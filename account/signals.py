@@ -7,6 +7,6 @@ from account.models import User
 
 
 @receiver(signals.post_save, sender=User)
-def create_token_on_new_user(instance: User, created: bool):
+def create_token_on_new_user(instance: User, created: bool, **kwargs):
     if created:
         Token.objects.create(user=instance)

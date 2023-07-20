@@ -1,14 +1,17 @@
 from rest_framework import viewsets
 
-from account.models import UserCourse
 
-from .serializers import UserCourseSerializer
+from .models import User
+from .serializers import UserSerializer
 
 
-class UserCourseViewSet(viewsets.ModelViewSet):
-    queryset = UserCourse.objects.all()
-    serializer_class = UserCourseSerializer
-    filter_fields = ["is_complete"]
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
 
     def get_queryset(self):
-        return super().get_queryset().filter(user=self.request.user)
+        match self.request.method:
+            case "GET":
+                return self.get_queryset()
+
+        return self.get_queryset().filter(pk=self.request.user.id)

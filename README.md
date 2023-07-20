@@ -5,6 +5,19 @@ Setup project using docker
 ```bash
 docker-compose up
 ```
+# Tests 
+All models and signals must undergo test before commit changes, any untest commit won't be merged 
+
+signals 
+
+[+] Account Test
+[+] Reward Test
+
+api 
+[+] Account Test
+[+] Course Test
+[+] Reward Test
+
 # Catalogue app 
 This contain the course business logics.
 

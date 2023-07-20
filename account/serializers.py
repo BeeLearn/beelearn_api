@@ -1,18 +1,16 @@
 from rest_framework import serializers
 
-from account.models import UserCourse
-from catalogue.serializers import CourseSerializer, LessonSerializer
+from .models import User
 
 
-class UserCourseSerializer(serializers.ModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
     """
-    UserCourse model serializer
+    User model serializer
     """
-
-    user_id = serializers.IntegerField(write_only=True)
-    course = CourseSerializer()
-    last_lesson = LessonSerializer()
 
     class Meta:
-        model = UserCourse
-        exclude = ("user",)
+        model = User
+        write_only_fields = (
+            "password",
+            "is_staff",
+        )

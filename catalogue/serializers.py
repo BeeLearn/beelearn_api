@@ -2,7 +2,6 @@ from django.utils import timezone
 
 from rest_framework import serializers
 
-from account.models import UserCourse
 from beelearn.mixins import ContextMixin
 
 from .models import Course, Lesson, Category, Module, Question, Topic
@@ -31,6 +30,7 @@ class ModuleSerializer(serializers.ModelSerializer, ContextMixin):
     """
     Module model serializer
     """
+
     is_unlocked = serializers.SerializerMethodField()
     is_complete = serializers.SerializerMethodField()
     lessons = serializers.SerializerMethodField()
@@ -47,7 +47,7 @@ class ModuleSerializer(serializers.ModelSerializer, ContextMixin):
             many=True,
             context=self.context,
         ).data
-    
+
     class Meta:
         model = Module
         exclude = (

@@ -171,10 +171,10 @@ class TopicComment(TimestampMixin):
         on_delete=models.CASCADE,
     )
     topic = models.ForeignKey(
-        Lesson,
+        Topic,
         on_delete=models.CASCADE,
     )
-    comment = models.TextField()
+    content = models.TextField()
 
     def __str__(self):
         return self.comment

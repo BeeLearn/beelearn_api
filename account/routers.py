@@ -1,7 +1,7 @@
 from rest_framework.routers import DefaultRouter
 
-from .viewsets import UserCourseViewSet
+from .viewsets import UserViewSet
 
 account_router = DefaultRouter()
 
-account_router.register(r"courses", UserCourseViewSet)
+account_router.register(r"users", UserViewSet)

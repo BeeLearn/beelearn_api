@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     # apps
     "catalogue.apps.CatalogueConfig",
     "account.apps.AccountConfig",
+    "reward.apps.RewardConfig",
 ]
 
 MIDDLEWARE = [
