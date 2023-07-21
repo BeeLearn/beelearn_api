@@ -23,9 +23,9 @@ class ModuleViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
     filter_fields = ("course",)
 
 
-class TopicViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
-    queryset = Topic.objects.all()
-    serializer_class = TopicSerializer
+class LessonViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
+    queryset = Lesson.objects.all()
+    serializer_class = LessonSerializer
 
     filter_fields = ("module",)
 
@@ -35,11 +35,11 @@ class QuestionViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
     serializer_class = QuestionSerializer
 
 
-class LessonViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
-    queryset = Lesson.objects.all()
-    serializer_class = LessonSerializer
+class TopicViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
+    queryset = Topic.objects.all()
+    serializer_class = TopicSerializer
 
-    filter_fields = ("topic",)
+    filter_fields = ("lesson",)
 
 
 class CategoryViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):

@@ -3,10 +3,16 @@ from django.db.models import signals
 
 from rest_framework.authtoken.models import Token
 
-from account.models import User
+from .models import Profile, User
 
 
 @receiver(signals.post_save, sender=User)
-def create_token_on_new_user(instance: User, created: bool, **kwargs):
+def create_new_user_token(instance: User, created: bool, **kwargs):
     if created:
         Token.objects.create(user=instance)
+
+
+@receiver(signals.post_save, sender=User)
+def create_new_user_profile(instance: User, created: bool, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)

@@ -89,7 +89,7 @@ class QuestionSerializer(serializers.ModelSerializer):
         model = Question
 
 
-class TopicSerializer(serializers.ModelSerializer):
+class TopicSerializer(serializers.ModelSerializer, ContextMixin):
     """
     Topic model serializer
     """
@@ -99,10 +99,13 @@ class TopicSerializer(serializers.ModelSerializer):
     class Meta:
         model = Topic
         exclude = (
-            "module",
+            "lesson",
             "entitled_users",
             "topic_complete_users",
         )
+
+    def get_is_liked(self, topic: Topic):
+        return topic.likes.contains(self.request.user)
 
 
 class CategorySerializer(serializers.ModelSerializer):
