@@ -14,6 +14,8 @@ dj-url-filter = "^0.4.4"
 six = "^1.16.0"
 django-cors-headers = "^4.2.0"
 requests = "^2.31.0"
+drf-writable-nested = "^0.7.0"
+django-restql = "^0.15.3"
 
 [tool.poetry.dev-dependencies]
 

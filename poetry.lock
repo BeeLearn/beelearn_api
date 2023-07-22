@@ -77,6 +77,19 @@ python-versions = ">=3.8"
 Django = ">=3.2"
 
 [[package]]
+name = "django-restql"
+version = "0.15.3"
+description = "Turn your API made with Django REST Framework(DRF) into a GraphQL like API."
+category = "main"
+optional = false
+python-versions = ">=3.5"
+
+[package.dependencies]
+django = ">=1.11"
+djangorestframework = ">=3.5"
+pypeg2 = ">=2.15.2"
+
+[[package]]
 name = "djangorestframework"
 version = "3.14.0"
 description = "Web APIs for Django, made easy."
@@ -87,6 +100,14 @@ python-versions = ">=3.6"
 [package.dependencies]
 django = ">=3.0"
 pytz = "*"
+
+[[package]]
+name = "drf-writable-nested"
+version = "0.7.0"
+description = "Writable nested helpers for django-rest-framework's serializers"
+category = "main"
+optional = false
+python-versions = ">=3.7"
 
 [[package]]
 name = "idna"
@@ -107,6 +128,14 @@ python-versions = ">=3.8"
 [package.extras]
 docs = ["furo", "olefile", "sphinx (>=2.4)", "sphinx-copybutton", "sphinx-inline-tabs", "sphinx-removed-in", "sphinxext-opengraph"]
 tests = ["check-manifest", "coverage", "defusedxml", "markdown2", "olefile", "packaging", "pyroma", "pytest", "pytest-cov", "pytest-timeout"]
+
+[[package]]
+name = "pypeg2"
+version = "2.15.2"
+description = "An intrinsic PEG Parser-Interpreter for Python"
+category = "main"
+optional = false
+python-versions = "*"
 
 [[package]]
 name = "pytz"
@@ -188,7 +217,7 @@ zstd = ["zstandard (>=0.18.0)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "c7b12d96588539aea39b45bdf1b1fc26dcc82699ac2bc5c73149ee5152d0da0a"
+content-hash = "ee90e3b20513ba9b138bc8c5fcf71e538350960c05f7d0de92e30c0ac675786e"
 
 [metadata.files]
 asgiref = []
@@ -198,9 +227,12 @@ charset-normalizer = []
 dj-url-filter = []
 django = []
 django-cors-headers = []
+django-restql = []
 djangorestframework = []
+drf-writable-nested = []
 idna = []
 pillow = []
+pypeg2 = []
 pytz = []
 requests = []
 six = []

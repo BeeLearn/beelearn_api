@@ -2,7 +2,12 @@ from django.utils import timezone
 
 from rest_framework import serializers
 
+from django_restql.fields import NestedField
+from django_restql.serializers import NestedModelSerializer
+
 from beelearn.mixins import ContextMixin
+
+from account.serializers import UserSerializer
 
 from .models import Course, Lesson, Category, Module, Question, Topic
 
@@ -89,12 +94,21 @@ class QuestionSerializer(serializers.ModelSerializer):
         model = Question
 
 
-class TopicSerializer(serializers.ModelSerializer, ContextMixin):
+class TopicSerializer(
+    NestedModelSerializer,
+    serializers.ModelSerializer,
+    ContextMixin,
+):
     """
     Topic model serializer
     """
 
     is_liked = serializers.SerializerMethodField()
+    likes = NestedField(
+        UserSerializer,
+        many=True,
+        write_only=True,
+    )
 
     class Meta:
         model = Topic

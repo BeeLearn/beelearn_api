@@ -28,6 +28,11 @@ class Course(TimestampMixin):
         max_length=255,
         help_text="Course detailed description (Optional)",
     )
+    course_enrolled_users = models.ManyToManyField(
+        User,
+        blank=True,
+        related_name="course_enrolled_users",
+    )
     course_complete_users = models.ManyToManyField(
         User,
         blank=True,
