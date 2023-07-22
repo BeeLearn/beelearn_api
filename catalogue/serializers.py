@@ -136,17 +136,30 @@ class TopicSerializer(
         many=True,
         write_only=True,
     )
+    is_complete = serializers.SerializerMethodField()
+    is_unlocked = serializers.SerializerMethodField()
+
+    topic_complete_users = NestedField(
+        UserSerializer,
+        many=True,
+        write_only=True,
+    )
 
     class Meta:
         model = Topic
         exclude = (
             "lesson",
             "entitled_users",
-            "topic_complete_users",
         )
 
     def get_is_liked(self, topic: Topic):
         return topic.likes.contains(self.request.user)
+
+    def get_is_complete(self, topic: Topic):
+        return topic.topic_complete_users.contains(self.request.user)
+
+    def get_is_unlocked(self, topic: Topic):
+        return topic.entitled_users.contains(self.request.user)
 
 
 class CategorySerializer(serializers.ModelSerializer):

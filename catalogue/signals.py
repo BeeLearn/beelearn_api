@@ -75,8 +75,8 @@ def unlock_next_topic(instance: Topic, action: Action, pk_set: Set[int], **kwarg
     """
     match action:
         case "post_add":
-            users = User.objects.get(pk__in=pk_set)
-            next_topic = Lesson.objects.filter(
+            users = User.objects.filter(pk__in=pk_set)
+            next_topic = Topic.objects.filter(
                 lesson=instance.lesson,
                 created_at__gt=instance.created_at,
             ).first()
