@@ -12,7 +12,11 @@ from .serializers import (
 )
 
 
-class CourseViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
+class CourseViewSet(
+    viewsets.GenericViewSet,
+    mixins.ListModelMixin,
+    mixins.UpdateModelMixin,
+):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
 

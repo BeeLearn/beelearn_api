@@ -12,12 +12,29 @@ from account.serializers import UserSerializer
 from .models import Course, Lesson, Category, Module, Question, Topic
 
 
-class CourseSerializer(serializers.ModelSerializer):
+class CourseSerializer(
+    NestedModelSerializer,
+    serializers.ModelSerializer,
+    ContextMixin,
+):
     """
     Course model serializer
     """
 
     is_new = serializers.SerializerMethodField()
+    is_enrolled = serializers.SerializerMethodField()
+
+    course_enrolled_users = NestedField(
+        UserSerializer,
+        many=True,
+        write_only=True,
+    )
+
+    course_complete_users = NestedField(
+        UserSerializer,
+        many=True,
+        write_only=True,
+    )
 
     def get_is_new(self, course: Course):
         topics = Topic.objects.filter(
@@ -26,9 +43,19 @@ class CourseSerializer(serializers.ModelSerializer):
         )
         return topics.exists()
 
+    def get_is_enrolled(self, course: Course):
+        return course.course_enrolled_users.contains(self.request.user)
+
     class Meta:
         model = Course
         fields = "__all__"
+        read_only_fields = (
+            "name",
+            "content",
+            "description",
+            "created_at",
+            "updated_at",
+        )
 
 
 class ModuleSerializer(serializers.ModelSerializer, ContextMixin):
