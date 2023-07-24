@@ -77,6 +77,14 @@ python-versions = ">=3.8"
 Django = ">=3.2"
 
 [[package]]
+name = "django-grappelli"
+version = "3.0.6"
+description = "A jazzy skin for the Django Admin-Interface."
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "django-restql"
 version = "0.15.3"
 description = "Turn your API made with Django REST Framework(DRF) into a GraphQL like API."
@@ -217,7 +225,7 @@ zstd = ["zstandard (>=0.18.0)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "ee90e3b20513ba9b138bc8c5fcf71e538350960c05f7d0de92e30c0ac675786e"
+content-hash = "189b06eeadf018be2eb0b6be08b1b6874d01c3d69624fad1341620441a0898c9"
 
 [metadata.files]
 asgiref = []
@@ -227,6 +235,7 @@ charset-normalizer = []
 dj-url-filter = []
 django = []
 django-cors-headers = []
+django-grappelli = []
 django-restql = []
 djangorestframework = []
 drf-writable-nested = []

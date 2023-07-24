@@ -1,8 +1,10 @@
+from django.utils import timezone
+
 from rest_framework import serializers
 
 from beelearn.mixins import ContextMixin
 
-from reward.models import Achievement, Price, Reward
+from .models import Achievement, Price, Reward, Streak
 
 
 class PriceSerializer(serializers.ModelSerializer, ContextMixin):
@@ -42,3 +44,18 @@ class AchievementSerializer(serializers.ModelSerializer):
     class Meta:
         model = Achievement
         fields = "__all__"
+
+
+class StreakSerializer(serializers.ModelSerializer):
+    """
+    Streak model serializer
+    """
+
+    is_today = serializers.SerializerMethodField()
+
+    def get_is_today(self, instance: Streak):
+        return instance.date == timezone.localdate()
+
+    class Meta:
+        model = Streak
+        exclude = ("user",)

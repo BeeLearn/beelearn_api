@@ -1,10 +1,13 @@
+import random
+
 from typing import List, Set
+
 from django.dispatch import receiver
 from django.db.models import signals
 
 from account.models import Profile, User
 from catalogue.models import Course, Lesson, TopicComment
-from reward.models import Achievement, Reward
+from reward.models import Achievement, Price, Reward, Streak
 
 # todo make use of socket to make realtime with frontend
 
@@ -136,7 +139,25 @@ def award_price_to_user(instance: Achievement, **kwargs):
     """
     Award achievement price to user
     """
+
     instance.user.profile.xp += instance.reward.price.xp
     instance.user.profile.bits += instance.reward.price.bits
 
     instance.user.profile.save(update_fields=["xp", "bits"])
+
+
+@receiver(signals.post_save, sender=Streak)
+def award_streak_price_to_user(instance: Streak, created: bool, **kwargs):
+    """
+    Award price to user on complete streak
+    """
+
+    if instance.is_complete:
+        prices = Price.objects.filter(
+            type=Price.PriceType.STREAK_COMPLETE,
+        )
+
+        if len(prices) > 0:
+            price = random.choice(prices)
+            instance.user.profile.xp += price.xp
+            instance.user.profile.bits += price.bits

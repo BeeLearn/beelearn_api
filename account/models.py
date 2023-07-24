@@ -21,6 +21,14 @@ class Profile(models.Model):
     xp = models.IntegerField(default=0)  # experience point
     bits = models.IntegerField(default=0)  # used to unlock questions
 
+    daily_streak_minutes = models.IntegerField(
+        validators=[
+            MinValueValidator(1),
+            MaxValueValidator(2),
+        ],
+        default=5,
+    )  # daily reach read goal to receive streak
+
     @property
     def level(self):
         return self.xp // 1024

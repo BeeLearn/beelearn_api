@@ -1,3 +1,5 @@
+from rest_framework.response import Response
+from rest_framework.request import Request
 from rest_framework import viewsets, mixins
 
 
@@ -21,6 +23,7 @@ class CourseViewSet(
     serializer_class = CourseSerializer
 
     filter_fields = (
+        "module",
         "course_enrolled_users",
         "course_complete_users",
     )
@@ -56,7 +59,10 @@ class TopicViewSet(
     queryset = Topic.objects.all()
     serializer_class = TopicSerializer
 
-    filter_fields = ("lesson",)
+    filter_fields = (
+        "lesson",
+        "likes",
+    )
 
 
 class CategoryViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
@@ -64,5 +70,34 @@ class CategoryViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
     serializer_class = CategorySerializer
 
 
-class LikedTopicViewSet(viewsets.ModelViewSet):
-    pass
+class FavouriteViewSet(viewsets.ModelViewSet):
+    queryset = Module.objects.all()
+    serializer_class = ModuleSerializer
+
+    def list(self, request: Request):
+        courses = Course.objects.filter(
+            module__lesson__topic__likes=request.user
+        ).distinct()
+        print(courses)
+
+        return Response(
+            list(
+                map(
+                    lambda course: {
+                        "course": CourseSerializer(
+                            course,
+                            context=self.get_serializer_context(),
+                        ).data,
+                        "topics": TopicSerializer(
+                            Topic.objects.filter(
+                                likes=request.user,
+                                lesson__module__course=course,
+                            ),
+                            many=True,
+                            context=self.get_serializer_context(),
+                        ).data,
+                    },
+                    courses,
+                ),
+            ),
+        )

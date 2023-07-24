@@ -1,27 +1,15 @@
-import os
-from typing import Callable, TypeVar
-
-from django.core.files import File
-from django.db.models import ImageField
-
-from .settings import BASE_DIR
-
-TModel = TypeVar("TModel")
+from django.utils.timezone import now, timedelta
 
 
-def save_file_to_image_field(
-    path: str,
-    model_instance: TModel,
-    image_instance: Callable[[TModel], ImageField],
-    base_dir=BASE_DIR,
-):
-    with open(base_dir / path, "rb") as file:
-        # Create a Django File object from the file
-        file_object = File(file)
+def get_week_start_and_end(today=None):
+    """
+    Get week start and end for filter based on week
+    """
 
-        # Set the image_field with the file_object
-        image_instance(model_instance).save(
-            os.path.basename(path),
-            file_object,
-            save=True,
-        )
+    if not today:
+        today = now().date()
+
+    week_start = today - timedelta(days=today.weekday())
+    week_end = week_start + timedelta(days=6)
+
+    return week_start, week_end

@@ -1,16 +1,40 @@
 from django.contrib import admin
 
-from .models import Price, Reward, Achievement
+from .models import Price, Reward, Achievement, Streak
+
 
 @admin.register(Price)
 class PriceAdmin(admin.ModelAdmin):
-    pass
+    list_display = (
+        "type",
+        "xp",
+        "bits",
+    )
+
 
 @admin.register(Reward)
 class RewardAdmin(admin.ModelAdmin):
-    pass
+    list_display = (
+        "id",
+        "type",
+        "description",
+    )
+
 
 @admin.register(Achievement)
 class AchievementAdmin(admin.ModelAdmin):
-    pass
+    list_display = (
+        "id",
+        "user",
+        "reward",
+    )
 
+
+@admin.register(Streak)
+class StreakAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "user",
+        "date",
+        "is_complete",
+    )

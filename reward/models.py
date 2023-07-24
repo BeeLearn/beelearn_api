@@ -1,5 +1,8 @@
 from django.db import models
+from django.utils.timezone import now, timedelta, datetime
 from django.contrib.auth import get_user_model
+
+from beelearn.utils import get_week_start_and_end
 
 User = get_user_model()
 
@@ -43,7 +46,7 @@ class Reward(models.Model):
         COURSE_NINJA = "COURSE_NINJA"
         VERIFY_ACCOUNT = "VERIFY_ACCOUNT"
         NEW_CAREER_AWAITS = "NEW_CAREER_AWAITS"
-        WHERE_THE_MAGIC_HAPPENS= "WHERE_THE_MAGIC_HAPPENS"
+        WHERE_THE_MAGIC_HAPPENS = "WHERE_THE_MAGIC_HAPPENS"
         JUST_GETTING_STARTED = "JUST_GETTING_STARTED"
 
         # api base rewards
@@ -95,4 +98,49 @@ class Achievement(models.Model):
 
 
 class Streak(models.Model):
-    pass
+    """
+    User streak tracker to sync to multiple devices
+    """
+
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+    )
+    date = models.DateField()
+    is_complete = models.BooleanField(default=False)
+
+    @classmethod
+    def create_streak_for_week(cls, user: User, start_date: datetime=None):
+        """
+        create streak for week
+        """
+        start_date, end_date = get_week_start_and_end(start_date)
+
+        if cls.objects.filter(user=user, date=start_date).exists():
+            return
+
+        current_date = start_date
+        streaks = []
+
+        while current_date <= end_date:
+            streaks.append(
+                cls(
+                    user=user,
+                    date=current_date,
+                )
+            )
+
+            current_date += timedelta(days=1)
+
+        return cls.objects.bulk_create(streaks)
+
+    def __str__(self):
+        return self.user.username
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["user", "date"],
+                name="User can only create one streak instance for a date",
+            )
+        ]
