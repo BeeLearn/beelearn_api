@@ -75,6 +75,11 @@ class Reward(models.Model):
         on_delete=models.CASCADE,
     )
 
+    reward_unlocked_users = models.ManyToManyField(
+        User,
+        blank=True,
+    )
+
     def __str__(self):
         return self.title
 
@@ -110,7 +115,7 @@ class Streak(models.Model):
     is_complete = models.BooleanField(default=False)
 
     @classmethod
-    def create_streak_for_week(cls, user: User, start_date: datetime=None):
+    def create_streak_for_week(cls, user: User, start_date: datetime = None):
         """
         create streak for week
         """

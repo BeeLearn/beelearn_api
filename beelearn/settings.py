@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     "grappelli",
+    "daphne",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -42,6 +43,7 @@ INSTALLED_APPS = [
     "corsheaders",
     "rest_framework",
     "rest_framework.authtoken",
+    "djira.apps.DJiraConfig",
     # apps
     "catalogue.apps.CatalogueConfig",
     "account.apps.AccountConfig",
@@ -79,6 +81,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "beelearn.wsgi.application"
+ASGI_APPLICATION = "beelearn.asgi.application"
 
 
 # Database
@@ -147,3 +150,8 @@ REST_FRAMEWORK = {
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:55288",
 ]
+
+
+DJIRA_SETTINGS = {
+    "AUTHENTICATION_CLASSES": ["djira.authentication.TokenAuthentication"],
+}

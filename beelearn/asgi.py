@@ -1,16 +1,28 @@
-"""
-ASGI config for beelearn project.
-
-It exposes the ASGI callable as a module-level variable named ``application``.
-
-For more information on this file, see
-https://docs.djangoproject.com/en/4.1/howto/deployment/asgi/
-"""
-
 import os
 
 from django.core.asgi import get_asgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'beelearn.settings')
+from reward.hooks import RewardAPIHook
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "beelearn.settings")
 
 application = get_asgi_application()
+
+from socketio import ASGIApp
+
+from djira.consumer import Consumer
+from djira.settings import jira_settings
+
+from catalogue.hooks import LessonAPIHook, ModuleAPIHook
+
+sio = jira_settings.SOCKET_INSTANCE
+
+application = ASGIApp(sio, application)
+
+consumer = Consumer(sio)
+
+consumer.register("modules", ModuleAPIHook)
+consumer.register("lessons", LessonAPIHook)
+consumer.register("rewards", RewardAPIHook)
+
+consumer.start()

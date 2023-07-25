@@ -24,7 +24,7 @@ class Profile(models.Model):
     daily_streak_minutes = models.IntegerField(
         validators=[
             MinValueValidator(1),
-            MaxValueValidator(2),
+            MaxValueValidator(240),
         ],
         default=5,
     )  # daily reach read goal to receive streak

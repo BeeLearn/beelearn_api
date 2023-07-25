@@ -50,10 +50,7 @@ def grant_verify_account_reward(instance: Profile, update_fields: List[str], **k
     if update_fields:
         if "is_email_verified" in update_fields:
             reward = Reward.objects.get(type=Reward.RewardType.VERIFY_ACCOUNT)
-            Achievement.objects.create(
-                user=instance.user,
-                reward=reward,
-            )
+            reward.reward_unlocked_users.add(instance.user)
 
 
 @receiver(signals.post_save, sender=TopicComment)
@@ -72,17 +69,11 @@ def grant_we_are_in_this_together_and_engaged_in_reward(
         # Triggered when a user comments on a lesson.
         if user_comment_count == 1:
             reward = Reward.objects.get(type=Reward.RewardType.WE_ARE_IN_THIS_TOGETHER)
-            Achievement.objects.create(
-                user=instance.user,
-                reward=reward,
-            )
+            reward.reward_unlocked_users.add(instance.user)
 
         if user_comment_count % 10 == 0:
             reward = Reward.objects.get(type=Reward.RewardType.ENGAGED_IN)
-            Achievement.objects.create(
-                user=instance.user,
-                reward=reward,
-            )
+            reward.reward_unlocked_users.add(instance.user)
 
 
 @receiver(signals.m2m_changed, sender=Lesson.lesson_complete_users.through)
@@ -95,8 +86,7 @@ def just_getting_started(instance: Lesson, pk_set: Set[int], **kwargs):
     if first_lesson == instance:
         reward = Reward.objects.get(type=Reward.RewardType.JUST_GETTING_STARTED)
         users = User.objects.filter(pk__in=pk_set)
-        achievements = [Achievement(user=user, reward=reward) for user in users]
-        Achievement.objects.bulk_create(achievements)
+        reward.reward_unlocked_users.add(*users)
 
 
 @receiver(signals.m2m_changed, sender=Course.course_complete_users.through)
@@ -109,8 +99,7 @@ def grant_course_master_hat_trick_and_course_ninja_reward(pk_set: Set[int], **kw
 
     # Reward a user who completes a course.
     reward = Reward.objects.get(type=Reward.RewardType.COURSE_MASTER)
-    achievements = [Achievement(user=user, reward=reward) for user in users]
-    Achievement.objects.bulk_create(achievements)
+    reward.reward_unlocked_users.add(*users)
 
     for user in users:
         total_user_complete_course = Course.objects.filter(
@@ -120,34 +109,30 @@ def grant_course_master_hat_trick_and_course_ninja_reward(pk_set: Set[int], **kw
         # Reward a user for completing three courses.
         if total_user_complete_course == 3:
             reward = Reward.objects.get(type=Reward.RewardType.HAT_TRICK)
-            Achievement.objects.create(
-                user=user,
-                reward=reward,
-            )
+            reward.reward_unlocked_users.add(user)
 
         # Reward a user for completing ten courses.
         if total_user_complete_course == 10:
             reward = Reward.objects.get(type=Reward.RewardType.COURSE_NINJA)
-            Achievement.objects.create(
-                user=user,
-                reward=reward,
-            )
+            reward.reward_unlocked_users.add(user)
 
 
-@receiver(signals.post_save, sender=Achievement)
-def award_price_to_user(instance: Achievement, **kwargs):
+@receiver(signals.m2m_changed, sender=Reward.reward_unlocked_users.through)
+def award_price_to_user(instance: Reward, pk_sets: Set[int], **kwargs):
     """
     Award achievement price to user
     """
+    users = User.objects.filter(pk__in=pk_sets)
 
-    instance.user.profile.xp += instance.reward.price.xp
-    instance.user.profile.bits += instance.reward.price.bits
+    for user in users:
+        instance.user.profile.xp += instance.reward.price.xp
+        instance.user.profile.bits += instance.reward.price.bits
 
-    instance.user.profile.save(update_fields=["xp", "bits"])
+    User.objects.bulk_update(user, fields=["xp", "bits"])
 
 
 @receiver(signals.post_save, sender=Streak)
-def award_streak_price_to_user(instance: Streak, created: bool, **kwargs):
+def award_streak_price_to_user(instance: Streak, **kwargs):
     """
     Award price to user on complete streak
     """
