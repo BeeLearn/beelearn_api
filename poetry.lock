@@ -222,6 +222,17 @@ djangorestframework = ">=3.5"
 pypeg2 = ">=2.15.2"
 
 [[package]]
+name = "django-tidb"
+version = "3.0.0"
+description = "Django backend for TiDB"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+mysqlclient = "*"
+
+[[package]]
 name = "djangorestframework"
 version = "3.14.0"
 description = "Web APIs for Django, made easy."
@@ -291,6 +302,14 @@ python-versions = "*"
 [package.extras]
 mypy = ["click (>=6.0)", "twisted (>=16.4.0)", "mypy (==0.812)"]
 scripts = ["click (>=6.0)", "twisted (>=16.4.0)"]
+
+[[package]]
+name = "mysqlclient"
+version = "2.2.0"
+description = "Python interface to MySQL"
+category = "main"
+optional = false
+python-versions = ">=3.8"
 
 [[package]]
 name = "pillow"
@@ -556,7 +575,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "55fdfff8411bb089ba61666146f5c69a044696232929c08d8f647419299bca70"
+content-hash = "b796c79f2782423f139c133c05a742af6fab782d4544490b5c43b2423f6259ea"
 
 [metadata.files]
 asgiref = []
@@ -576,12 +595,14 @@ django = []
 django-cors-headers = []
 django-grappelli = []
 django-restql = []
+django-tidb = []
 djangorestframework = []
 djira = []
 drf-writable-nested = []
 hyperlink = []
 idna = []
 incremental = []
+mysqlclient = []
 pillow = []
 pyasn1 = []
 pyasn1-modules = []
