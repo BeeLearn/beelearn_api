@@ -23,6 +23,7 @@ class CourseSerializer(
 
     is_new = serializers.SerializerMethodField()
     is_enrolled = serializers.SerializerMethodField()
+    is_completed = serializers.SerializerMethodField()
 
     course_enrolled_users = NestedField(
         UserSerializer,
@@ -35,6 +36,7 @@ class CourseSerializer(
         many=True,
         write_only=True,
     )
+    
 
     def get_is_new(self, course: Course):
         topics = Topic.objects.filter(
@@ -45,6 +47,9 @@ class CourseSerializer(
 
     def get_is_enrolled(self, course: Course):
         return course.course_enrolled_users.contains(self.request.user)
+
+    def get_is_completed(self, course: Course):
+        return course.course_complete_users.contains(self.request.user)
 
     class Meta:
         model = Course
@@ -64,13 +69,13 @@ class ModuleSerializer(serializers.ModelSerializer, ContextMixin):
     """
 
     is_unlocked = serializers.SerializerMethodField()
-    is_complete = serializers.SerializerMethodField()
+    is_completed = serializers.SerializerMethodField()
     lessons = serializers.SerializerMethodField()
 
     def get_is_unlocked(self, module: Module):
         return module.entitled_users.contains(self.request.user)
 
-    def get_is_complete(self, module: Module):
+    def get_is_completed(self, module: Module):
         return module.module_complete_users.contains(self.request.user)
 
     def get_lessons(self, module: Module):
@@ -95,12 +100,12 @@ class LessonSerializer(serializers.ModelSerializer, ContextMixin):
     """
 
     is_unlocked = serializers.SerializerMethodField()
-    is_complete = serializers.SerializerMethodField()
+    is_completed = serializers.SerializerMethodField()
 
     def get_is_unlocked(self, lesson: Lesson):
         return lesson.entitled_users.contains(self.request.user)
 
-    def get_is_complete(self, lesson: Lesson):
+    def get_is_completed(self, lesson: Lesson):
         return lesson.lesson_complete_users.contains(self.request.user)
 
     class Meta:
@@ -136,7 +141,7 @@ class TopicSerializer(
         many=True,
         write_only=True,
     )
-    is_complete = serializers.SerializerMethodField()
+    is_completed = serializers.SerializerMethodField()
     is_unlocked = serializers.SerializerMethodField()
 
     topic_complete_users = NestedField(
@@ -155,7 +160,7 @@ class TopicSerializer(
     def get_is_liked(self, topic: Topic):
         return topic.likes.contains(self.request.user)
 
-    def get_is_complete(self, topic: Topic):
+    def get_is_completed(self, topic: Topic):
         return topic.topic_complete_users.contains(self.request.user)
 
     def get_is_unlocked(self, topic: Topic):

@@ -6,19 +6,60 @@ from djira.decorators import action
 from djira.observer import observer, SignalObserver
 from djira.observer.base_observer import Action, Scope
 
-from .models import Lesson, Module
-from .serializers import LessonSerializer, ModuleSerializer
+from .models import Course, Lesson, Module
+from .serializers import CourseSerializer, LessonSerializer, ModuleSerializer
+
+
+class CourseAPIHook(APIHook):
+    @observer(
+        m2m_changed,
+        (
+            Course.course_complete_users.through,
+            Course.course_enrolled_users.through,
+        ),
+        CourseSerializer,
+    )
+    def course_observer(observer: SignalObserver, action: str, **kwargs):
+        match action:
+            case "post_add":
+                observer.dispatch(Action.UPDATE, **kwargs)
+
+    @course_observer.rooms
+    def course_observer_rooms(observer: SignalObserver, pk_set: Set[int], **kwargs):
+        for pk in pk_set:
+            yield f"course__{pk}"
+
+    @course_observer.subscribing_rooms
+    def course_observer_subscribing_rooms(observer: SignalObserver, scope: Scope):
+        yield f"course__{scope.user.pk}"
+
+    @action(methods=["POST"])
+    async def subscribe(self):
+        self.course_observer.subscribe(self.scope)
+
+        await self.emit()
+
+    @action(methods={"POST"})
+    async def unsubscribe(self):
+        self.course_observer.unsubscribe(self.scope)
+
+        await self.emit()
 
 
 class ModuleAPIHook(APIHook):
     @observer(
         m2m_changed,
-        Module.entitled_users.through,
+        (
+            Module.entitled_users.through,
+            Module.module_complete_users.through,
+        ),
         ModuleSerializer,
     )
     def module_observer(observer: SignalObserver, action: str, **kwargs):
+        print(kwargs)
         match action:
-            case "post_save":
+            case "post_add":
+                print("module dispatch")
                 observer.dispatch(Action.UPDATE, **kwargs)
 
     @module_observer.rooms
@@ -46,21 +87,24 @@ class ModuleAPIHook(APIHook):
 class LessonAPIHook(APIHook):
     @observer(
         m2m_changed,
-        Lesson.entitled_users.through,
+        (
+            Lesson.entitled_users.through,
+            Lesson.lesson_complete_users.through,
+        ),
         LessonSerializer,
     )
     def lesson_observer(observer: SignalObserver, action: str, **kwargs):
         match action:
-            case "post_save":
+            case "post_add":
                 observer.dispatch(Action.UPDATE, **kwargs)
 
     @lesson_observer.rooms
-    def lesson_rooms(observer, pk_set: Set[int], **kwargs):
+    def lesson_observer_rooms(observer: SignalObserver, pk_set: Set[int], **kwargs):
         for pk in pk_set:
             yield f"lesson__{pk}"
 
     @lesson_observer.subscribing_rooms
-    def lesson_rooms(observer, scope: Scope):
+    def lesson_observer_subscribing_rooms(observer: SignalObserver, scope: Scope):
         yield f"lesson__{scope.user.pk}"
 
     @action(methods=["POST"])

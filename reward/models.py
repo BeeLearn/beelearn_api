@@ -107,45 +107,31 @@ class Streak(models.Model):
     User streak tracker to sync to multiple devices
     """
 
-    user = models.ForeignKey(
+    date = models.DateField(unique=True)
+    streak_complete_users = models.ManyToManyField(
         User,
-        on_delete=models.CASCADE,
+        blank=True,
     )
-    date = models.DateField()
-    is_complete = models.BooleanField(default=False)
 
     @classmethod
-    def create_streak_for_week(cls, user: User, start_date: datetime = None):
+    def create_streak_for_week(cls, start_date: datetime = None):
         """
         create streak for week
         """
         start_date, end_date = get_week_start_and_end(start_date)
 
-        if cls.objects.filter(user=user, date=start_date).exists():
+        if cls.objects.filter(date=start_date).exists():
             return
 
         current_date = start_date
         streaks = []
 
         while current_date <= end_date:
-            streaks.append(
-                cls(
-                    user=user,
-                    date=current_date,
-                )
-            )
+            streaks.append(cls(date=current_date))
 
             current_date += timedelta(days=1)
 
         return cls.objects.bulk_create(streaks)
 
     def __str__(self):
-        return self.user.username
-
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(
-                fields=["user", "date"],
-                name="User can only create one streak instance for a date",
-            )
-        ]
+        return self.date

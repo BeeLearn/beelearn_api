@@ -118,17 +118,20 @@ def grant_course_master_hat_trick_and_course_ninja_reward(pk_set: Set[int], **kw
 
 
 @receiver(signals.m2m_changed, sender=Reward.reward_unlocked_users.through)
-def award_price_to_user(instance: Reward, pk_sets: Set[int], **kwargs):
+def award_price_to_user(instance: Reward, pk_set: Set[int], **kwargs):
     """
     Award achievement price to user
     """
-    users = User.objects.filter(pk__in=pk_sets)
+    profiles = []
+    users = User.objects.filter(pk__in=pk_set)
 
     for user in users:
-        instance.user.profile.xp += instance.reward.price.xp
-        instance.user.profile.bits += instance.reward.price.bits
+        user.profile.xp += instance.price.xp
+        user.profile.bits += instance.price.bits
 
-    User.objects.bulk_update(user, fields=["xp", "bits"])
+        profiles.append(user.profile)
+
+    Profile.objects.bulk_update(profiles, fields=["xp", "bits"])
 
 
 @receiver(signals.post_save, sender=Streak)

@@ -34,7 +34,5 @@ class AchievementAdmin(admin.ModelAdmin):
 class StreakAdmin(admin.ModelAdmin):
     list_display = (
         "id",
-        "user",
         "date",
-        "is_complete",
     )
