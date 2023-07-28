@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: beelearn
+    runtime: python
+    buildCommand: "./build.sh"
+    startCommand: "daphne -b 0.0.0.0 -p 8000 beelearn.asgi:application"
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: WEB_CONCURRENCY
+        value: 4
+      - key: PYTHON_VERSION
+        value: 3.11.4
+
+      - key: DATABASE_USER
+        value: 2fXkLQXJ7a7okDY.root
+      - key:  DATABASE_NAME
+        value: test
+      - key: DATABASE_PASSWORD
+        value: 7Hj7XL54GfJVBu3T
+      - key: DATABASE_HOST
+        value: gateway01.eu-central-1.prod.aws.tidbcloud.com
+      - fromGroup: BeeLearn 

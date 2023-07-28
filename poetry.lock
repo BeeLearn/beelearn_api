@@ -232,6 +232,11 @@ python-versions = ">=3.6"
 [package.dependencies]
 mysqlclient = "*"
 
+[package.source]
+type = "git"
+branch = "main"
+url = "https://github.com/pingcap/django-tidb"
+
 [[package]]
 name = "djangorestframework"
 version = "3.14.0"
@@ -250,7 +255,7 @@ version = "0.1.0"
 description = "djira is a websocket extension for drf using socketio"
 category = "main"
 optional = false
-python-versions = "^3.10"
+python-versions = ">=3.7"
 develop = true
 
 [package.dependencies]
@@ -261,8 +266,9 @@ djangorestframework = "^3.14.0"
 python-socketio = "^5.8.0"
 
 [package.source]
-type = "directory"
-url = "../../../workspace/python/wjira"
+type = "git"
+branch = "main"
+url = "https://github.com/oasisMystre/djira"
 
 [[package]]
 name = "drf-writable-nested"
