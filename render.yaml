@@ -18,4 +18,4 @@ services:
       - key: WEB_CONCURRENCY
         value: 4
       - key: PYTHON_VERSION
-        value: 3.10
+        value: 3.11.4
