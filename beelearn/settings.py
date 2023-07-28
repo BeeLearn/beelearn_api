@@ -106,7 +106,7 @@ else :
             "PORT": "4000",
             "OPTIONS": {
                 "ssl": {
-                    "ca": "/etc/ssl/cert.pem",
+                    "ca": "/etc/secrets/cert.pem",
                     "sslmode": "VERIFY_IDENTITY",
                 }
             }
