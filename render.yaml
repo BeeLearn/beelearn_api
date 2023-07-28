@@ -3,7 +3,7 @@ services:
     name: beelearn
     runtime: python
     buildCommand: "./build.sh"
-    startCommand: "gunicorn beelearn.wsgi:application"
+    startCommand: "daphne beelearn.asgi:application"
     envVars:
       - key: DATABASE_URL
         fromDatabase:
