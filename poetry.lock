@@ -4,7 +4,7 @@ version = "3.7.2"
 description = "ASGI specs, helper code, and adapters"
 category = "main"
 optional = false
-python-versions = ">=3.10"
+python-versions = ">=3.7"
 
 [package.dependencies]
 typing-extensions = {version = ">=4", markers = "python_version < \"3.11\""}
@@ -250,7 +250,7 @@ version = "0.1.0"
 description = "djira is a websocket extension for drf using socketio"
 category = "main"
 optional = false
-python-versions = "^3.10"
+python-versions = ">=3.10"
 develop = true
 
 [package.dependencies]
