@@ -101,7 +101,7 @@ else:
         "default": {
             "ENGINE": "django_tidb",
             "NAME": os.environ.get("DATABASE_NAME", default="django"),
-            "USER": os.eviron.get("DATABASE_USER",default="root"),
+            "USER": os.environ.get("DATABASE_USER",default="root"),
             "PASSWORD": os.environ.get("DATABASE_PASSWORD", default=""),
             "HOST": os.environ.get("DATABASE_HOST", default="localhost"),
             "PORT": 4000,
