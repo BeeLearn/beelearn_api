@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -20,13 +20,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-f&4h0n2)4t1)0*3*6^eo^1^*ww+-3ui$odqw+zkupnu$l_ti#j"
-
+SECRET_KEY = os.environ.get("SECRET_KEY", default="django-insecure-f&4h0n2)4t1)0*3*6^eo^1^*ww+-3ui$odqw+zkupnu$l_ti#j")
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = 'RENDER' not in os.environ
 
 ALLOWED_HOSTS = []
 
+RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
 # Application definition
 
@@ -98,14 +100,13 @@ else:
     DATABASES = {
         "default": {
             "ENGINE": "django_tidb",
-            "NAME": "django",
-            "USER": "root",
-            "PASSWORD": "",
-            "HOST": "127.0.0.1",
+            "NAME": os.environ.get("DATABASE_NAME", default="django"),
+            "USER": os.eviron.get("DATABASE_USER",default="root"),
+            "PASSWORD": os.environ.get("DATABASE_PASSWORD", default=""),
+            "HOST": os.environ.get("DATABASE_HOST", default="localhost"),
             "PORT": 4000,
         },
     }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -142,6 +143,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = "static/"
+
+if not DEBUG:
+    # Tell Django to copy statics to the `staticfiles` directory
+    # in your application directory on Render.
+    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
