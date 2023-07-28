@@ -7,14 +7,6 @@ services:
     envVars:
       - key: SECRET_KEY
         generateValue: true
-      - key: DATABASE_USER 
-        value: cGvnzvWRcjX1wvk.root
-      - key: DATABASE_NAME
-        value: test 
-      - key: DATABASE_PASSWORD
-        value: QswQ3pdlQmxwpeaf
-      - key: DATABASE_HOST
-        value: gateway01.eu-central-1.prod.aws.tidbcloud.com
       - key: WEB_CONCURRENCY
         value: 4
       - key: PYTHON_VERSION
