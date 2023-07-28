@@ -11,4 +11,4 @@ django-grappelli==3.0.6
 pytz==2023.3
 python-socketio==5.8.0
 djira @ git+https://github.com/oasisMystre/djira.git
-django-tidb @ git+https://github.com/pingcap/django-tidb.git
+django-tidb @ git+https://github.com/pingcap/django-tidb.git@main
