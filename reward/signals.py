@@ -134,18 +134,27 @@ def award_price_to_user(instance: Reward, pk_set: Set[int], **kwargs):
     Profile.objects.bulk_update(profiles, fields=["xp", "bits"])
 
 
-@receiver(signals.post_save, sender=Streak)
-def award_streak_price_to_user(instance: Streak, **kwargs):
+@receiver(signals.m2m_changed, sender=Streak.streak_complete_users.through)
+def award_streak_price_to_user(
+    instance: Streak, action: str, pk_set: Set[int], **kwargs
+):
     """
     Award price to user on complete streak
     """
 
-    if instance.is_complete:
-        prices = Price.objects.filter(
-            type=Price.PriceType.STREAK_COMPLETE,
-        )
+    prices = Price.objects.filter(type=Price.PriceType.STREAK_COMPLETE)
+    users = User.objects.filter(pk__in=pk_set)
 
-        if len(prices) > 0:
-            price = random.choice(prices)
-            instance.user.profile.xp += price.xp
-            instance.user.profile.bits += price.bits
+    if len(prices) > 0:
+        profiles = []
+        price = random.choice(prices)
+
+        for user in users:
+            user.profile.xp += price.xp
+            user.profile.bits += price.bits
+
+            profiles.append(user.profile)
+
+        Profile.objects.bulk_update(profiles, ["xp", "bits"])
+
+

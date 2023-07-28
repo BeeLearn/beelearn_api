@@ -6,8 +6,13 @@ from djira.decorators import action
 from djira.observer import observer, SignalObserver
 from djira.observer.base_observer import Action, Scope
 
-from .models import Course, Lesson, Module
-from .serializers import CourseSerializer, LessonSerializer, ModuleSerializer
+from .models import Course, Lesson, Module, Topic
+from .serializers import (
+    CourseSerializer,
+    LessonSerializer,
+    ModuleSerializer,
+    TopicSerializer,
+)
 
 
 class CourseAPIHook(APIHook):
@@ -56,10 +61,8 @@ class ModuleAPIHook(APIHook):
         ModuleSerializer,
     )
     def module_observer(observer: SignalObserver, action: str, **kwargs):
-        print(kwargs)
         match action:
             case "post_add":
-                print("module dispatch")
                 observer.dispatch(Action.UPDATE, **kwargs)
 
     @module_observer.rooms
@@ -116,5 +119,53 @@ class LessonAPIHook(APIHook):
     @action(methods=["POST"])
     async def unsubscribe(self):
         self.lesson_observer.unsubscribe(self.scope)
+
+        await self.emit()
+
+
+class FavoriteAPIHook(APIHook):
+    @observer(
+        m2m_changed,
+        Topic.likes.through,
+    )
+    def favourite_observer(observer: SignalObserver, action: str, **kwargs):
+        match action:
+            case "post_add":
+                observer.dispatch(Action.UPDATE, **kwargs)
+            case "post_remove":
+                observer.dispatch(Action.DELETE, **kwargs)
+
+    @favourite_observer.serializer
+    def favourite_observer_serializer(
+        observer: SignalObserver,
+        instance: Topic,
+        action: Action,
+        context,
+    ):
+        course = Course.objects.get(module__lesson__topic=instance)
+
+        return CourseSerializer(
+            course,
+            context=context,
+        ).data
+
+    @favourite_observer.rooms
+    def favourite_observer_rooms(observer: SignalObserver, pk_set: Set[int], **kwargs):
+        for pk in pk_set:
+            yield f"lesson__{pk}"
+
+    @favourite_observer.subscribing_rooms
+    def favourite_observer_subscribing_rooms(observer: SignalObserver, scope: Scope):
+        yield f"lesson__{scope.user.pk}"
+
+    @action(methods=["POST"])
+    async def subscribe(self):
+        self.favourite_observer.subscribe(self.scope)
+
+        await self.emit()
+
+    @action(methods=["POST"])
+    async def unsubscribe(self):
+        self.favourite_observer.unsubscribe(self.scope)
 
         await self.emit()

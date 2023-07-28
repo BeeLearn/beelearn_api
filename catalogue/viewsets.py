@@ -70,34 +70,3 @@ class CategoryViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
     serializer_class = CategorySerializer
 
 
-class FavouriteViewSet(viewsets.ModelViewSet):
-    queryset = Module.objects.all()
-    serializer_class = ModuleSerializer
-
-    def list(self, request: Request):
-        courses = Course.objects.filter(
-            module__lesson__topic__likes=request.user
-        ).distinct()
-        print(courses)
-
-        return Response(
-            list(
-                map(
-                    lambda course: {
-                        "course": CourseSerializer(
-                            course,
-                            context=self.get_serializer_context(),
-                        ).data,
-                        "topics": TopicSerializer(
-                            Topic.objects.filter(
-                                likes=request.user,
-                                lesson__module__course=course,
-                            ),
-                            many=True,
-                            context=self.get_serializer_context(),
-                        ).data,
-                    },
-                    courses,
-                ),
-            ),
-        )

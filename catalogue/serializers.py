@@ -22,6 +22,7 @@ class CourseSerializer(
     """
 
     is_new = serializers.SerializerMethodField()
+    is_liked = serializers.SerializerMethodField()
     is_enrolled = serializers.SerializerMethodField()
     is_completed = serializers.SerializerMethodField()
 
@@ -36,7 +37,6 @@ class CourseSerializer(
         many=True,
         write_only=True,
     )
-    
 
     def get_is_new(self, course: Course):
         topics = Topic.objects.filter(
@@ -50,6 +50,12 @@ class CourseSerializer(
 
     def get_is_completed(self, course: Course):
         return course.course_complete_users.contains(self.request.user)
+
+    def get_is_liked(self, course: Course):
+        return Course.objects.filter(
+            id=course.pk,
+            module__lesson__topic__likes=self.request.user
+        ).distinct().exists()
 
     class Meta:
         model = Course

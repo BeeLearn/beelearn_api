@@ -54,6 +54,8 @@ class StreakAPIHook(APIHook):
         match action:
             case "post_add":
                 observer.dispatch(Action.UPDATE, **kwargs)
+            case "post_remove":
+                observer.dispatch(Action.DELETE, **kwargs)
 
     @streak_observer.rooms
     def streak_observer_rooms(observer: SignalObserver, pk_set: Set[int], **kwargs):

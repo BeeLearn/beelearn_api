@@ -2,7 +2,12 @@ from django.utils import timezone
 
 from rest_framework import serializers
 
+from django_restql.fields import NestedField
+from django_restql.serializers import NestedModelSerializer
+
 from beelearn.mixins import ContextMixin
+
+from account.serializers import UserSerializer
 
 from .models import Price, Reward, Streak
 
@@ -33,13 +38,23 @@ class RewardSerializer(serializers.ModelSerializer, ContextMixin):
         exclude = ["reward_unlocked_users"]
 
 
-class StreakSerializer(serializers.ModelSerializer, ContextMixin):
+class StreakSerializer(
+    NestedModelSerializer,
+    serializers.ModelSerializer,
+    ContextMixin,
+):
     """
     Streak model serializer
     """
 
     is_today = serializers.SerializerMethodField()
     is_complete = serializers.SerializerMethodField()
+
+    streak_complete_users = NestedField(
+        UserSerializer,
+        many=True,
+        write_only=True,
+    )
 
     def get_is_today(self, instance: Streak):
         return instance.date == timezone.localdate()

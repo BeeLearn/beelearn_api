@@ -13,7 +13,7 @@ from socketio import ASGIApp
 from djira.consumer import Consumer
 from djira.settings import jira_settings
 
-from catalogue.hooks import CourseAPIHook, LessonAPIHook, ModuleAPIHook
+from catalogue.hooks import CourseAPIHook, FavoriteAPIHook, LessonAPIHook, ModuleAPIHook
 
 sio = jira_settings.SOCKET_INSTANCE
 
@@ -24,6 +24,7 @@ consumer = Consumer(sio)
 consumer.register("courses", CourseAPIHook)
 consumer.register("modules", ModuleAPIHook)
 consumer.register("lessons", LessonAPIHook)
+consumer.register("favourites", FavoriteAPIHook)
 consumer.register("rewards", RewardAPIHook)
 consumer.register("streaks", StreakAPIHook)
 

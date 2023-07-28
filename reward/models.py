@@ -1,6 +1,7 @@
 from django.db import models
-from django.utils.timezone import now, timedelta, datetime
+from django.utils.timezone import timedelta, datetime
 from django.contrib.auth import get_user_model
+from django.contrib.humanize.templatetags.humanize import naturalday
 
 from beelearn.utils import get_week_start_and_end
 
@@ -134,4 +135,4 @@ class Streak(models.Model):
         return cls.objects.bulk_create(streaks)
 
     def __str__(self):
-        return self.date
+        return naturalday(self.date)
