@@ -4,7 +4,7 @@ version = "3.7.2"
 description = "ASGI specs, helper code, and adapters"
 category = "main"
 optional = false
-python-versions = ">=3.7"
+python-versions = ">=3.10"
 
 [package.dependencies]
 typing-extensions = {version = ">=4", markers = "python_version < \"3.11\""}
