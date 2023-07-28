@@ -250,7 +250,7 @@ version = "0.1.0"
 description = "djira is a websocket extension for drf using socketio"
 category = "main"
 optional = false
-python-versions = ">=3.10"
+python-versions = ">=3.7"
 develop = true
 
 [package.dependencies]
