@@ -11,3 +11,5 @@ services:
         value: 4
       - key: PYTHON_VERSION
         value: 3.11.4
+      - fromGroup: BeeLearn 
+      
