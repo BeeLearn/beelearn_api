@@ -23,7 +23,6 @@ djira = {git="https://github.com/oasisMystre/djira", branch="main"}
 sentry-sdk = "^1.28.1"
 
 [tool.poetry.dev-dependencies]
-django-tidb = { git="https://github.com/pingcap/django-tidb", branch="main"}
 
 
 [build-system]
