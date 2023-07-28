@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: beelearn
+    runtime: python
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn beelearn.wsgi:application"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: mysite
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_USER 
+        value: 2gZaPqPfjWbh9J8.root
+      - key: DATABASE_NAME
+        value: test 
+      - key: DATABASE_PASSWORD
+        value: p38loX81guhPQWMR
+      - key: DATABASE_HOST
+        value: gateway01.eu-central-1.prod.aws.tidbcloud.com
+      - key: WEB_CONCURRENCY
+        value: 4
+        
