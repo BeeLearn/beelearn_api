@@ -28,7 +28,7 @@ ALLOWED_HOSTS = []
 
 RENDER_EXTERNAL_HOSTNAME = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
 if RENDER_EXTERNAL_HOSTNAME:
-ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
 # Application definition
 
@@ -89,28 +89,29 @@ ASGI_APPLICATION = "beelearn.asgi.application"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 if DEBUG:
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
-} else :
-DATABASES = {
-    "default": {
-        "ENGINE": "django_tidb",
-        "NAME": os.environ.get("DATABASE_NAME", default = "django"),
-        "USER": os.environ.get("DATABASE_USER",default = "root"),
-        "PASSWORD": os.environ.get("DATABASE_PASSWORD", default = ""),
-        "HOST": os.environ.get("DATABASE_HOST", default = "localhost"),
-        "PORT": "4000",
-        "OPTIONS": {
-            "ssl": {
-                "ca": "/etc/ssl/cert.pem",
-                "sslmode": "VERIFY_IDENTITY",
-            }
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
         }
-    },
-}
+    } 
+else :
+    DATABASES = {
+        "default": {
+            "ENGINE": "django_tidb",
+            "NAME": os.environ.get("DATABASE_NAME", default = "django"),
+            "USER": os.environ.get("DATABASE_USER",default = "root"),
+            "PASSWORD": os.environ.get("DATABASE_PASSWORD", default = ""),
+            "HOST": os.environ.get("DATABASE_HOST", default = "localhost"),
+            "PORT": "4000",
+            "OPTIONS": {
+                "ssl": {
+                    "ca": "/etc/ssl/cert.pem",
+                    "sslmode": "VERIFY_IDENTITY",
+                }
+            }
+        },
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -148,9 +149,9 @@ USE_TZ = True
 STATIC_URL = "static/"
 
 if not DEBUG:
-# Tell Django to copy statics to the `staticfiles` directory
-# in your application directory on Render.
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+    # Tell Django to copy statics to the `staticfiles` directory
+    # in your application directory on Render.
+    STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
