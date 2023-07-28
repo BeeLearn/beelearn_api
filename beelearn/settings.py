@@ -190,6 +190,8 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:55288",
     "https://beelearn.onrender.com",
     "http://beelearn.onrender.com",
+    "http://bee-learn.web.app",
+    "https://bee-learn.web.app",
 ]
 
 
