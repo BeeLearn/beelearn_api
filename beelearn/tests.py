@@ -4,7 +4,7 @@ from catalogue.models import Course, Lesson, Module, Topic
 from reward.models import Price, Reward
 
 from .settings import BASE_DIR
-from .utils import save_image_to_image_field
+from .utils import save_file_to_image_field
 
 class AccounTestMixin:
     def create_test_account(self):
