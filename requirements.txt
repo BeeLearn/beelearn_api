@@ -1,4 +1,4 @@
-Django==4.2.3
+Django==4.1.10
 djangorestframework==3.14.0
 Pillow==10.0.0
 dj-url-filter==0.4.4
