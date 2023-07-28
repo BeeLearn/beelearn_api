@@ -232,6 +232,11 @@ python-versions = ">=3.6"
 [package.dependencies]
 mysqlclient = "*"
 
+[package.source]
+type = "git"
+branch = "main"
+url = "https://github.com/pingcap/django-tidb"
+
 [[package]]
 name = "djangorestframework"
 version = "3.14.0"
