@@ -17,4 +17,5 @@ services:
         value: gateway01.eu-central-1.prod.aws.tidbcloud.com
       - key: WEB_CONCURRENCY
         value: 4
-        
+      - key: PYTHON_VERSION
+        value: 3.10
