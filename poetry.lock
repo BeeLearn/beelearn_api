@@ -222,22 +222,6 @@ djangorestframework = ">=3.5"
 pypeg2 = ">=2.15.2"
 
 [[package]]
-name = "django-tidb"
-version = "3.0.0"
-description = "Django backend for TiDB"
-category = "main"
-optional = false
-python-versions = ">=3.6"
-
-[package.dependencies]
-mysqlclient = "*"
-
-[package.source]
-type = "git"
-branch = "main"
-url = "https://github.com/pingcap/django-tidb"
-
-[[package]]
 name = "djangorestframework"
 version = "3.14.0"
 description = "Web APIs for Django, made easy."
@@ -255,8 +239,8 @@ version = "0.1.0"
 description = "djira is a websocket extension for drf using socketio"
 category = "main"
 optional = false
-python-versions = ">=3.7"
-develop = true
+python-versions = "^3.10"
+develop = false
 
 [package.dependencies]
 daphne = "^4.0.0"
@@ -267,8 +251,9 @@ python-socketio = "^5.8.0"
 
 [package.source]
 type = "git"
-branch = "main"
 url = "https://github.com/oasisMystre/djira"
+reference = "main"
+resolved_reference = "d9ab327d00ea862173135d5d549cefe651adecc9"
 
 [[package]]
 name = "drf-writable-nested"
@@ -308,14 +293,6 @@ python-versions = "*"
 [package.extras]
 mypy = ["click (>=6.0)", "twisted (>=16.4.0)", "mypy (==0.812)"]
 scripts = ["click (>=6.0)", "twisted (>=16.4.0)"]
-
-[[package]]
-name = "mysqlclient"
-version = "2.2.0"
-description = "Python interface to MySQL"
-category = "main"
-optional = false
-python-versions = ">=3.8"
 
 [[package]]
 name = "pillow"
@@ -433,6 +410,45 @@ urllib3 = ">=1.21.1,<3"
 [package.extras]
 socks = ["PySocks (>=1.5.6,!=1.5.7)"]
 use_chardet_on_py3 = ["chardet (>=3.0.2,<6)"]
+
+[[package]]
+name = "sentry-sdk"
+version = "1.28.1"
+description = "Python client for Sentry (https://sentry.io)"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+certifi = "*"
+urllib3 = {version = ">=1.26.11", markers = "python_version >= \"3.6\""}
+
+[package.extras]
+aiohttp = ["aiohttp (>=3.5)"]
+arq = ["arq (>=0.23)"]
+beam = ["apache-beam (>=2.12)"]
+bottle = ["bottle (>=0.12.13)"]
+celery = ["celery (>=3)"]
+chalice = ["chalice (>=1.16.0)"]
+django = ["django (>=1.8)"]
+falcon = ["falcon (>=1.4)"]
+fastapi = ["fastapi (>=0.79.0)"]
+flask = ["flask (>=0.11)", "blinker (>=1.1)", "markupsafe"]
+grpcio = ["grpcio (>=1.21.1)"]
+httpx = ["httpx (>=0.16.0)"]
+huey = ["huey (>=2)"]
+loguru = ["loguru (>=0.5)"]
+opentelemetry = ["opentelemetry-distro (>=0.35b0)"]
+pure_eval = ["pure-eval", "executing", "asttokens"]
+pymongo = ["pymongo (>=3.1)"]
+pyspark = ["pyspark (>=2.4.4)"]
+quart = ["quart (>=0.16.1)", "blinker (>=1.1)"]
+rq = ["rq (>=0.6)"]
+sanic = ["sanic (>=0.8)"]
+sqlalchemy = ["sqlalchemy (>=1.2)"]
+starlette = ["starlette (>=0.19.1)"]
+starlite = ["starlite (>=1.48)"]
+tornado = ["tornado (>=5)"]
 
 [[package]]
 name = "service-identity"
@@ -581,7 +597,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "b796c79f2782423f139c133c05a742af6fab782d4544490b5c43b2423f6259ea"
+content-hash = "87e56e95c13578c27de66f837c81a803f54fbb552563c6e15497713228193bb9"
 
 [metadata.files]
 asgiref = []
@@ -601,14 +617,12 @@ django = []
 django-cors-headers = []
 django-grappelli = []
 django-restql = []
-django-tidb = []
 djangorestframework = []
 djira = []
 drf-writable-nested = []
 hyperlink = []
 idna = []
 incremental = []
-mysqlclient = []
 pillow = []
 pyasn1 = []
 pyasn1-modules = []
@@ -619,6 +633,7 @@ python-engineio = []
 python-socketio = []
 pytz = []
 requests = []
+sentry-sdk = []
 service-identity = []
 six = []
 sqlparse = []

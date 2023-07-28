@@ -15,23 +15,37 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / "subdir".
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
+
+sentry_sdk.init(
+    dsn="https://9b38570f04de483f86f19fd30501892b@o4504537892192256.ingest.sentry.io/4505607228096512",
+    integrations=[DjangoIntegration()],
+    traces_sample_rate=1.0,
+    send_default_pii=True,
+)
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get("SECRET_KEY", default = "django-insecure-f&4h0n2)4t1)0*3*6^eo^1^*ww+-3ui$odqw+zkupnu$l_ti#j")
+SECRET_KEY = os.environ.get(
+    "SECRET_KEY",
+    default="django-insecure-f&4h0n2)4t1)0*3*6^eo^1^*ww+-3ui$odqw+zkupnu$l_ti#j",
+)
+
 # SECURITY WARNING: don"t run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = ["beelearn.onrender.com", "*"]
 
 RENDER_EXTERNAL_HOSTNAME = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
+
 if RENDER_EXTERNAL_HOSTNAME:
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
 # Application definition
-
 INSTALLED_APPS = [
     "grappelli",
     "daphne",
@@ -56,7 +70,7 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "corsheaders.middleware.CorsMiddleware",
-     "corsheaders.middleware.CorsMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.locale.LocaleMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -67,19 +81,20 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "beelearn.urls"
 
-TEMPLATES = [{
-    "BACKEND": "django.template.backends.django.DjangoTemplates",
-    "DIRS": [],
-    "APP_DIRS": True,
-    "OPTIONS": {
-        "context_processors": [
-            "django.template.context_processors.debug",
-            "django.template.context_processors.request",
-            "django.contrib.auth.context_processors.auth",
-            "django.contrib.messages.context_processors.messages",
-        ],
+TEMPLATES = [
+    {
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
+            ],
+        },
     },
-},
 ]
 
 WSGI_APPLICATION = "beelearn.wsgi.application"
@@ -95,31 +110,32 @@ if DEBUG:
             "ENGINE": "django.db.backends.sqlite3",
             "NAME": BASE_DIR / "db.sqlite3",
         }
-    } 
-else :
+    }
+else:
     DATABASES = {
         "default": {
             "ENGINE": "django_tidb",
-            "NAME": os.environ.get("DATABASE_NAME", default = "django"),
-            "USER": os.environ.get("DATABASE_USER",default = "root"),
-            "PASSWORD": os.environ.get("DATABASE_PASSWORD", default = ""),
-            "HOST": os.environ.get("DATABASE_HOST", default = "localhost"),
+            "NAME": os.environ.get("DATABASE_NAME", default="django"),
+            "USER": os.environ.get("DATABASE_USER", default="root"),
+            "PASSWORD": os.environ.get("DATABASE_PASSWORD", default=""),
+            "HOST": os.environ.get("DATABASE_HOST", default="localhost"),
             "PORT": "4000",
             "OPTIONS": {
                 "ssl": {
                     "ca": "/etc/secrets/cert.pem",
                     "sslmode": "VERIFY_IDENTITY",
                 }
-            }
+            },
         },
     }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 
-AUTH_PASSWORD_VALIDATORS = [{
-    "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
-},
+AUTH_PASSWORD_VALIDATORS = [
+    {
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
+    },
     {
         "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
     },
@@ -172,6 +188,8 @@ REST_FRAMEWORK = {
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:55288",
+    "https://beelearn.onrender.com",
+    "http://beelearn.onrender.com",
 ]
 
 
@@ -179,8 +197,6 @@ DJIRA_SETTINGS = {
     "AUTHENTICATION_CLASSES": ["djira.authentication.TokenAuthentication"],
 }
 
-
-CORS_ALLOW_ALL_ORIGINS = True
 
 CSRF_TRUSTED_ORIGINS = [
     "https://*.onrender.com",
