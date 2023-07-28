@@ -21,7 +21,6 @@ pytz = "^2023.3"
 python-socketio = "^5.8.0"
 djira = {path="../../../workspace/python/wjira", develop=true}
 django-tidb = "^3.0.0"
-gunicorn = "^21.2.0"
 
 [tool.poetry.dev-dependencies]
 
