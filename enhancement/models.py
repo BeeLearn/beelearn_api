@@ -1,3 +1,5 @@
+import openai
+
 from django.db import models
 
 from beelearn.models import TimestampMixin
@@ -13,13 +15,45 @@ class Enhancement(TimestampMixin):
     Store AI Enhanced History
     """
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
+    class EnhancementType(models.TextChoices):
+        ENHANCE = "ENHANCE", "Enhance"
+        SUMMARIZE = "SUMMARIZE", "Summaize"
+
+    type = models.TextField(choices=EnhancementType.choices)
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+    )
+    topic = models.ForeignKey(
+        Topic,
+        on_delete=models.CASCADE,
+    )
     content = models.TextField()
 
     def __str__(self):
         return self.topic.title
 
     @staticmethod
-    def enhance_topic(topic: Topic):
-        return Enhancement.objects.create(topic=topic, content=None)
+    def enhance_topic(user: User, topic: Topic, type: EnhancementType):
+        match type:
+            case Enhancement.EnhancementType.ENHANCE:
+                prompt = f"Explain the course topic '{topic.title}'."
+                response = openai.Completion.create(
+                    engine="gpt-3.5-turbo",
+                    prompt=prompt,
+                    stop="\n",
+                )
+            case Enhancement.EnhancementType.SUMMARIZE:
+                response = openai.Completion.create(
+                    engine="gpt-3.5-turbo",
+                    prompt=topic.title,
+                    stop="\n",
+                )
+
+        content = response["choices"][0]["text"].strip()
+
+        return Enhancement.objects.create(
+            user=user,
+            topic=topic,
+            content=content,
+        )

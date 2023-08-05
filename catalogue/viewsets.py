@@ -68,12 +68,38 @@ class TopicViewSet(
 
     @action(["POST"], detail=True)
     def enhance(self, **kwargs):
-        """ """
+        """ 
+        Enhance a topic content
+        """
 
         topic: Topic = self.get_object()
 
         return Response(
-            EnhancementSerializer(Enhancement.enhance_topic(topic)).data,
+            EnhancementSerializer(
+                Enhancement.enhance_topic(
+                    self.request.user,
+                    topic,
+                    Enhancement.EnhancementType.ENHANCE,
+                )
+            ).data,
+        )
+
+    @action(["GET"], detail=True)
+    def summarize(self, request, **kwargs):
+        """
+        Summarize a topic
+        """
+
+        topic: Topic = self.get_object()
+
+        return Response(
+            EnhancementSerializer(
+                Enhancement.enhance_topic(
+                    self.request.user,
+                    topic,
+                    Enhancement.EnhancementType.SUMMARIZE,
+                )
+            ).data,
         )
 
 
