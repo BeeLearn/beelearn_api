@@ -37,15 +37,16 @@ class Enhancement(TimestampMixin):
     def enhance_topic(user: User, topic: Topic, type: EnhancementType):
         match type:
             case Enhancement.EnhancementType.ENHANCE:
-                prompt = f"Explain the course topic '{topic.title}'."
+                prompt = f"Explain this course topic '{topic.title}'."
                 response = openai.Completion.create(
-                    engine="gpt-3.5-turbo",
+                    engine="text-davinci-002",
                     prompt=prompt,
-                    stop="\n",
+                    temperature=0.7,
+                    max_tokens=150,
                 )
             case Enhancement.EnhancementType.SUMMARIZE:
                 prompt = (
-                    f"Summarize this course {topic.title} content '{topic.content}'."
+                    f"Summarize this course '{topic.title}' content '{topic.content}'."
                 )
                 response = openai.Completion.create(
                     engine="text-davinci-002",
