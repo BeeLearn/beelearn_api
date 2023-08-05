@@ -44,12 +44,15 @@ class Enhancement(TimestampMixin):
                     stop="\n",
                 )
             case Enhancement.EnhancementType.SUMMARIZE:
-                response = openai.Completion.create(
-                    engine="gpt-3.5-turbo",
-                    prompt=topic.title,
-                    stop="\n",
+                prompt = (
+                    f"Summarize this course {topic.title} content '{topic.content}'."
                 )
-
+                response = openai.Completion.create(
+                    engine="text-davinci-002",
+                    prompt=prompt,
+                    temperature=0.7,
+                    max_tokens=150,
+                )
         content = response["choices"][0]["text"].strip()
 
         return Enhancement.objects.create(

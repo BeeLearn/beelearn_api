@@ -9,8 +9,12 @@ class EnhancementSerializer(serializers.ModelSerializer):
     """
     Enhancement model serializer
     """
+
     topic = TopicSerializer()
-    
+
     class Meta:
         model = Enhancement
-        exclude = ("user",)
+        exclude = (
+            "user",
+            "topic",
+        )

@@ -197,7 +197,7 @@ python-versions = "*"
 
 [[package]]
 name = "cryptography"
-version = "41.0.2"
+version = "41.0.3"
 description = "cryptography is a package which provides cryptographic recipes and primitives to Python developers."
 category = "main"
 optional = false
@@ -308,7 +308,7 @@ description = "Django backend for TiDB"
 category = "main"
 optional = false
 python-versions = ">=3.6"
-develop = false
+develop = true
 
 [package.dependencies]
 mysqlclient = "*"
@@ -317,7 +317,7 @@ mysqlclient = "*"
 type = "git"
 url = "https://github.com/pingcap/django-tidb.git"
 reference = "main"
-resolved_reference = "04a7223a3423521a97d444355bd307ec40563da1"
+resolved_reference = "8ead1b9190bcc24116c15e89fc78869a254de95a"
 
 [[package]]
 name = "djangorestframework"
@@ -351,7 +351,7 @@ python-socketio = "^5.8.0"
 type = "git"
 url = "https://github.com/oasisMystre/djira"
 reference = "main"
-resolved_reference = "86509ce000e80fb023dff366de9792eddc92ee95"
+resolved_reference = "8de549b95dc1d53d5b26dcc8da94813263d27e3e"
 
 [[package]]
 name = "drf-writable-nested"
@@ -852,7 +852,7 @@ pyasn1 = ">=0.1.3"
 
 [[package]]
 name = "sentry-sdk"
-version = "1.28.1"
+version = "1.29.2"
 description = "Python client for Sentry (https://sentry.io)"
 category = "main"
 optional = false
@@ -1072,7 +1072,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "e7891ea1e4016e54e33ca1e605806bc21d1b524acd3a2142b28d9e6bbbde80f7"
+content-hash = "af2a11a24982ec284c12aa8f2b7e85059a8e091e61492f4d36223cb61166fbdf"
 
 [metadata.files]
 aiohttp = []

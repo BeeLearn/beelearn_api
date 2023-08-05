@@ -68,7 +68,7 @@ class TopicViewSet(
 
     @action(["POST"], detail=True)
     def enhance(self, **kwargs):
-        """ 
+        """
         Enhance a topic content
         """
 
@@ -80,7 +80,8 @@ class TopicViewSet(
                     self.request.user,
                     topic,
                     Enhancement.EnhancementType.ENHANCE,
-                )
+                ),
+                context=self.get_serializer_context(),
             ).data,
         )
 
@@ -98,7 +99,8 @@ class TopicViewSet(
                     self.request.user,
                     topic,
                     Enhancement.EnhancementType.SUMMARIZE,
-                )
+                ),
+                context=self.get_serializer_context(),
             ).data,
         )
 
