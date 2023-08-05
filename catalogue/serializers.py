@@ -52,10 +52,13 @@ class CourseSerializer(
         return course.course_complete_users.contains(self.request.user)
 
     def get_is_liked(self, course: Course):
-        return Course.objects.filter(
-            id=course.pk,
-            module__lesson__topic__likes=self.request.user
-        ).distinct().exists()
+        return (
+            Course.objects.filter(
+                id=course.pk, module__lesson__topic__likes=self.request.user
+            )
+            .distinct()
+            .exists()
+        )
 
     class Meta:
         model = Course
@@ -105,8 +108,12 @@ class LessonSerializer(serializers.ModelSerializer, ContextMixin):
     Lesson model serializer
     """
 
+    module_id = serializers.SerializerMethodField()
     is_unlocked = serializers.SerializerMethodField()
     is_completed = serializers.SerializerMethodField()
+
+    def get_module_id(self, lesson: Lesson):
+        return lesson.module.id
 
     def get_is_unlocked(self, lesson: Lesson):
         return lesson.entitled_users.contains(self.request.user)

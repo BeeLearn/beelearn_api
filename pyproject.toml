@@ -7,7 +7,7 @@ license = "MIT"
 
 [tool.poetry.dependencies]
 python = "^3.10"
-Django = "^4.2.3"
+Django = "4.1"
 djangorestframework = "^3.14.0"
 Pillow = "^10.0.0"
 dj-url-filter = "^0.4.4"
@@ -19,10 +19,17 @@ django-restql = "^0.15.3"
 django-grappelli = "^3.0.6"
 pytz = "^2023.3"
 python-socketio = "^5.8.0"
-djira = {git="https://github.com/oasisMystre/djira", branch="main"}
 sentry-sdk = "^1.28.1"
+mysqlclient = "^2.2.0"
+djira = {git="https://github.com/oasisMystre/djira", branch="main"}
+django-tidb = {git="https://github.com/pingcap/django-tidb.git", branch="main"}
+python-dotenv = "^1.0.0"
+openai = "^0.27.8"
+firebase-admin = "^6.2.0"
+django-nested-inline = "^0.4.6"
 
 [tool.poetry.dev-dependencies]
+
 
 
 [build-system]

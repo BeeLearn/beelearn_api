@@ -12,19 +12,22 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 import os
 from pathlib import Path
 
-# Build paths inside the project like this: BASE_DIR / "subdir".
-BASE_DIR = Path(__file__).resolve().parent.parent
-
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
 
+from dotenv import load_dotenv
+
+# Build paths inside the project like this: BASE_DIR / "subdir".
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+load_dotenv()
+
 sentry_sdk.init(
-    dsn="https://9b38570f04de483f86f19fd30501892b@o4504537892192256.ingest.sentry.io/4505607228096512",
+    dsn=os.environ.get("SENTRY_DNS"),
     integrations=[DjangoIntegration()],
     traces_sample_rate=1.0,
     send_default_pii=True,
 )
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
@@ -56,6 +59,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     # 3rd party apps
+    "nested_inline",
     "corsheaders",
     "rest_framework",
     "rest_framework.authtoken",
@@ -64,6 +68,7 @@ INSTALLED_APPS = [
     "catalogue.apps.CatalogueConfig",
     "account.apps.AccountConfig",
     "reward.apps.RewardConfig",
+    "enhancement.apps.EnhancementConfig"
 ]
 
 MIDDLEWARE = [
@@ -114,15 +119,15 @@ if DEBUG:
 else:
     DATABASES = {
         "default": {
-            "ENGINE": "django_tidb",
-            "NAME": os.environ.get("DATABASE_NAME", default="django"),
-            "USER": os.environ.get("DATABASE_USER", default="root"),
-            "PASSWORD": os.environ.get("DATABASE_PASSWORD", default=""),
-            "HOST": os.environ.get("DATABASE_HOST", default="localhost"),
+            "ENGINE": "django.db.backends.mysql",
+            "NAME": os.environ.get("DATABASE_NAME"),
+            "USER": os.environ.get("DATABASE_USER"),
+            "PASSWORD": os.environ.get("DATABASE_PASSWORD"),
+            "HOST": os.environ.get("DATABASE_HOST"),
             "PORT": "4000",
             "OPTIONS": {
                 "ssl": {
-                    "ca": "/etc/secrets/cert.pem",
+                    "ca": "/etc/ssl/certs/ca-certificates.crt",
                     "sslmode": "VERIFY_IDENTITY",
                 }
             },
@@ -187,7 +192,7 @@ REST_FRAMEWORK = {
 }
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:55288",
+    "http://localhost:3000",
     "https://beelearn.onrender.com",
     "http://beelearn.onrender.com",
     "http://bee-learn.web.app",
@@ -203,3 +208,5 @@ DJIRA_SETTINGS = {
 CSRF_TRUSTED_ORIGINS = [
     "https://*.onrender.com",
 ]
+
+AUTH_USER_MODEL = "account.user"

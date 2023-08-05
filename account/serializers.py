@@ -25,7 +25,6 @@ class UserSerializer(NestedModelSerializer, serializers.ModelSerializer):
     profile = NestedField(ProfileSerializer)
 
     def update(self, instance, validated_data):
-        print(validated_data)
         return super().update(instance, validated_data)
 
     class Meta:

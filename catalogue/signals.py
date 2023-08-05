@@ -45,7 +45,6 @@ def unlock_next_lesson(instance: Lesson, action: Action, pk_set: Set[int], **kwa
 
     When all module lessons are completed, the `unlock_next_module` event is triggered
     """
-
     match action:
         case "post_add":
             users = User.objects.filter(pk__in=pk_set)

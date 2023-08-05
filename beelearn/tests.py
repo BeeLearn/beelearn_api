@@ -192,13 +192,15 @@ class RewardTextMixin:
             ),
         ]
 
+        rewards = Reward.objects.bulk_create(rewards)
+
         [
             save_file_to_image_field(
                 f"reward/static/rewards/{reward.type.lower()}.png",
                 reward,
                 lambda reward: reward.icon,
             )
-            for reward in Reward.objects.bulk_create(rewards)
+            for reward in rewards
         ]
 
         return rewards

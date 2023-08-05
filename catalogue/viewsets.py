@@ -1,7 +1,6 @@
+from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.request import Request
 from rest_framework import viewsets, mixins
-
 
 from .models import Course, Lesson, Category, Module, Question, Topic
 from .serializers import (
@@ -12,6 +11,9 @@ from .serializers import (
     QuestionSerializer,
     TopicSerializer,
 )
+
+from enhancement.models import Enhancement
+from enhancement.serializers import EnhancementSerializer
 
 
 class CourseViewSet(
@@ -64,9 +66,17 @@ class TopicViewSet(
         "likes",
     )
 
+    @action(["POST"], detail=True)
+    def enhance(self, **kwargs):
+        """ """
+
+        topic: Topic = self.get_object()
+
+        return Response(
+            EnhancementSerializer(Enhancement.enhance_topic(topic)).data,
+        )
+
 
 class CategoryViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-
-
