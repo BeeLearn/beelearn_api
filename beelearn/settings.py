@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
+import json
 import os
 from pathlib import Path
 
@@ -220,5 +221,5 @@ CSRF_TRUSTED_ORIGINS = [
 AUTH_USER_MODEL = "account.user"
 
 
-cred = credentials.Certificate(BASE_DIR / "serviceAccountKey.json")
+cred = credentials.Certificate(json.loads(os.environ.get("FIREBASE_SERVICE_ACCOUNT_KEY")))
 firebase_admin.initialize_app(cred)

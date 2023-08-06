@@ -283,3 +283,4 @@ serviceAccountKey.json
 
 /data
 .env.prod
+serviceAccountKey.json 
