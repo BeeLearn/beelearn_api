@@ -22,5 +22,5 @@ class FirebaseTokenAuthentication(TokenAuthentication):
 
 
 class DjiraFirebaseTokenAuthentication(DjiraTokenAuthentication):
-    def authenticate_credentials(self, key: str) -> AbstractUser:
-        return authenticate_credentials(key)
+    def authenticate_credential(self, key: str) -> AbstractUser:
+        return authenticate_credentials(key)[0]

@@ -15,6 +15,9 @@ from pathlib import Path
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
 
+import firebase_admin
+from firebase_admin import credentials
+
 from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / "subdir".
@@ -184,7 +187,7 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.BasicAuthentication",
         "rest_framework.authentication.SessionAuthentication",
-        "rest_framework.authentication.TokenAuthentication",
+        "account.authentication.FirebaseTokenAuthentication",
     ],
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
     "PAGE_SIZE": 8,
@@ -204,7 +207,9 @@ CORS_ALLOWED_ORIGINS = [
 
 
 DJIRA_SETTINGS = {
-    "AUTHENTICATION_CLASSES": ["djira.authentication.TokenAuthentication"],
+    "AUTHENTICATION_CLASSES": [
+        "account.authentication.DjiraFirebaseTokenAuthentication"
+    ],
 }
 
 
@@ -213,3 +218,7 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 AUTH_USER_MODEL = "account.user"
+
+
+cred = credentials.Certificate(BASE_DIR / "serviceAccountKey.json")
+firebase_admin.initialize_app(cred)
