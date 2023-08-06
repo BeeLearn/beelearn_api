@@ -8,6 +8,7 @@ class EnhancementViewSet(
     viewsets.GenericViewSet,
     mixins.ListModelMixin,
     mixins.RetrieveModelMixin,
+    mixins.DestroyModelMixin,
 ):
     queryset = Enhancement.objects.all()
     serializer_class = EnhancementSerializer

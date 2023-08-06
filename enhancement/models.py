@@ -60,4 +60,5 @@ class Enhancement(TimestampMixin):
             user=user,
             topic=topic,
             content=content,
+            type=type,
         )

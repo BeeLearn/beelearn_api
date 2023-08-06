@@ -68,7 +68,7 @@ INSTALLED_APPS = [
     "catalogue.apps.CatalogueConfig",
     "account.apps.AccountConfig",
     "reward.apps.RewardConfig",
-    "enhancement.apps.EnhancementConfig"
+    "enhancement.apps.EnhancementConfig",
 ]
 
 MIDDLEWARE = [
@@ -188,7 +188,10 @@ REST_FRAMEWORK = {
     ],
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
     "PAGE_SIZE": 8,
-    "DEFAULT_FILTER_BACKENDS": ["url_filter.integrations.drf.DjangoFilterBackend"],
+    "DEFAULT_FILTER_BACKENDS": [
+        "rest_framework.filters.SearchFilter",
+        "url_filter.integrations.drf.DjangoFilterBackend",
+    ],
 }
 
 CORS_ALLOWED_ORIGINS = [

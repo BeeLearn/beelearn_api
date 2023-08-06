@@ -14,7 +14,4 @@ class EnhancementSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Enhancement
-        exclude = (
-            "user",
-            "topic",
-        )
+        exclude = ("user",)

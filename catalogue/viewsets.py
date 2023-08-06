@@ -1,6 +1,6 @@
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework import viewsets, mixins
+from rest_framework import viewsets, mixins, status
 
 from .models import Course, Lesson, Category, Module, Question, Topic
 from .serializers import (
@@ -24,11 +24,13 @@ class CourseViewSet(
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
 
+    search_fields = ("name",)
     filter_fields = (
         "module",
         "course_enrolled_users",
         "course_complete_users",
     )
+
 
 
 class ModuleViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
@@ -67,7 +69,7 @@ class TopicViewSet(
     )
 
     @action(["POST"], detail=True)
-    def enhance(self, **kwargs):
+    def enhance(self, request, **kwargs):
         """
         Enhance a topic content
         """
@@ -83,9 +85,10 @@ class TopicViewSet(
                 ),
                 context=self.get_serializer_context(),
             ).data,
+            status=status.HTTP_201_CREATED,
         )
 
-    @action(["GET"], detail=True)
+    @action(["POST"], detail=True)
     def summarize(self, request, **kwargs):
         """
         Summarize a topic
@@ -102,6 +105,7 @@ class TopicViewSet(
                 ),
                 context=self.get_serializer_context(),
             ).data,
+            status=status.HTTP_201_CREATED,
         )
 
 
