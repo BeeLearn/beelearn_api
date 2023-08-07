@@ -43,7 +43,7 @@ SECRET_KEY = os.environ.get(
 )
 
 # SECURITY WARNING: don"t run with debug turned on in production!
-DEBUG = False # or "RENDER" not in os.environ
+DEBUG = "RENDER" not in os.environ
 
 ALLOWED_HOSTS = ["beelearn.onrender.com"]
 
@@ -188,6 +188,9 @@ if not DEBUG:
     # and creating unique names for each version so they can safely be cached forever.
     STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
+    DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
+
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
@@ -236,4 +239,5 @@ AUTH_USER_MODEL = "account.user"
 cred = credentials.Certificate(
     json.loads(os.environ.get("FIREBASE_SERVICE_ACCOUNT_KEY"))
 )
+
 firebase_admin.initialize_app(cred)
