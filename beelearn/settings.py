@@ -241,3 +241,7 @@ cred = credentials.Certificate(
 )
 
 firebase_admin.initialize_app(cred)
+
+CLOUDINARY_STORAGE = {
+    "EXCLUDE_DELETE_ORPHANED_MEDIA_PATHS": (),
+}

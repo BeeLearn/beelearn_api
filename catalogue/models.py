@@ -142,7 +142,13 @@ class Topic(TimestampMixin):
         on_delete=models.CASCADE,
     )
     title = models.CharField(max_length=128)
-    content = models.TextField()
+    content = models.TextField(
+        blank=True,
+        null=True,
+    )
+    is_visible = models.BooleanField(
+        default=True,
+    )
     likes = models.ManyToManyField(
         User,
         blank=True,
