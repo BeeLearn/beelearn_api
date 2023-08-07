@@ -6,6 +6,7 @@ from reward.models import Price, Reward
 from .settings import BASE_DIR
 from .utils import save_file_to_image_field
 
+
 class AccounTestMixin:
     def create_test_account(self):
         """
@@ -194,13 +195,11 @@ class RewardTextMixin:
 
         rewards = Reward.objects.bulk_create(rewards)
 
-        [
+        for reward in rewards:
             save_file_to_image_field(
                 f"reward/static/rewards/{reward.type.lower()}.png",
                 reward,
                 lambda reward: reward.icon,
             )
-            for reward in rewards
-        ]
 
         return rewards

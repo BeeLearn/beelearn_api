@@ -273,6 +273,17 @@ python-versions = ">=3.8"
 Django = ">=3.2"
 
 [[package]]
+name = "django-extensions"
+version = "3.2.3"
+description = "Extensions for Django"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+Django = ">=3.2"
+
+[[package]]
 name = "django-grappelli"
 version = "3.0.6"
 description = "A jazzy skin for the Django Admin-Interface."
@@ -1072,7 +1083,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "af2a11a24982ec284c12aa8f2b7e85059a8e091e61492f4d36223cb61166fbdf"
+content-hash = "f72a571b80f462df151025ff3cd801e992d84cf4a2740b8bcfb455dde7c49a1a"
 
 [metadata.files]
 aiohttp = []
@@ -1096,6 +1107,7 @@ daphne = []
 dj-url-filter = []
 django = []
 django-cors-headers = []
+django-extensions = []
 django-grappelli = []
 django-nested-inline = []
 django-restql = []

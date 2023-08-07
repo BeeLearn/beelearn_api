@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     # 3rd party apps
+    "django_extensions",
     "nested_inline",
     "corsheaders",
     "rest_framework",
@@ -221,5 +222,7 @@ CSRF_TRUSTED_ORIGINS = [
 AUTH_USER_MODEL = "account.user"
 
 
-cred = credentials.Certificate(json.loads(os.environ.get("FIREBASE_SERVICE_ACCOUNT_KEY")))
+cred = credentials.Certificate(
+    json.loads(os.environ.get("FIREBASE_SERVICE_ACCOUNT_KEY"))
+)
 firebase_admin.initialize_app(cred)
