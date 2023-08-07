@@ -134,7 +134,9 @@ else:
             "PORT": "4000",
             "OPTIONS": {
                 "ssl": {
-                    "ca": "/etc/ssl/certs/ca-certificates.crt",
+                    "ca": "/etc/ssl/certs/ca-certificates.crt"
+                    if "IS_LOCAL" in os.environ
+                    else BASE_DIR / "cert.pem",
                     "sslmode": "VERIFY_IDENTITY",
                 }
             },
