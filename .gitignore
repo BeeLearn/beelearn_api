@@ -277,10 +277,10 @@ pip-selfcheck.json
 !**/migrations/__init__.py
 
 serviceAccountKey.json
-/staticfiles
-/assets
-/uploads
+staticfiles
+assets
+uploads
 
-/data
+data
 .env.prod
 serviceAccountKey.json 

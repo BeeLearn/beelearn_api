@@ -43,9 +43,9 @@ SECRET_KEY = os.environ.get(
 )
 
 # SECURITY WARNING: don"t run with debug turned on in production!
-DEBUG = False
+DEBUG = False # or "RENDER" not in os.environ
 
-ALLOWED_HOSTS = ["beelearn.onrender.com", "*"]
+ALLOWED_HOSTS = ["beelearn.onrender.com"]
 
 RENDER_EXTERNAL_HOSTNAME = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
 
@@ -80,6 +80,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "corsheaders.middleware.CorsMiddleware",
@@ -134,9 +135,7 @@ else:
             "PORT": "4000",
             "OPTIONS": {
                 "ssl": {
-                    "ca": "/etc/ssl/certs/ca-certificates.crt"
-                    if "IS_LOCAL" in os.environ
-                    else BASE_DIR / "cert.pem",
+                    "ca": "/etc/ssl/certs/ca-certificates.crt",
                     "sslmode": "VERIFY_IDENTITY",
                 }
             },
@@ -179,9 +178,15 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 
-# Tell Django to copy statics to the `staticfiles` directory
-# in your application directory on Render.
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+# Following settings only make sense on production and may break development environments.
+if not DEBUG:
+    # Tell Django to copy statics to the `staticfiles` directory
+    # in your application directory on Render.
+    STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+
+    # Turn on WhiteNoise storage backend that takes care of compressing static files
+    # and creating unique names for each version so they can safely be cached forever.
+    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field

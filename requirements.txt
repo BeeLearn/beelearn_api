@@ -1,13 +1,81 @@
-Django==4.1.10
-djangorestframework==3.14.0
-Pillow==10.0.0
-dj-url-filter==0.4.4
-six==1.16.0
-django-cors-headers==4.2.0
-requests==2.31.0
-drf-writable-nested==0.7.0
-django-restql==0.15.3
-django-grappelli==3.0.6
-pytz==2023.3
-python-socketio==5.8.0
-djira @ git+https://github.com/oasisMystre/djira.git
+aiohttp @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/0a/83/25/c6f404df49a4976440935a4720f468b65bb3450f80c029e437ad88d4df/aiohttp-3.8.5-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+aiosignal @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/d5/80/e2/e1a48bb6ad80992699e2bc3b70b91198f794a2f3153958657ebbaa316e/aiosignal-1.3.1-py3-none-any.whl
+asgiref @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/dd/07/9d/34e69fc3361ef66faaafa0ac39393603a7e35eb5085e2021535e02d895/asgiref-3.7.2-py3-none-any.whl
+async-timeout @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/5e/15/15/173c5bae6f8d28fa399857d021326b2b05fc2debcbc7bcae7c5bf79891/async_timeout-4.0.2-py3-none-any.whl
+attrs @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/48/11/e5/f6b2735221d3a0dddea1312eb79319c0c9c01df7e857a0579481eb5c07/attrs-23.1.0-py3-none-any.whl
+autobahn @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/32/6f/45/ab812bb96a7d640c9ece20900380238adefa94feaffaac672c74d2dccf/autobahn-23.6.2.tar.gz
+Automat @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/30/d3/18/b8ff4f217829efa3ca63f811c94c1a75565cc69d0940506eb0ebeae8d0/Automat-22.10.0-py2.py3-none-any.whl
+beelearn==0.1.0
+bidict @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/a7/17/f3/4bf2a1b619296c3a41f67fdfdb7b619d90fd7e2bc2d0bee57adcf4481a/bidict-0.22.1-py3-none-any.whl
+CacheControl @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/ad/09/33/2001c843767179098b33bcb68c17b8b7906c7d8f7bc1d246c42089552a/cachecontrol-0.13.1-py3-none-any.whl
+cached-property @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/f1/71/9d/376889279dc0201dd7b964ab9188bf01213b90aec06e6bf8714cf763ee/cached_property-1.5.2-py2.py3-none-any.whl
+cachetools @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/12/92/8a/0547bc40d58c3bd7e44f35eca285ebf9673e65c93b4d804ef94ce9e9dd/cachetools-5.3.1-py3-none-any.whl
+certifi @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/a8/1b/ac/b470e735834da8d37373add9752305c91d6c81ce82dd51115cc76d156d/certifi-2023.7.22-py3-none-any.whl
+cffi @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/8f/03/c5/3cf9dd7e8f36733162538ee0346ef86f4ad0f08a663096e18a252718fb/cffi-1.15.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+charset-normalizer @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/84/be/bb/b287624101e837a66618c4fc7f08eec53bd4c4a5dbe50f96715a5ec1ca/charset_normalizer-3.2.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+cloudinary @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/d4/38/82/06a3ca6ffefcc808e22b06017e2d80af26680248181eb9fd0812e13983/cloudinary-1.33.0.tar.gz
+constantly @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/4a/b7/d1/b877d01457e81307df294c34c1f863df6bc3f91efac202b07f547663a6/constantly-15.1.0-py2.py3-none-any.whl
+cryptography @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/fa/6f/60/c94626e5bcb1a50b47509a64d50ae460d787b3ec7c547af74bd7b0fcd3/cryptography-41.0.3-cp37-abi3-manylinux_2_28_x86_64.whl
+daphne @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/21/3f/db/b75800738f1eedfc45257c02dc4472152c0ceb91e085cb437f03c910dd/daphne-4.0.0-py3-none-any.whl
+dj-url-filter @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/c5/fc/1d/f6ab2f73006fe1fabd1e9f2d10477d6b3caed1564c5ce5be841bb3799b/dj_url_filter-0.4.4-py3-none-any.whl
+Django @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/f6/42/55/34bad728e835f7d80666fd1fdc5adfb229adc3af1eb00ab2e9b80d1c9d/Django-4.1-py3-none-any.whl
+django-cloudinary-storage @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/b6/ce/3e/b24030e74b8c2a5967e242c0ec87f9c4fdbdcef319f4ab430a6256ea3c/django_cloudinary_storage-0.3.0-py3-none-any.whl
+django-cors-headers @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/e3/31/45/17b22612052cb64cfb8939a5f6c2c8d2cdce4a30e9ff8764e8b6b0f4a1/django_cors_headers-4.2.0-py3-none-any.whl
+django-extensions @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/ca/e6/70/6d808503925e6ea16b91d7851456a72d8a4b5276977369023a5d64613d/django_extensions-3.2.3-py3-none-any.whl
+django-grappelli @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/ce/b7/97/a9326ce1ff32610e62d8358cd57a7b284cc8035098b70a21ac46889721/django_grappelli-3.0.6-py2.py3-none-any.whl
+django-nested-inline @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/4e/ed/5d/0879bd4afea9ab072c7fe842c902ed5e49572ef37b2756314f006085cc/django_nested_inline-0.4.6-py2.py3-none-any.whl
+django-restql @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/1f/27/b0/2919aef0d7c9722bba12074940197a8d75b07dc388438e5e3248f60859/django_restql-0.15.3-py3-none-any.whl
+-e git+https://github.com/pingcap/django-tidb.git@8ead1b9190bcc24116c15e89fc78869a254de95a#egg=django_tidb
+djangorestframework @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/20/30/7a/84b42d5bd530132e945ba03b8508b6877743ff6b6ad8ea00ba2ef2b89c/djangorestframework-3.14.0-py3-none-any.whl
+djira @ file:///home/lyonkvalid/.cache/pypoetry/virtualenvs/beelearn-pPbw_pUD-py3.10/src/djira
+drf-writable-nested @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/ac/31/32/20d023e2db8190c521bd33dd564c5743f78299cb18b9224944587ef42d/drf_writable_nested-0.7.0-py3-none-any.whl
+firebase-admin @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/0d/c2/07/59831e158a8e9dea4405055a65afd0ba500fb5558cad20901405e9ab54/firebase_admin-6.2.0-py3-none-any.whl
+frozenlist @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/80/e3/47/1d5354a11042dee4542efe59249dfba6d1f165861dc5a5d5a58f71b138/frozenlist-1.4.0-cp310-cp310-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+google-api-core @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/de/ad/e8/95706e662e22df68e3c1526bdd53c170ddecbdb0bcc5601a313e8c7cb4/google_api_core-2.11.1-py3-none-any.whl
+google-api-python-client @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/95/6e/df/4f6a9a5ed7a87a3c9956c5961d4636b74c2abda69752c2993b8f7a230e/google_api_python_client-2.95.0-py2.py3-none-any.whl
+google-auth @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/f1/16/86/032f2a4c06ae63e53c21ae529b6d0dee79efcce80b17412f7fbcbb3fe3/google_auth-2.22.0-py2.py3-none-any.whl
+google-auth-httplib2 @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/70/3f/00/c3a592b76a96e03c8f202a29fd88cefbbd27e13975b0e5266bf7dcd469/google_auth_httplib2-0.1.0-py2.py3-none-any.whl
+google-cloud-core @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/df/c0/8a/4d4f5abfca90e277a270bd2fc8fd54d04430c7614bc83f80945214b0e7/google_cloud_core-2.3.3-py2.py3-none-any.whl
+google-cloud-firestore @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/d7/4a/ca/502b97d13f83f60d4e849997f761879210b89ae82f66f9c33f61c2b998/google_cloud_firestore-2.11.1-py2.py3-none-any.whl
+google-cloud-storage @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/cc/76/47/46db7968553e229421dabcfac6149fd4bea694dea82841d7bbfec2380c/google_cloud_storage-2.10.0-py2.py3-none-any.whl
+google-crc32c @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/c8/09/e1/5b02f1caf46b65fc752efded822fb54d69cfbc37f957045f130fdd4c85/google_crc32c-1.5.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+google-resumable-media @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/a6/4f/65/ea4bd53e0dce18259d1b8d7c77e874cfb8b4702acfe9cd65e43801286b/google_resumable_media-2.5.0-py2.py3-none-any.whl
+googleapis-common-protos @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/6c/c1/98/8c418b3b0ad22560cd235f2026779b64cf593945b1d54ffdc6f5aff397/googleapis_common_protos-1.60.0-py2.py3-none-any.whl
+grpcio @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/7b/2e/fa/41d83bd5e27adbbebdca9ae225ec8dec0f42601da3bb1647b9618d1b32/grpcio-1.56.2-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+grpcio-status @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/e7/df/2b/cb3df13f20e184809c5ce1bdbe8067aec2902b7fd152d21f75daef408b/grpcio_status-1.56.2-py3-none-any.whl
+httplib2 @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/76/e3/26/a30a3f2f30be1b10e4adae28b06c92c22dbe9f2519bc02c589948bffa3/httplib2-0.22.0-py3-none-any.whl
+hyperlink @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/ca/a6/d8/7f2a9ea7c8db1e9b040c4de2eedf0d61eb5d9a1c04daf10b43bc982eda/hyperlink-21.0.0-py2.py3-none-any.whl
+idna @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/6c/c4/9a/4a40812e61d669fffc474987128ff48aab9be33cdddc5e5038bd96f4ac/idna-3.4-py3-none-any.whl
+incremental @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/de/d6/c0/0abc8da208566caa154e87503e2dc94ea2b217048fce3382c4fed93546/incremental-22.10.0-py2.py3-none-any.whl
+msgpack @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/13/58/73/a1db92b9198685d08917e4fd8ba48a211434d50a7da4f2bfadda48e848/msgpack-1.0.5-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+multidict @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/ca/21/97/bdfdd2f4f1e40e902fda564b78405224feb83522f01b244c8274b8e5d8/multidict-6.0.4-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+mysqlclient @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/66/c4/9b/f45ec49146ef3869172e31193c1ad0d2a43e86ac27ca65a4cef69969ec/mysqlclient-2.2.0.tar.gz
+openai @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/02/72/26/d4b1a4f8ed4d70585a48b382dd267cb58849ee0ae2126cbc1242f58738/openai-0.27.8-py3-none-any.whl
+Pillow @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/9d/2b/23/fa81ad8cc832578506ba2bf95cf0d0b908aeb39198c36a6f85a92ad506/Pillow-10.0.0-cp310-cp310-manylinux_2_28_x86_64.whl
+proto-plus @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/d7/d5/ab/27d2e80bf227e1ee7e721271230275a201bc9297db9a90a29a083108d1/proto_plus-1.22.3-py3-none-any.whl
+protobuf @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/05/e0/38/f179e1fc6b4fc37f33d89c1aee90f9b08baeb50154402390dae7382ffa/protobuf-4.23.4-cp37-abi3-manylinux2014_x86_64.whl
+pyasn1 @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/53/d4/c2/a24195dbd2b7cfa05c517f75145eab408001df86496a47aff0eb2e063a/pyasn1-0.5.0-py2.py3-none-any.whl
+pyasn1-modules @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/9e/8e/66/8fb34ba25764dfe3f3c767279c63a61f5cac121cd883bb9bbc298d9b8e/pyasn1_modules-0.3.0-py2.py3-none-any.whl
+pycparser @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/08/b1/1b/4618699096207aa9eba9fa35118b2b6544fd1c9c2a79ea3601a3d325a0/pycparser-2.21-py2.py3-none-any.whl
+PyJWT @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/ff/3b/5e/df0e1e431848178a1a865fb3d3303f520f7e3841a01b6c52e6ed27f8a5/PyJWT-2.8.0-py3-none-any.whl
+pyOpenSSL @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/06/a1/3c/d756937edb3706bd56004e56637bb500d954a50ec8cf44ba44436cae1a/pyOpenSSL-23.2.0-py3-none-any.whl
+pyparsing @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/de/b7/3e/662df4bc59dead67ab3efa2b4c9fbcbc017acf9ff7e37f926dce5a2b98/pyparsing-3.1.1-py3-none-any.whl
+pyPEG2 @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/35/62/9f/416626e75b0b806c8d320f7ae87db7b42953b9ce1687d5976cbfea797a/pyPEG2-2.15.2.tar.gz
+python-dotenv @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/5d/7c/90/38aefc5073a676fec5caae25a0e06f790e048f050f1dc94a43ace0b324/python_dotenv-1.0.0-py3-none-any.whl
+python-engineio @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/4f/16/8f/8bf3a815f782bebabc65f874ae386f6a7c77b9de14c8c362167c5ebec9/python_engineio-4.5.1-py3-none-any.whl
+python-socketio @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/79/ab/08/6cb7540adbb1f8298f8d31c48192969450c5dcede2e1e3d75a4fdd92e7/python_socketio-5.8.0-py3-none-any.whl
+pytz @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/ef/d7/70/a6e3cca05c00e2f0aa43699df7c28ca8f9b4a568bbe20bcf32a2583e4d/pytz-2023.3-py2.py3-none-any.whl
+requests @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/eb/ea/f9/18e57d121e8db52265153ca64de6c444adc1c23239a161bfa2610cb588/requests-2.31.0-py3-none-any.whl
+rsa @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/4c/5f/b8/91cdc2a62c55059bdc352db73629eed1bc45fe31b022d51d8784c9b92c/rsa-4.9-py3-none-any.whl
+sentry-sdk @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/92/2a/2c/4f57fbd2fa19645bd17ee7f4829ac5ea5f18d6cc4ca19e5fc796305637/sentry_sdk-1.29.2-py2.py3-none-any.whl
+service-identity @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/7f/9c/f3/a88a9047c5470c89665c9585b60d3ceb1009ee004b0e9c729972d113f1/service_identity-23.1.0-py3-none-any.whl
+six @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/89/b2/f8/fd92b6d5daa0f8889429b2fc67ec21eedc5cae5d531ee2853828ced6c7/six-1.16.0-py2.py3-none-any.whl
+sqlparse @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/77/ca/25/5fc2f94ea6af1763173cedc3cdba5600b2e499acf3d4a70d606040616d/sqlparse-0.4.4-py3-none-any.whl
+tqdm @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/9d/70/e0/376626bb6c97bf03beef69752addc9634614f4aa7230c026be9497a185/tqdm-4.65.0-py3-none-any.whl
+Twisted @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/57/bd/f8/9c1c8c543474763ab3a3f1c3d6ea6b5244a2d321d24f0630f5ddd90cfe/Twisted-22.10.0-py3-none-any.whl
+txaio @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/23/d7/9c/6740172a17ec10a62532eeb6e44046ce57b7beabb1fc8bc8beb09e97fe/txaio-23.1.1-py2.py3-none-any.whl
+typing_extensions @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/53/6b/c8/0663e1357929d984d3499d9cb8bff33a9f1593eaeeab1a62ef4a03c4a9/typing_extensions-4.7.1-py3-none-any.whl
+uritemplate @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/2a/d6/11/cd290afd2d0cea58f6e23668fa9814ba18c6fa968dfbd7d280a2f76dc6/uritemplate-4.1.1-py2.py3-none-any.whl
+urllib3 @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/e5/80/37/5c8cd3b24a2affca6746821a9606c25e381255776cc2f368be9db49c54/urllib3-1.26.16-py2.py3-none-any.whl
+yarl @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/27/86/19/d6a80e8dc1e92771daf9f3f4a7bb95e6041a01bda005f510e1e52257a7/yarl-1.9.2-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+zope.interface @ file:///home/lyonkvalid/.cache/pypoetry/artifacts/75/97/d2/baaa5a2aeb21def8eaa0587ac2480cae2fff6f79d31dbf3cd93b81e1a9/zope.interface-6.0-cp310-cp310-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl
