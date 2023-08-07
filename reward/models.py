@@ -18,21 +18,24 @@ class Price(models.Model):
         LESSON_COMPLETE = "LESSON_COMPLETE", "Lesson completed"
         STREAK_COMPLETE = "STREAK_COMPLETE", "Streak completed"
 
-    type = models.TextField(choices=PriceType.choices)
+    type = models.TextField(
+        choices=PriceType.choices,
+        max_length=128,
+    )
     xp = models.IntegerField()
     bits = models.IntegerField()
 
     def __str__(self):
         return self.type
 
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(
-                fields=["type", "xp", "bits"],
-                name="Price must be unique",
-                violation_error_message="Price already exist",
-            )
-        ]
+    # class Meta: # not working on sql
+    #     constraints = [
+    #         models.UniqueConstraint(
+    #             fields=["type","xp", "bits"],
+    #             name="Price must be unique",
+    #             violation_error_message="Price already exist",
+    #         )
+    #     ]
 
 
 class Reward(models.Model):
@@ -57,7 +60,10 @@ class Reward(models.Model):
         ENGAGED_IN = "ENGAGED_IN"
         WE_ARE_IN_THIS_TOGETHER = "WE_ARE_IN_THIS_TOGETHER"
 
-    type = models.TextField(choices=RewardType.choices)
+    type = models.TextField(
+        choices=RewardType.choices,
+        max_length=128,
+    )
 
     # metadata
     title = models.CharField(max_length=60)

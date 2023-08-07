@@ -43,7 +43,7 @@ SECRET_KEY = os.environ.get(
 )
 
 # SECURITY WARNING: don"t run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["beelearn.onrender.com", "*"]
 
@@ -63,6 +63,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     # 3rd party apps
+    "cloudinary_storage",
+    "cloudinary",
     "django_extensions",
     "nested_inline",
     "corsheaders",
@@ -124,7 +126,7 @@ if DEBUG:
 else:
     DATABASES = {
         "default": {
-            "ENGINE": "django.db.backends.mysql",
+            "ENGINE": "django_tidb",
             "NAME": os.environ.get("DATABASE_NAME"),
             "USER": os.environ.get("DATABASE_USER"),
             "PASSWORD": os.environ.get("DATABASE_PASSWORD"),
@@ -175,10 +177,9 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 
-if DEBUG:
-    # Tell Django to copy statics to the `staticfiles` directory
-    # in your application directory on Render.
-    STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+# Tell Django to copy statics to the `staticfiles` directory
+# in your application directory on Render.
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field

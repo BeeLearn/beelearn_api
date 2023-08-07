@@ -123,7 +123,10 @@ class Question(models.Model):
 
     title = models.CharField(max_length=60)
     content = models.JSONField()
-    type = models.TextField(choices=QuestionType.choices)
+    type = models.TextField(
+        choices=QuestionType.choices,
+        max_length=128,
+    )
 
     def __str__(self) -> str:
         return self.title

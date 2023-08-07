@@ -180,6 +180,19 @@ optional = false
 python-versions = ">=3.7.0"
 
 [[package]]
+name = "cloudinary"
+version = "1.33.0"
+description = "Python and Django SDK for Cloudinary"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+certifi = "*"
+six = "*"
+urllib3 = ">=1.26.5,<2"
+
+[[package]]
 name = "colorama"
 version = "0.4.6"
 description = "Cross-platform colored terminal text."
@@ -260,6 +273,21 @@ tzdata = {version = "*", markers = "sys_platform == \"win32\""}
 [package.extras]
 argon2 = ["argon2-cffi (>=19.1.0)"]
 bcrypt = ["bcrypt"]
+
+[[package]]
+name = "django-cloudinary-storage"
+version = "0.3.0"
+description = "Django package that provides Cloudinary storages for both media and static files as well as management commands for removing unnecessary files."
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+cloudinary = ">=1.4.0"
+requests = ">=2.10.0"
+
+[package.extras]
+video = ["python-magic (>=0.4.12)"]
 
 [[package]]
 name = "django-cors-headers"
@@ -1083,7 +1111,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "f72a571b80f462df151025ff3cd801e992d84cf4a2740b8bcfb455dde7c49a1a"
+content-hash = "253460eb97aa3a8fa28da5c117bfba36b9430af9d5a6e75c0f316cfdc138fe8e"
 
 [metadata.files]
 aiohttp = []
@@ -1100,12 +1128,14 @@ cachetools = []
 certifi = []
 cffi = []
 charset-normalizer = []
+cloudinary = []
 colorama = []
 constantly = []
 cryptography = []
 daphne = []
 dj-url-filter = []
 django = []
+django-cloudinary-storage = []
 django-cors-headers = []
 django-extensions = []
 django-grappelli = []

@@ -19,7 +19,10 @@ class Enhancement(TimestampMixin):
         ENHANCE = "ENHANCE", "Enhance"
         SUMMARIZE = "SUMMARIZE", "Summaize"
 
-    type = models.TextField(choices=EnhancementType.choices)
+    type = models.TextField(
+        choices=EnhancementType.choices,
+        max_length=128,
+    )
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
