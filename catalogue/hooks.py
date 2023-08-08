@@ -11,7 +11,6 @@ from .serializers import (
     CourseSerializer,
     LessonSerializer,
     ModuleSerializer,
-    TopicSerializer,
 )
 
 
