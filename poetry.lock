@@ -398,7 +398,7 @@ python-socketio = "^5.8.0"
 type = "git"
 url = "https://github.com/oasisMystre/djira"
 reference = "main"
-resolved_reference = "8de549b95dc1d53d5b26dcc8da94813263d27e3e"
+resolved_reference = "8b1bed83e45cf1dc54ccbbaf12e141646980bc8b"
 
 [[package]]
 name = "drf-writable-nested"
