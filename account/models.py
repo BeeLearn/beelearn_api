@@ -8,6 +8,9 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 class User(AbstractUser):
     uid = models.TextField(default=uuid4)
 
+    def __str__(self) -> str:
+        return self.username or self.email or self.uid
+
 
 class Profile(models.Model):
     user = models.OneToOneField(

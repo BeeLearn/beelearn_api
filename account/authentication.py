@@ -10,15 +10,15 @@ from .models import User
 
 
 def authenticate_credentials(key: str):
-    decode_token = verify_id_token(key)
+    decoded_token = verify_id_token(key)
     user, created = User.objects.get_or_create(
-        uid=decode_token["uid"],
-        email=decode_token["email"],
+        uid=decoded_token["uid"],
     )
 
     if created:
-        user.username = user.uid
-        user.save(["username"])
+        user.email = decoded_token["email"]
+        user.username = decoded_token["uid"]
+        user.save(update_fields=["username", "email"])
 
     return user, key
 
