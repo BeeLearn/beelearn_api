@@ -13,6 +13,7 @@ def authenticate_credentials(key: str):
     decoded_token = verify_id_token(key)
     user, created = User.objects.get_or_create(
         uid=decoded_token["uid"],
+        username=decoded_token["uid"]
     )
 
     if created:

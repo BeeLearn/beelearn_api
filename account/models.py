@@ -6,15 +6,9 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 
 
 class User(AbstractUser):
-    username = models.TextField()
-    uid = models.TextField(
-        default=uuid4,
-        unique=True,
-    )
+    uid = models.TextField(default=uuid4)
 
-    USERNAME_FIELD = "uid"
-
-    def __str__(self) -> str:
+    def __str__(self):
         return self.username or self.email or self.uid
 
 

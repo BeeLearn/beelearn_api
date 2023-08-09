@@ -43,7 +43,7 @@ SECRET_KEY = os.environ.get(
 )
 
 # SECURITY WARNING: don"t run with debug turned on in production!
-DEBUG = "RENDER" not in os.environ
+DEBUG = False and "RENDER" not in os.environ
 
 ALLOWED_HOSTS = ["beelearn.onrender.com"]
 
