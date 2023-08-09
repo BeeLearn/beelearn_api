@@ -17,8 +17,7 @@ def authenticate_credentials(key: str):
 
     if created:
         user.email = decoded_token["email"]
-        user.username = decoded_token["uid"]
-        user.save(update_fields=["username", "email"])
+        user.save(update_fields=["email"])
 
     return user, key
 
