@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Price, Reward, Achievement, Streak
+from .models import Price, Reward, Streak
 
 
 @admin.register(Price)
@@ -21,13 +21,13 @@ class RewardAdmin(admin.ModelAdmin):
     )
 
 
-@admin.register(Achievement)
-class AchievementAdmin(admin.ModelAdmin):
-    list_display = (
-        "id",
-        "user",
-        "reward",
-    )
+# @admin.register(Achievement)
+# class AchievementAdmin(admin.ModelAdmin):
+#     list_display = (
+#         "id",
+#         "user",
+#         "reward",
+#     )
 
 
 @admin.register(Streak)

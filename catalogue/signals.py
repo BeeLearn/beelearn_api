@@ -33,6 +33,12 @@ def unlock_next_module(instance: Module, action: Action, pk_set: Set[int], **kwa
             if next_module:
                 # add user as entitled to next module
                 next_module.entitled_users.add(*users)
+                first_lesson = next_module.lesson_set.first()
+                if first_lesson:
+                    first_lesson.entitled_users.add(*users)
+                else:
+                    # add user to those that have complete this course
+                    instance.course.course_complete_users.add(*users)
             else:  # mark course as completed
                 # add user to those that have complete this course
                 instance.course.course_complete_users.add(*users)
@@ -79,6 +85,10 @@ def unlock_next_topic(instance: Topic, action: Action, pk_set: Set[int], **kwarg
                 lesson=instance.lesson,
                 created_at__gt=instance.created_at,
             ).first()
+
+            for user in users:
+                if not instance.entitled_users.contains(user):
+                    instance.entitled_users.add(user)
 
             if next_topic:
                 # add user as entitleld to next lesson

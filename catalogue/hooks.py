@@ -73,7 +73,7 @@ class ModuleAPIHook(APIHook):
     def module_rooms(observer, scope: Scope):
         yield f"module__{scope.user.pk}"
 
-    @action(methods=["SUBSCRIPTION"])
+    @action(methods=["POST"])
     async def subscribe(self):
         self.module_observer.subscribe(self.scope)
 

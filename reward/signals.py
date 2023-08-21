@@ -7,39 +7,37 @@ from django.db.models import signals
 
 from account.models import Profile, User
 from catalogue.models import Course, Lesson, TopicComment
-from reward.models import Achievement, Price, Reward, Streak
-
-# todo make use of socket to make realtime with frontend
+from reward.models import Price, Reward, Streak
 
 
 # api
-@receiver(signals.post_save)
-def grant_fearless_reward(instance, **kwargs):
-    """
-    Retry a solution to a question multiple times.
-    """
+# @receiver(signals.post_save)
+# def grant_fearless_reward(instance, **kwargs):
+#     """
+#     Retry a solution to a question multiple times.
+#     """
 
 
-@receiver(signals.m2m_changed, sender=Course.course_complete_users.through)
-def grant_new_career_awaits_reward(instance: Course, **kwargs):
-    """
-    Triggered when a user completes all possible courses on a particular topic (rare).
-    """
+# @receiver(signals.m2m_changed, sender=Course.course_complete_users.through)
+# def grant_new_career_awaits_reward(instance: Course, **kwargs):
+#     """
+#     Triggered when a user completes all possible courses on a particular topic (rare).
+#     """
 
 
-@receiver(signals.pre_save)
-def grand_where_the_magic_happens_reward(instance, **kwargs):
-    """
-    Triggered when a user completes a random task (rare).
-    """
+# @receiver(signals.pre_save)
+# def grand_where_the_magic_happens_reward(instance, **kwargs):
+#     """
+#     Triggered when a user completes a random task (rare).
+#     """
 
 
 # solution
-@receiver(signals.post_save, sender=Achievement)
-def grand_achiever_reward(instance, **kwargs):
-    """
-    Reward a user who has earned more than half of all possible rewards.
-    """
+# @receiver(signals.post_save, sender=Achievement)
+# def grand_achiever_reward(instance, **kwargs):
+#     """
+#     Reward a user who has earned more than half of all possible rewards.
+#     """
 
 
 @receiver(signals.post_save, sender=Profile)
@@ -156,5 +154,3 @@ def award_streak_price_to_user(
             profiles.append(user.profile)
 
         Profile.objects.bulk_update(profiles, ["xp", "bits"])
-
-

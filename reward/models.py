@@ -91,22 +91,22 @@ class Reward(models.Model):
         return self.title
 
 
-class Achievement(models.Model):
-    """
-    User unlocked reward collections
-    """
+# class Achievement(models.Model):
+#     """
+#     User unlocked reward collections
+#     """
 
-    user = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-    )
-    reward = models.ForeignKey(
-        Reward,
-        on_delete=models.CASCADE,
-    )
+#     user = models.ForeignKey(
+#         User,
+#         on_delete=models.CASCADE,
+#     )
+#     reward = models.ForeignKey(
+#         Reward,
+#         on_delete=models.CASCADE,
+#     )
 
-    def __str__(self):
-        return self.reward.title
+#     def __str__(self):
+#         return self.reward.title
 
 
 class Streak(models.Model):
