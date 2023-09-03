@@ -1,9 +1,9 @@
 from account.models import Profile, User
+from assessment.models import Choice, SingleChoiceQuestion, TextOptionQuestion
 
 from catalogue.models import Course, Lesson, Module, Topic
 from reward.models import Price, Reward
 
-from .settings import BASE_DIR
 from .utils import save_file_to_image_field
 
 
@@ -201,3 +201,58 @@ class RewardTextMixin:
             )
 
         return rewards
+
+
+class QuestionTestMixin:
+    def create_test_questions(self):
+        single_choice_question_1 = SingleChoiceQuestion.objects.create(
+            title="CSS stands for"
+        )
+        single_choice_question_2 = SingleChoiceQuestion.objects.create(
+            title="A CSS rules includes:"
+        )
+        single_choice_question_3 = SingleChoiceQuestion.objects.create(
+            title="Which sttribute is used to add style declarations to an element?"
+        )
+
+        single_choice_questions = [
+            single_choice_question_1,
+            single_choice_question_2,
+            single_choice_question_3,
+        ]
+
+        # SingleChoiceQuestion.objects.bulk_create(single_choice_questions)
+
+        single_choice_question_1.choices.add(
+            Choice.objects.create(name="Casting Style Sheets"),
+            Choice.objects.create(name="Cascading Some Styles"),
+            Choice.objects.create(name="Cascading Selection Styles"),
+            Choice.objects.create(name="Cascading Style Sheets"),
+        )
+
+        single_choice_question_2.choices.add(
+            Choice.objects.create(name="paragraphs"),
+            Choice.objects.create(name="style declarations"),
+            Choice.objects.create(name="elements"),
+        )
+        single_choice_question_3.choices.add(
+            Choice.objects.create(name="css"),
+            Choice.objects.create(name="add"),
+            Choice.objects.create(name="style"),
+            Choice.objects.create(name="class"),
+        )
+
+        text_option_questions = [
+            TextOptionQuestion(
+                title="Fill in the blank to define a style for the paragraph:",
+                question="""
+                <p %s% ="color: yellow">
+                some text 
+                </p>
+                """,
+            ),
+        ]
+
+        TextOptionQuestion.objects.bulk_create(text_option_questions)
+
+        return single_choice_questions + text_option_questions

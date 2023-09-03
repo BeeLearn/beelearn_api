@@ -4,12 +4,26 @@ from rest_framework import serializers
 
 from django_restql.fields import NestedField
 from django_restql.serializers import NestedModelSerializer
+from assessment.models import (
+    DragDropQuestion,
+    MultiChoiceQuestion,
+    SingleChoiceQuestion,
+    TextOptionQuestion,
+)
+from assessment.serializers import (
+    DragDropQuestionSerializer,
+    MultipleChoiceQuestionSerializer,
+    SingleChoiceQuestionSerializer,
+    TextOptionQuestionSerializer,
+)
+
+from generic_relations.relations import GenericRelatedField
 
 from beelearn.mixins import ContextMixin
 
 from account.serializers import UserSerializer
 
-from .models import Course, Lesson, Category, Module, Question, Topic
+from .models import Course, Lesson, Category, Module, Topic
 
 
 class CourseSerializer(
@@ -130,15 +144,6 @@ class LessonSerializer(serializers.ModelSerializer, ContextMixin):
         )
 
 
-class QuestionSerializer(serializers.ModelSerializer):
-    """
-    Question model serializer
-    """
-
-    class Meta:
-        model = Question
-
-
 class TopicSerializer(
     NestedModelSerializer,
     serializers.ModelSerializer,
@@ -157,7 +162,24 @@ class TopicSerializer(
     is_completed = serializers.SerializerMethodField()
     is_unlocked = serializers.SerializerMethodField()
 
+    question = GenericRelatedField(
+        {
+            DragDropQuestion: DragDropQuestionSerializer(),
+            TextOptionQuestion: TextOptionQuestionSerializer(),
+            SingleChoiceQuestion: SingleChoiceQuestionSerializer(),
+            MultiChoiceQuestion: MultipleChoiceQuestionSerializer(),
+        }
+    )
+
+    has_assessment = serializers.SerializerMethodField()
+
     topic_complete_users = NestedField(
+        UserSerializer,
+        many=True,
+        write_only=True,
+    )
+    
+    entitled_users = NestedField(
         UserSerializer,
         many=True,
         write_only=True,
@@ -165,10 +187,7 @@ class TopicSerializer(
 
     class Meta:
         model = Topic
-        exclude = (
-            "lesson",
-            "entitled_users",
-        )
+        exclude = ("lesson",)
 
     def get_is_liked(self, topic: Topic):
         return topic.likes.contains(self.request.user)
@@ -178,6 +197,9 @@ class TopicSerializer(
 
     def get_is_unlocked(self, topic: Topic):
         return topic.entitled_users.contains(self.request.user)
+
+    def get_has_assessment(self, topic: Topic):
+        return not topic.question is None
 
 
 class CategorySerializer(serializers.ModelSerializer):

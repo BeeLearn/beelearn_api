@@ -63,6 +63,9 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     # 3rd party apps
+    "generic_relations",
+    "martor",
+    "nested_admin",
     "cloudinary_storage",
     "cloudinary",
     "django_extensions",
@@ -73,6 +76,7 @@ INSTALLED_APPS = [
     "djira.apps.DJiraConfig",
     # apps
     "catalogue.apps.CatalogueConfig",
+    "assessment.apps.AssessmentConfig",
     "account.apps.AccountConfig",
     "reward.apps.RewardConfig",
     "enhancement.apps.EnhancementConfig",
@@ -190,6 +194,9 @@ if not DEBUG:
 
     DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
 
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
@@ -245,3 +252,13 @@ firebase_admin.initialize_app(cred)
 CLOUDINARY_STORAGE = {
     "EXCLUDE_DELETE_ORPHANED_MEDIA_PATHS": (),
 }
+
+
+# martor config
+MARTOR_ENABLE_ADMIN_CSS = False
+MARTOR_IMGUR_CLIENT_ID = os.environ.get("IMGUR_CLIENT_ID")
+MARTOR_IMGUR_API_KEY = os.environ.get("IMGUR_API_KEY")
+
+# grappelli config
+
+GRAPPELLI_ADMIN_TITLE = "BeeLearn"

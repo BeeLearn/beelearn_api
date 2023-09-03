@@ -1,45 +1,134 @@
+from django import forms
 from django.contrib import admin
+from django.contrib.contenttypes.models import ContentType
 
-from nested_inline.admin import NestedStackedInline, NestedModelAdmin
-
+from nested_admin import NestedStackedInline, NestedModelAdmin
 from .models import Course, Lesson, Category, Module, Topic
 
 
 class TopicInline(NestedStackedInline):
     model = Topic
-    extra = 1
 
 
 class LessonInline(NestedStackedInline):
     model = Lesson
-    extra = 1
-    inlines = [TopicInline]
+    inlines = (TopicInline,)
 
 
 class ModuleInline(NestedStackedInline):
     model = Module
-    extra = 1
-    inlines = [LessonInline]
+    inlines = (LessonInline,)
 
 
 @admin.register(Course)
 class CourseAdmin(NestedModelAdmin):
-    inlines = [ModuleInline]
+    inlines = (ModuleInline,)
+
+    list_display = (
+        "id",
+        "name",
+        "is_visible",
+        "number_of_enrolled_users",
+        "number_of_completed_users",
+        "created_at",
+        "updated_at",
+    )
+
+    search_fields = ("name",)
+
+    list_filter = (
+        "created_at",
+        "updated_at",
+        "is_visible",
+    )
+
+    def number_of_completed_users(self, course: Course):
+        return course.course_complete_users.count()
+
+    def number_of_enrolled_users(self, course: Course):
+        return course.course_enrolled_users.count()
 
 
 @admin.register(Module)
 class ModuleAdmin(NestedModelAdmin):
-    inlines = [LessonInline]
+    inlines = (LessonInline,)
+
+    list_display = (
+        "id",
+        "name",
+        "created_at",
+        "updated_at",
+    )
+
+    search_fields = ("name",)
+
+    list_filter = (
+        "created_at",
+        "updated_at",
+        "is_visible",
+    )
 
 
 @admin.register(Lesson)
 class LessonAdmin(NestedModelAdmin):
-    inlines = [TopicInline]
+    inlines = (TopicInline,)
+
+    list_display = (
+        "id",
+        "name",
+        "created_at",
+        "updated_at",
+    )
+
+    search_fields = (
+        "name",
+        "module__name",
+        "module__course__name",
+    )
+
+    list_filter = (
+        "created_at",
+        "updated_at",
+        "is_visible",
+    )
+
+
+class TopicAdminForm(forms.ModelForm):
+    class Meta:
+        model = Topic
+        fields = "__all__"
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["question_content_type"].queryset = ContentType.objects.filter(
+            model__icontains="question",
+        )
 
 
 @admin.register(Topic)
 class TopicAdmin(admin.ModelAdmin):
-    pass
+    list_display = (
+        "id",
+        "title",
+        "is_visible",
+        "created_at",
+        "updated_at",
+    )
+
+    search_fields = (
+        "title",
+        "lesson__name",
+        "lesson__module__name",
+        "lesson__module__course__name",
+    )
+
+    list_filter = (
+        "is_visible",
+        "created_at",
+        "updated_at",
+    )
+
+    form = TopicAdminForm
 
 
 @admin.register(Category)

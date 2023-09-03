@@ -120,6 +120,21 @@ lint = ["pre-commit"]
 test = ["hypothesis", "pytest", "pytest-benchmark", "pytest-cov", "pytest-xdist", "sortedcollections", "sortedcontainers", "sphinx"]
 
 [[package]]
+name = "bleach"
+version = "6.0.0"
+description = "An easy safelist-based HTML-sanitizing tool."
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.dependencies]
+six = ">=1.9.0"
+webencodings = "*"
+
+[package.extras]
+css = ["tinycss2 (>=1.1.0,<1.2)"]
+
+[[package]]
 name = "brotli"
 version = "1.0.9"
 description = "Python bindings for the Brotli compression library"
@@ -328,6 +343,21 @@ optional = false
 python-versions = "*"
 
 [[package]]
+name = "django-nested-admin"
+version = "4.0.2"
+description = "Django admin classes that allow for nested inlines"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+python-monkey-business = ">=1.0.0"
+
+[package.extras]
+dev = ["black", "flake8", "pytest", "pytest-cov", "pytest-xdist", "pytest-django", "pillow", "dj-database-url", "django-selenosis", "selenium"]
+test = ["pytest", "pytest-cov", "pytest-xdist", "pytest-django", "pillow", "dj-database-url", "django-selenosis", "selenium"]
+
+[[package]]
 name = "django-nested-inline"
 version = "0.4.6"
 description = "Recursive nesting of inline forms for Django Admin"
@@ -350,21 +380,18 @@ pypeg2 = ">=2.15.2"
 
 [[package]]
 name = "django-tidb"
-version = "3.0.0"
+version = "4.2.0"
 description = "Django backend for TiDB"
 category = "main"
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=3.8"
 develop = true
-
-[package.dependencies]
-mysqlclient = "*"
 
 [package.source]
 type = "git"
 url = "https://github.com/pingcap/django-tidb.git"
 reference = "main"
-resolved_reference = "8ead1b9190bcc24116c15e89fc78869a254de95a"
+resolved_reference = "7ec47751b58b3b7e530696cad733a86ab5a74ae1"
 
 [[package]]
 name = "djangorestframework"
@@ -654,6 +681,22 @@ optional = false
 python-versions = ">=3.5"
 
 [[package]]
+name = "importlib-metadata"
+version = "4.8.3"
+description = "Read metadata from Python packages"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+zipp = ">=0.5"
+
+[package.extras]
+docs = ["sphinx", "jaraco.packaging (>=8.2)", "rst.linker (>=1.9)"]
+perf = ["ipython"]
+testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-cov", "pytest-enabler (>=1.0.1)", "packaging", "pep517", "pyfakefs", "flufl.flake8", "pytest-perf (>=0.9.2)", "pytest-black (>=0.3.7)", "pytest-mypy", "importlib-resources (>=1.3)"]
+
+[[package]]
 name = "incremental"
 version = "22.10.0"
 description = "\"A small library that versions your Python projects.\""
@@ -664,6 +707,33 @@ python-versions = "*"
 [package.extras]
 mypy = ["click (>=6.0)", "twisted (>=16.4.0)", "mypy (==0.812)"]
 scripts = ["click (>=6.0)", "twisted (>=16.4.0)"]
+
+[[package]]
+name = "markdown"
+version = "3.3.7"
+description = "Python implementation of Markdown."
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.extras]
+testing = ["coverage", "pyyaml"]
+
+[[package]]
+name = "martor"
+version = "1.6.28"
+description = "Django Markdown Editor"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+bleach = "*"
+Django = ">=3.2"
+importlib_metadata = "<4.9"
+Markdown = "<3.4"
+requests = "*"
+tzdata = "*"
 
 [[package]]
 name = "msgpack"
@@ -845,6 +915,17 @@ client = ["requests (>=2.21.0)", "websocket-client (>=0.54.0)"]
 docs = ["sphinx"]
 
 [[package]]
+name = "python-monkey-business"
+version = "1.0.0"
+description = "Utility functions for monkey-patching python code"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+six = ">=1.7.0"
+
+[[package]]
 name = "python-socketio"
 version = "5.8.0"
 description = "Socket.IO server and client for Python"
@@ -885,6 +966,17 @@ urllib3 = ">=1.21.1,<3"
 [package.extras]
 socks = ["PySocks (>=1.5.6,!=1.5.7)"]
 use_chardet_on_py3 = ["chardet (>=3.0.2,<6)"]
+
+[[package]]
+name = "rest-framework-generic-relations"
+version = "2.1.0"
+description = "Generic Relations for Django Rest Framework"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+djangorestframework = ">=3.11.0"
 
 [[package]]
 name = "rsa"
@@ -1092,6 +1184,14 @@ secure = ["pyOpenSSL (>=0.14)", "cryptography (>=1.3.4)", "idna (>=2.0.0)", "cer
 socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 
 [[package]]
+name = "webencodings"
+version = "0.5.1"
+description = "Character encoding aliases for legacy web content"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "whitenoise"
 version = "6.5.0"
 description = "Radically simplified static file serving for WSGI applications"
@@ -1118,6 +1218,18 @@ idna = ">=2.0"
 multidict = ">=4.0"
 
 [[package]]
+name = "zipp"
+version = "3.16.2"
+description = "Backport of pathlib-compatible object wrapper for zip files"
+category = "main"
+optional = false
+python-versions = ">=3.8"
+
+[package.extras]
+docs = ["sphinx (>=3.5)", "jaraco.packaging (>=9.3)", "rst.linker (>=1.9)", "furo", "sphinx-lint", "jaraco.tidelift (>=1.4)"]
+testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-cov", "pytest-enabler (>=2.2)", "pytest-ruff", "jaraco.itertools", "jaraco.functools", "more-itertools", "big-o", "pytest-ignore-flaky", "pytest-black (>=0.3.7)", "pytest-mypy (>=0.9.1)"]
+
+[[package]]
 name = "zope.interface"
 version = "6.0"
 description = "Interfaces for Python"
@@ -1133,7 +1245,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "8f5584119da62bd874fdece6a755ce72186becf2b4103b07daa186d2f6e8722d"
+content-hash = "ce3747c89043afc1936f1bc49781b958c4f4a8f7ec779f33a8ecd17132ade6cd"
 
 [metadata.files]
 aiohttp = []
@@ -1144,6 +1256,7 @@ attrs = []
 autobahn = []
 automat = []
 bidict = []
+bleach = []
 brotli = []
 cachecontrol = []
 cached-property = []
@@ -1162,6 +1275,7 @@ django-cloudinary-storage = []
 django-cors-headers = []
 django-extensions = []
 django-grappelli = []
+django-nested-admin = []
 django-nested-inline = []
 django-restql = []
 django-tidb = []
@@ -1185,7 +1299,10 @@ grpcio-status = []
 httplib2 = []
 hyperlink = []
 idna = []
+importlib-metadata = []
 incremental = []
+markdown = []
+martor = []
 msgpack = []
 multidict = []
 mysqlclient = []
@@ -1202,9 +1319,11 @@ pyparsing = []
 pypeg2 = []
 python-dotenv = []
 python-engineio = []
+python-monkey-business = []
 python-socketio = []
 pytz = []
 requests = []
+rest-framework-generic-relations = []
 rsa = []
 sentry-sdk = []
 service-identity = []
@@ -1218,6 +1337,8 @@ typing-extensions = []
 tzdata = []
 uritemplate = []
 urllib3 = []
+webencodings = []
 whitenoise = []
 yarl = []
+zipp = []
 "zope.interface" = []
