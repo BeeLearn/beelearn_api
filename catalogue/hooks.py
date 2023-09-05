@@ -1,4 +1,4 @@
-from typing import Set
+from typing import List, Set
 from django.db.models.signals import m2m_changed
 
 from djira.hooks import APIHook
@@ -178,6 +178,12 @@ class TopicCommentAPIHook(APIHook):
         TopicComment,
     )
 
+    @topic_comment_observer.participants
+    def topic_comment_participants(
+        observer: SignalObserver, scopes: List[Scope], instance: TopicComment, **kwargs
+    ):
+        return list(filter(lambda scope: scope.user.pk != instance.user.pk, scopes))
+
     @topic_comment_observer.serializer
     def topic_comment_serializer(
         observer: SignalObserver,
@@ -200,7 +206,6 @@ class TopicCommentAPIHook(APIHook):
     ):
         if instance.is_parent:
             yield f"topic__comment__{instance.topic.pk}"
-
 
     @topic_comment_observer.subscribing_rooms
     def topic_comment_subscribing_observer_rooms(
