@@ -170,19 +170,34 @@ class TopicComment(TimestampMixin):
     """
     Topic comments
     """
+    is_parent = models.BooleanField(default=False)
 
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
+        related_name="topic_comment_users",
     )
     topic = models.ForeignKey(
         Topic,
         on_delete=models.CASCADE,
     )
-    content = models.TextField()
+
+    content = MartorField()
+
+    likes = models.ManyToManyField(
+        User,
+        blank=True,
+        related_name="topic_comment_likes",
+    )
+
+    sub_topic_comments = models.ManyToManyField(
+        "self",
+        blank=True,
+        symmetrical=False,
+    )
 
     def __str__(self):
-        return self.comment
+        return self.topic.title
 
     class Meta:
         ordering = ("-updated_at", "created_at")

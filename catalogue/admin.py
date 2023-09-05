@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.contrib.contenttypes.models import ContentType
 
 from nested_admin import NestedStackedInline, NestedModelAdmin
-from .models import Course, Lesson, Category, Module, Topic
+from .models import Course, Lesson, Category, Module, Topic, TopicComment
 
 
 class TopicInline(NestedStackedInline):
@@ -129,6 +129,16 @@ class TopicAdmin(admin.ModelAdmin):
     )
 
     form = TopicAdminForm
+
+
+@admin.register(TopicComment)
+class TopicCommentAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "is_parent",
+        "created_at",
+        "updated_at",
+    )
 
 
 @admin.register(Category)

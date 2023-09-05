@@ -5,6 +5,7 @@ from .viewsets import (
     LessonViewSet,
     CategoryViewSet,
     ModuleViewSet,
+    TopicCommentViewSet,
     TopicViewSet,
 )
 
@@ -14,4 +15,5 @@ catalogue_router.register(r"courses", CourseViewSet)
 catalogue_router.register(r"modules", ModuleViewSet)
 catalogue_router.register(r"lessons", LessonViewSet)
 catalogue_router.register(r"topics", TopicViewSet)
+catalogue_router.register(r"topic-comments", TopicCommentViewSet)
 catalogue_router.register(r"categories", CategoryViewSet)

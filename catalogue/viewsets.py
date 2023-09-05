@@ -2,12 +2,14 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import viewsets, mixins, status
 
-from .models import Course, Lesson, Category, Module, Topic
+from .models import Course, Lesson, Category, Module, Topic, TopicComment
 from .serializers import (
     CourseSerializer,
     LessonSerializer,
     CategorySerializer,
     ModuleSerializer,
+    ParentTopicCommentSerializer,
+    TopicCommentSerializer,
     TopicSerializer,
 )
 
@@ -100,6 +102,18 @@ class TopicViewSet(
             ).data,
             status=status.HTTP_201_CREATED,
         )
+
+
+class TopicCommentViewSet(
+    viewsets.GenericViewSet,
+    mixins.ListModelMixin,
+    mixins.CreateModelMixin,
+    mixins.UpdateModelMixin,
+):
+    queryset = TopicComment.objects.filter(is_parent=True)
+    serializer_class = ParentTopicCommentSerializer
+
+    filter_fields = ("topic",)
 
 
 class CategoryViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):

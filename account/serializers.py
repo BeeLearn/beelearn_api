@@ -38,6 +38,7 @@ class UserSerializer(NestedModelSerializer, serializers.ModelSerializer):
             "id",
             "username",
             "email",
+            "avatar",
             "first_name",
             "last_name",
             "profile",

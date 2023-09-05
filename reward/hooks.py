@@ -37,7 +37,7 @@ class RewardAPIHook(APIHook):
 
         await self.emit()
 
-    @action(methods=["POST"])
+    @action(methods=["DELETE"])
     async def unsubscribe(self):
         self.reward_observer.unsubscribe(self.scope)
 
@@ -72,7 +72,7 @@ class StreakAPIHook(APIHook):
 
         await self.emit()
 
-    @action(methods=["POST"])
+    @action(methods=["DELETE"])
     async def unsubscribe(self):
         self.streak_observer.unsubscribe(self.scope)
 

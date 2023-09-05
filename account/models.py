@@ -7,6 +7,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 
 class User(AbstractUser):
     uid = models.TextField(default=uuid4)
+    avatar = models.ImageField(blank=True, null=True,)
 
     def __str__(self):
         return self.username or self.email or self.uid

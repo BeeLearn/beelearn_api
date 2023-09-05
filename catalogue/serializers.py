@@ -23,7 +23,7 @@ from beelearn.mixins import ContextMixin
 
 from account.serializers import UserSerializer
 
-from .models import Course, Lesson, Category, Module, Topic
+from .models import Course, Lesson, Category, Module, Topic, TopicComment
 
 
 class CourseSerializer(
@@ -178,7 +178,7 @@ class TopicSerializer(
         many=True,
         write_only=True,
     )
-    
+
     entitled_users = NestedField(
         UserSerializer,
         many=True,
@@ -200,6 +200,67 @@ class TopicSerializer(
 
     def get_has_assessment(self, topic: Topic):
         return not topic.question is None
+
+
+class TopicCommentSerializer(NestedModelSerializer, ContextMixin):
+    """
+    TopicComment model serializer
+    """
+
+    user = UserSerializer(default=serializers.CurrentUserDefault())
+    topic = serializers.PrimaryKeyRelatedField(
+        queryset=Topic.objects.all(),
+        write_only=True,
+    )
+    likes = NestedField(
+        UserSerializer,
+        many=True,
+        write_only=True,
+        required=False,
+    )
+
+    is_liked = serializers.SerializerMethodField()
+
+    def get_is_liked(self, topic_comment: TopicComment):
+        return topic_comment.likes.contains(self.request.user)
+
+
+class SubTopicCommentSerializer(TopicCommentSerializer):
+    is_parent = serializers.SerializerMethodField()
+    parent_id = serializers.SerializerMethodField()
+
+    def get_is_parent(self, subTopicComment: TopicComment):
+        return False
+
+    def get_parent_id(self, subTopicComment: TopicComment):
+        comment = TopicComment.objects.filter(
+            sub_topic_comments=subTopicComment
+        ).first()
+
+        return None if comment is None else comment.pk
+
+    class Meta:
+        exclude = ("sub_topic_comments",)
+        model = TopicComment
+
+
+class ParentTopicCommentSerializer(TopicCommentSerializer):
+    sub_topic_comments = NestedField(
+        SubTopicCommentSerializer,
+        many=True,
+        required=False,
+    )
+
+    def get_sub_topic_comments(self, topic_comment: TopicComment):
+        return SubTopicCommentSerializer(
+            topic_comment.sub_topic_comments.all(),
+            many=True,
+            context=self.context,
+        ).data
+
+    class Meta:
+        fields = "__all__"
+        model = TopicComment
 
 
 class CategorySerializer(serializers.ModelSerializer):
