@@ -57,7 +57,7 @@ class CourseSerializer(
             lesson__module__course=course,
             created_at__gte=timezone.now() - timezone.timedelta(7),
         )
-        return topics.exists()
+        return topics.exists() or course.created_at > (timezone.now() - timezone.timedelta(7))
 
     def get_is_enrolled(self, course: Course):
         return course.course_enrolled_users.contains(self.request.user)
@@ -68,7 +68,8 @@ class CourseSerializer(
     def get_is_liked(self, course: Course):
         return (
             Course.objects.filter(
-                id=course.pk, module__lesson__topic__likes=self.request.user
+                id=course.pk,
+                module__lesson__topic__likes=self.request.user,
             )
             .distinct()
             .exists()
@@ -76,7 +77,10 @@ class CourseSerializer(
 
     class Meta:
         model = Course
-        fields = "__all__"
+        exclude = (
+            "editors",
+            "creator",
+        )
         read_only_fields = (
             "name",
             "content",
@@ -114,6 +118,8 @@ class ModuleSerializer(serializers.ModelSerializer, ContextMixin):
             "course",
             "entitled_users",
             "module_complete_users",
+            "editors",
+            "creator",
         )
 
 
@@ -141,6 +147,8 @@ class LessonSerializer(serializers.ModelSerializer, ContextMixin):
             "module",
             "entitled_users",
             "lesson_complete_users",
+            "creator",
+            "editors",
         )
 
 
@@ -187,7 +195,11 @@ class TopicSerializer(
 
     class Meta:
         model = Topic
-        exclude = ("lesson",)
+        exclude = (
+            "lesson",
+            "creator",
+            "editors",
+        )
 
     def get_is_liked(self, topic: Topic):
         return topic.likes.contains(self.request.user)
@@ -272,4 +284,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Category
-        fields = "__all__"
+        exclude = (
+            "creator",
+            "editors",
+        )

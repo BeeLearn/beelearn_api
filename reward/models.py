@@ -1,6 +1,6 @@
 from django.db import models
-from django.utils.timezone import timedelta, datetime
 from django.contrib.auth import get_user_model
+from django.utils.timezone import timedelta, datetime
 from django.contrib.humanize.templatetags.humanize import naturalday
 
 from beelearn.utils import get_week_start_and_end
@@ -91,24 +91,6 @@ class Reward(models.Model):
         return self.title
 
 
-# class Achievement(models.Model):
-#     """
-#     User unlocked reward collections
-#     """
-
-#     user = models.ForeignKey(
-#         User,
-#         on_delete=models.CASCADE,
-#     )
-#     reward = models.ForeignKey(
-#         Reward,
-#         on_delete=models.CASCADE,
-#     )
-
-#     def __str__(self):
-#         return self.reward.title
-
-
 class Streak(models.Model):
     """
     User streak tracker to sync to multiple devices
@@ -138,7 +120,10 @@ class Streak(models.Model):
 
             current_date += timedelta(days=1)
 
-        return cls.objects.bulk_create(streaks)
+        return cls.objects.bulk_create(
+            streaks,
+            ignore_conflicts=True,
+        )
 
     def __str__(self):
         return naturalday(self.date)

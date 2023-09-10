@@ -79,6 +79,7 @@ INSTALLED_APPS = [
     "assessment.apps.AssessmentConfig",
     "account.apps.AccountConfig",
     "reward.apps.RewardConfig",
+    "payment.apps.PaymentConfig",
     "enhancement.apps.EnhancementConfig",
 ]
 

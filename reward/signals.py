@@ -2,10 +2,12 @@ import random
 
 from typing import List, Set
 
+from django.utils import timezone
 from django.dispatch import receiver
 from django.db.models import signals
 
 from account.models import Profile, User
+from beelearn.utils import get_week_start_and_end
 from catalogue.models import Course, Lesson, TopicComment
 from reward.models import Price, Reward, Streak
 
@@ -133,9 +135,7 @@ def award_price_to_user(instance: Reward, pk_set: Set[int], **kwargs):
 
 
 @receiver(signals.m2m_changed, sender=Streak.streak_complete_users.through)
-def award_streak_price_to_user(
-    instance: Streak, action: str, pk_set: Set[int], **kwargs
-):
+def award_streak_price_to_user(pk_set: Set[int], **kwargs):
     """
     Award price to user on complete streak
     """
@@ -154,3 +154,23 @@ def award_streak_price_to_user(
             profiles.append(user.profile)
 
         Profile.objects.bulk_update(profiles, ["xp", "bits"])
+
+
+@receiver(signals.m2m_changed, sender=Streak.streak_complete_users.through)
+def streak_complete(instance: Streak, pk_set: Set[int], action: str, **kwargs):
+    # increase streak count on completion
+    if action == "post_add":
+        if instance.date == timezone.now().date():
+            week_start, week_end = get_week_start_and_end(instance.date)
+
+            for user in User.objects.filter(pk__in=pk_set):
+                streaks = Streak.objects.filter(
+                    date__gte=week_start,
+                    date__lte=week_end,
+                    streak_complete_users=user,
+                )
+
+                if streaks.count() == 7:
+                    profile = Profile.objects.get(user=user)
+                    profile.streaks = profile.streaks + 1
+                    profile.save(update_fields=["streaks"])

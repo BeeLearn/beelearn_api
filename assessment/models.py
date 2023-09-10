@@ -1,5 +1,7 @@
 from django.db import models
 
+from beelearn.models import TimestampMixin, get_revision_mixin
+
 
 class Choice(models.Model):
     """
@@ -13,7 +15,7 @@ class Choice(models.Model):
         return self.name
 
 
-class Question(models.Model):
+class Question(TimestampMixin):
     """
     Challenge questions, used to reward users on topic completion or challenges
     """
@@ -60,7 +62,13 @@ class ChoiceQuestion(Question):
         abstract = True
 
 
-class MultiChoiceQuestion(ChoiceQuestion):
+class MultiChoiceQuestion(
+    ChoiceQuestion,
+    get_revision_mixin(
+        "multi_choice_question_creator",
+        "multi_choice_question_editors",
+    ),
+):
     """
     Multichoice question, have multiple answers and choice
     """
@@ -73,7 +81,13 @@ class MultiChoiceQuestion(ChoiceQuestion):
     )
 
 
-class SingleChoiceQuestion(ChoiceQuestion):
+class SingleChoiceQuestion(
+    ChoiceQuestion,
+    get_revision_mixin(
+        "single_choice_question_creator",
+        "single_choice_question_editors",
+    ),
+):
     """
     Singlechoice question, have single answer but multiple choice
     """
@@ -86,7 +100,13 @@ class SingleChoiceQuestion(ChoiceQuestion):
     )
 
 
-class DragDropQuestion(Question):
+class DragDropQuestion(
+    Question,
+    get_revision_mixin(
+        "drag_drop_question_creator",
+        "drag_drop_question_editors",
+    ),
+):
     """
     This is a text like question with drag and drop answers e.g
     ```
@@ -99,6 +119,7 @@ class DragDropQuestion(Question):
     """
 
     question = models.TextField()
+    choices = models.TextField()
     type = models.TextField(
         max_length=128,
         editable=False,
@@ -107,7 +128,13 @@ class DragDropQuestion(Question):
     )
 
 
-class TextOptionQuestion(Question):
+class TextOptionQuestion(
+    Question,
+    get_revision_mixin(
+        "text_option_question_creator",
+        "text_option_question_editors",
+    ),
+):
     """
     Text editable questions
     `%int% is what type of number is called in python`

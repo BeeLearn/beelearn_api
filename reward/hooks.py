@@ -18,6 +18,7 @@ class RewardAPIHook(APIHook):
         RewardSerializer,
     )
     def reward_observer(observer: SignalObserver, action: str, **kwargs):
+        print(action)
         match action:
             case "post_add":
                 observer.dispatch(Action.UPDATE, **kwargs)

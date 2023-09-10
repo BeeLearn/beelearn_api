@@ -7,15 +7,15 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 
 from martor.models import MartorField
 
-from beelearn.models import TimestampMixin
+from beelearn.models import get_revision_mixin, TimestampMixin
 
 
 User = get_user_model()
 
 
-class Course(TimestampMixin):
+class Course(TimestampMixin, get_revision_mixin("course_creator", "course_editors")):
     """
-    Collection of lessons
+    Collection of modules
     """
 
     COURSE_IMAGE_PATH = Path("assets/courses")
@@ -42,6 +42,8 @@ class Course(TimestampMixin):
         related_name="course_complete_users",
     )  # users that have complete this course
 
+    tags = None  # course tag
+
     def __str__(self):
         return self.name
 
@@ -49,7 +51,7 @@ class Course(TimestampMixin):
         ordering = ("-updated_at", "-created_at")
 
 
-class Module(TimestampMixin):
+class Module(TimestampMixin, get_revision_mixin("module_creator", "module_editors")):
     """
     Course module collections
     """
@@ -80,7 +82,7 @@ class Module(TimestampMixin):
         ordering = ("-updated_at", "-created_at")
 
 
-class Lesson(TimestampMixin):
+class Lesson(TimestampMixin, get_revision_mixin("lesson_creator", "lesson_editors")):
     """
     Module lesson collections
     """
@@ -111,7 +113,7 @@ class Lesson(TimestampMixin):
         ordering = ("-updated_at", "-created_at")
 
 
-class Topic(TimestampMixin):
+class Topic(TimestampMixin, get_revision_mixin("topic_creator", "topic_editors")):
     """
     Topic is the root representation of a course content
     """
@@ -170,6 +172,7 @@ class TopicComment(TimestampMixin):
     """
     Topic comments
     """
+
     is_parent = models.BooleanField(default=False)
 
     user = models.ForeignKey(
@@ -203,13 +206,15 @@ class TopicComment(TimestampMixin):
         ordering = ("-updated_at", "created_at")
 
 
-class Category(TimestampMixin):
+class Category(TimestampMixin, get_revision_mixin("category_creator", "category_editors")):
     """
     Collections of courses that are related
     """
 
     courses = models.ManyToManyField(Course, blank=True)
     name = models.TextField(max_length=60)
+
+    tags = None  # category tags
 
     def __str__(self):
         return self.name
