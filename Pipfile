@@ -1,0 +1,39 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+django = "*"
+djangorestframework = "*"
+pillow = "*"
+dj-url-filter = "*"
+six = "*"
+django-cors-headers = "*"
+requests = "*"
+drf-writable-nested = "*"
+django-restql = "*"
+django-grappelli = "*"
+pytz = "*"
+python-socketio = "*"
+sentry-sdk = "*"
+mysqlclient = "*"
+python-dotenv = "*"
+openai = "*"
+firebase-admin = "*"
+django-nested-inline = "*"
+django-extensions = "*"
+django-cloudinary-storage = "*"
+brotli = "*"
+whitenoise = "*"
+martor = "*"
+django-nested-admin = "*"
+rest-framework-generic-relations = "*"
+django-debug-toolbar = "*"
+daphne = "*"
+djira = {git = "git+https://github.com/oasisMystre/djira"}
+
+[dev-packages]
+
+[requires]
+python_version = "3.10"

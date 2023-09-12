@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     # 3rd party apps
+    "debug_toolbar",
     "generic_relations",
     "martor",
     "nested_admin",
@@ -80,10 +81,12 @@ INSTALLED_APPS = [
     "account.apps.AccountConfig",
     "reward.apps.RewardConfig",
     "payment.apps.PaymentConfig",
+    "messaging.apps.MessagingConfig",
     "enhancement.apps.EnhancementConfig",
 ]
 
 MIDDLEWARE = [
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",

@@ -1,5 +1,7 @@
 from django.db import models
 
+from martor.models import MartorField
+
 from beelearn.models import TimestampMixin, get_revision_mixin
 
 
@@ -41,11 +43,14 @@ class Question(TimestampMixin):
             "MULTIPLE_CHOICE",
             "Multiple Choice",
         )  # validate more than one choice from multiple options
+        RE_ORDER_CHOICE = (
+            "RE_ORDER_CHOICE",
+            "Reorder Choice",
+        )  # Rearrange choice combinations in orders
 
-    title = models.CharField(max_length=60)
+    title = MartorField()
     type = models.TextField(
         choices=QuestionType.choices,
-        max_length=128,
     )
 
     def __str__(self) -> str:
@@ -74,7 +79,6 @@ class MultiChoiceQuestion(
     """
 
     type = models.TextField(
-        max_length=128,
         editable=False,
         choices=Question.QuestionType.choices,
         default=Question.QuestionType.MULTIPLE_CHOICE,
@@ -93,7 +97,6 @@ class SingleChoiceQuestion(
     """
 
     type = models.TextField(
-        max_length=128,
         editable=False,
         choices=Question.QuestionType.choices,
         default=Question.QuestionType.SINGLE_CHOICE,
@@ -118,10 +121,9 @@ class DragDropQuestion(
     We parse the question by using a special parser
     """
 
-    question = models.TextField()
+    question = MartorField()
     choices = models.TextField()
     type = models.TextField(
-        max_length=128,
         editable=False,
         choices=Question.QuestionType.choices,
         default=Question.QuestionType.DRAG_DROP,
@@ -142,8 +144,38 @@ class TextOptionQuestion(
 
     question = models.TextField()
     type = models.TextField(
-        max_length=128,
         editable=False,
         choices=Question.QuestionType.choices,
         default=Question.QuestionType.TEXT_OPTION,
+    )
+
+
+class ReorderChoice(Choice):
+    """
+    Reorder question choice with correct position combinations
+    """
+
+    is_answer = None
+    position = models.PositiveIntegerField()
+
+
+class ReorderQuestion(
+    Question,
+    get_revision_mixin(
+        "reorder_question_creator",
+        "reorder_question_editors",
+    ),
+):
+    """
+    Reorder questions, reorder list for correct
+    """
+
+    choices = models.ManyToManyField(
+        ReorderChoice,
+    )
+
+    type = models.TextField(
+        editable=False,
+        choices=Question.QuestionType.choices,
+        default=Question.QuestionType.RE_ORDER_CHOICE,
     )

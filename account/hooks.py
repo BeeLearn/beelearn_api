@@ -25,7 +25,6 @@ class ProfileAPIHook(APIHook):
 
     @action(methods=["POST"])
     async def subscribe(self):
-        print("SUBSCRIBE PROFILE")
         self.profile_observer.subscribe(self.scope)
 
         await self.emit()

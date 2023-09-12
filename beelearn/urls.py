@@ -7,6 +7,7 @@ from django.urls import path, include, re_path
 urlpatterns = [
     path("martor/", include("martor.urls")),
     path("grappelli/", include("grappelli.urls")),
+    path("__debug__/", include("debug_toolbar.urls")),
     re_path(r"^_nested_admin/", include("nested_admin.urls")),
     path("admin/", admin.site.urls),
     path("api/", include("beelearn.api_urls")),

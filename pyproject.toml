@@ -33,6 +33,7 @@ whitenoise = { extras = ["brotli"], version = "^6.5.0" }
 martor = "^1.6.28"
 django-nested-admin = "^4.0.2"
 rest-framework-generic-relations = "^2.1.0"
+django-debug-toolbar = "^4.2.0"
 
 [tool.poetry.dev-dependencies]
 

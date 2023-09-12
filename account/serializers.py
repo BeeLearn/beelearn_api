@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 
+from django_restql.mixins import DynamicFieldsMixin
 from django_restql.fields import NestedField
 from django_restql.serializers import NestedModelSerializer
 
@@ -9,7 +10,7 @@ from payment.models import Purchase
 from .models import Notification, Settings, User, Profile
 
 
-class ProfileSerializer(serializers.ModelSerializer):
+class ProfileSerializer(DynamicFieldsMixin, serializers.ModelSerializer):
     """
     profile serializer
     """
@@ -19,7 +20,7 @@ class ProfileSerializer(serializers.ModelSerializer):
         exclude = ("user",)
 
 
-class SettingsSerializer(serializers.ModelSerializer):
+class SettingsSerializer(DynamicFieldsMixin, serializers.ModelSerializer):
     """
     Settings model serializer
     """
@@ -30,7 +31,7 @@ class SettingsSerializer(serializers.ModelSerializer):
         extra_kwargs = {"fcm_token": {"write_only": True}}
 
 
-class UserSerializer(NestedModelSerializer, serializers.ModelSerializer):
+class UserSerializer(DynamicFieldsMixin, NestedModelSerializer):
     """
     User model serializer
     """
@@ -65,7 +66,8 @@ class UserSerializer(NestedModelSerializer, serializers.ModelSerializer):
             "subscription": {"read_only": True},
         }
 
-class NotificationSerializer(serializers.ModelSerializer):
+
+class NotificationSerializer(DynamicFieldsMixin, serializers.ModelSerializer):
     """
     Notification model serializer
     """

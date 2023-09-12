@@ -8,12 +8,21 @@ from beelearn.models import TimestampMixin
 
 
 class User(AbstractUser):
+    """
+    Override django default user class
+    """
+
+    USER_AVATAR_PATH = "assets/users/avatars/"
+
     class UserType(models.TextChoices):
         STUDENT = "STUDENT", "Student"
         CURATOR = "CURATOR", "Curator"
         SPECIALIST = "SPECIALIST", "Specialist"
 
-    uid = models.TextField(default=uuid4, unique=True)
+    uid = models.TextField(
+        default=uuid4,
+        unique=True,
+    )
     user_type = models.TextField(
         choices=UserType.choices,
         default=UserType.STUDENT,
@@ -21,6 +30,7 @@ class User(AbstractUser):
     avatar = models.ImageField(
         blank=True,
         null=True,
+        upload_to=USER_AVATAR_PATH,
     )
 
     REQUIRED_FIELDS = (
@@ -84,27 +94,44 @@ class Settings(TimestampMixin):
     def __str__(self):
         return self.user.email
 
+    class Meta:
+        verbose_name_plural = "Settings"
+
 
 class Notification(TimestampMixin):
     """
     user notifications
     """
 
-    user = models.OneToOneField(
+    class Topic(models.TextChoices):
+        IN_APP = "IN_APP", "In-app"
+        GENERAL = "GENERAL", "General"
+        COMMENTS = "COMMENTS", "Comments"
+
+    user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
     )
-
-    small_image = models.ImageField(
+    icon = models.ImageField(
         blank=True,
         null=True,
     )
-    content = models.TextField()
+    image = models.ImageField(
+        blank=True,
+        null=True,
+    )
+    title = models.TextField()
+    body = models.TextField()
+    topic = models.TextField(choices=Topic.choices)
     intent_to = models.TextField(
         null=True,
         blank=True,
     )
     is_read = models.BooleanField(default=False)
+    metadata = models.JSONField(
+        blank=True,
+        null=True,
+    )
 
     def __str__(self):
         return self.user.email

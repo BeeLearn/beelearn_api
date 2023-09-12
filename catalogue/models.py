@@ -1,16 +1,13 @@
 from pathlib import Path
 
 from django.db import models
-from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
 
 from martor.models import MartorField
+from account.models import User
 
 from beelearn.models import get_revision_mixin, TimestampMixin
-
-
-User = get_user_model()
 
 
 class Course(TimestampMixin, get_revision_mixin("course_creator", "course_editors")):
@@ -206,7 +203,9 @@ class TopicComment(TimestampMixin):
         ordering = ("-updated_at", "created_at")
 
 
-class Category(TimestampMixin, get_revision_mixin("category_creator", "category_editors")):
+class Category(
+    TimestampMixin, get_revision_mixin("category_creator", "category_editors")
+):
     """
     Collections of courses that are related
     """

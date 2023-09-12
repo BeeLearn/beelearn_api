@@ -6,6 +6,8 @@ from .models import (
     DragDropQuestion,
     MultiChoiceQuestion,
     Question,
+    ReorderChoice,
+    ReorderQuestion,
     SingleChoiceQuestion,
     TextOptionQuestion,
 )
@@ -50,4 +52,14 @@ class DragDropQuestionAdmin(QuestionAdmin):
 
 @admin.register(TextOptionQuestion)
 class TextOptionQuestionAdmin(QuestionAdmin):
+    pass
+
+
+@admin.register(ReorderChoice)
+class ReorderChoice(admin.ModelAdmin):
+    pass
+
+
+@admin.register(ReorderQuestion)
+class ReorderQuestionAdmin(QuestionAdmin):
     pass

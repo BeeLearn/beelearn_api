@@ -135,7 +135,10 @@ class TopicAdmin(admin.ModelAdmin):
 class TopicCommentAdmin(admin.ModelAdmin):
     list_display = (
         "id",
+        "user",
+        "topic",
         "is_parent",
+        "content",
         "created_at",
         "updated_at",
     )
