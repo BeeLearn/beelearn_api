@@ -13,26 +13,26 @@ from account.models import Notification
 from .models import Comment, Reply, Thread
 
 
-@receiver(signals.post_save, sender=Comment)
-def trigger_thread_or_reply_update_on_comment_post_save(
-    instance: Comment,
-    created: bool,
-    update_fields: List[str],
-    **kwargs,
-):
-    """
-    trigger thread post_save  and reply post_save when comment is updated
-    """
-    # if not created:
-    #     thread = Thread.objects.filter(comment=instance).first()
+# @receiver(signals.post_save, sender=Comment)
+# def trigger_thread_or_reply_update_on_comment_post_save(
+#     instance: Comment,
+#     created: bool,
+#     update_fields: List[str],
+#     **kwargs,
+# ):
+#     """
+#     trigger thread post_save  and reply post_save when comment is updated
+#     """
+#     if not created:
+#         thread = Thread.objects.filter(comment=instance).first()
 
-    #     if thread:
-    #         signals.post_save.send(Thread, instance=thread, created=False)
-    #     else:
-    #         reply = Reply.objects.filter(comment=instance).first()
+#         if thread:
+#             signals.post_save.send(Thread, instance=thread, created=False)
+#         else:
+#             reply = Reply.objects.filter(comment=instance).first()
 
-    #         if reply:
-    #             signals.post_save.send(Reply, instance=reply, created=False)
+#             if reply:
+#                 signals.post_save.send(Reply, instance=reply, created=False)
 
 
 def notify(
