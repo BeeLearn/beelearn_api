@@ -13,6 +13,7 @@ from account.models import Notification
 from .models import Comment, Reply, Thread
 
 
+# todo switch to use update_fields 
 # @receiver(signals.post_save, sender=Comment)
 # def trigger_thread_or_reply_update_on_comment_post_save(
 #     instance: Comment,

@@ -8,9 +8,21 @@ from rest_framework.authtoken.models import Token
 
 from firebase_admin.messaging import subscribe_to_topic, unsubscribe_from_topic
 
+from beelearn.art import circle_image, create_avatar
+
 from reward.models import Streak
 from .models import Notification, Profile, Settings, User
 
+
+@receiver(signals.pre_save, sender=User)
+def override_user_fields(instance: User, **kwargs):
+    if  instance.avatar:
+        instance.avatar = circle_image(instance.avatar)
+    else:
+        fullname = instance.get_full_name()
+        instance.avatar = create_avatar(
+            (fullname if len(fullname) > 1 else instance.email or instance.username)[:2]
+        )
 
 @receiver(signals.post_save, sender=User)
 def create_new_user_token(instance: User, created: bool, **kwargs):

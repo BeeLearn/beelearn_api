@@ -6,7 +6,7 @@ name = "pypi"
 [packages]
 django = "*"
 djangorestframework = "*"
-pillow = "*"
+pillow = "10.0.1"
 dj-url-filter = "*"
 six = "*"
 django-cors-headers = "*"
@@ -32,6 +32,7 @@ rest-framework-generic-relations = "*"
 django-debug-toolbar = "*"
 daphne = "*"
 djira = {git = "git+https://github.com/oasisMystre/djira"}
+numpy = "*"
 
 [dev-packages]
 
