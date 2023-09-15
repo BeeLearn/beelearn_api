@@ -12,13 +12,13 @@ from socketio import ASGIApp
 from djira.consumer import Consumer
 from djira.settings import jira_settings
 
+from messaging.hooks import ReplyAPIHook, ThreadAPIHook
 from account.hooks import ProfileAPIHook
 from catalogue.hooks import (
     CourseAPIHook,
     FavoriteAPIHook,
     LessonAPIHook,
     ModuleAPIHook,
-    TopicCommentAPIHook,
 )
 from reward.hooks import RewardAPIHook, StreakAPIHook
 
@@ -35,6 +35,7 @@ consumer.register("lessons", LessonAPIHook)
 consumer.register("favourites", FavoriteAPIHook)
 consumer.register("rewards", RewardAPIHook)
 consumer.register("streaks", StreakAPIHook)
-consumer.register("topic-comments", TopicCommentAPIHook)
+consumer.register("replies", ReplyAPIHook)
+consumer.register("threads", ThreadAPIHook)
 
 consumer.start()

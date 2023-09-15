@@ -1,8 +1,10 @@
+from uuid import uuid4
 from django.test import TestCase
 
 from beelearn.tests import AccounTestMixin, CourseTestMixin, RewardTextMixin
 
-from catalogue.models import Lesson, Topic, TopicComment
+from catalogue.models import Lesson, Topic
+from messaging.models import Comment, Thread
 
 from .models import Achievement, Reward
 
@@ -71,11 +73,12 @@ class RewardTestCase(TestCase, AccounTestMixin, CourseTestMixin, RewardTextMixin
         """
         This reward is granted to user that comment on a course
         """
-        TopicComment.objects.create(
+        comment = Comment.objects.create(
             user=self.user,
             content="Test comment",
-            topic=Topic.objects.first(),
         )
+
+        Thread.objects.create(comment=comment, reference=uuid4)
 
         # check if user is granted the achievement
         self.assertTrue(
@@ -87,11 +90,12 @@ class RewardTestCase(TestCase, AccounTestMixin, CourseTestMixin, RewardTextMixin
         This reward is granted to user that comment on topics in multiple of ten
         """
         for _ in range(0, 10):
-            TopicComment.objects.create(
+            comment = Comment.objects.create(
                 user=self.user,
                 content="Test comment",
-                topic=Topic.objects.first(),
             )
+
+            Thread.objects.create(comment=comment, reference=uuid4)
 
         # check if user is granted the achievement
         self.assertTrue(self.check_achievement(Reward.RewardType.ENGAGED_IN))

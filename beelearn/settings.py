@@ -266,3 +266,9 @@ MARTOR_IMGUR_API_KEY = os.environ.get("IMGUR_API_KEY")
 # grappelli config
 
 GRAPPELLI_ADMIN_TITLE = "BeeLearn"
+
+# debug toolbar
+
+INTERNAL_IPS = [
+    "127.0.0.1",
+]

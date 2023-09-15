@@ -123,10 +123,6 @@ class Notification(TimestampMixin):
     title = models.TextField()
     body = models.TextField()
     topic = models.TextField(choices=Topic.choices)
-    intent_to = models.TextField(
-        null=True,
-        blank=True,
-    )
     is_read = models.BooleanField(default=False)
     metadata = models.JSONField(
         blank=True,

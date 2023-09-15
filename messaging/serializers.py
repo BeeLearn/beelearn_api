@@ -11,19 +11,24 @@ from beelearn.mixins import ContextMixin
 from .models import Comment, Reply, Thread
 
 
-class CommentSerializer(NestedModelSerializer, ContextMixin, DynamicFieldsMixin):
+class SubCommentSerializer(NestedModelSerializer, ContextMixin, DynamicFieldsMixin):
     """
     Comment model serializer
     """
 
-    user = UserSerializer(exclude=["profile", "settings"])
+    user = UserSerializer(
+        exclude=["profile", "settings"],
+        default=serializers.CurrentUserDefault(),
+    )
 
     is_liked = serializers.SerializerMethodField()
     like_count = serializers.SerializerMethodField()
 
     likes = NestedField(
         UserSerializer,
+        many=True,
         write_only=True,
+        required=False,
     )
 
     def get_is_liked(self, comment: Comment):
@@ -33,40 +38,45 @@ class CommentSerializer(NestedModelSerializer, ContextMixin, DynamicFieldsMixin)
         return comment.likes.count()
 
     class Meta:
-        model = Thread
+        model = Comment
         exclude = ("replies",)
-        extra_kwargs = {
-            "likes": {
-                "write_only": True,
-            }
-        }
 
 
-class ThreadSerializer(CommentSerializer):
+class CommentSerializer(SubCommentSerializer):
+    """
+    Comment model serializer
+    """
+
+    replies = SubCommentSerializer(
+        many=True,
+        read_only=True,
+    )
+
+    class Meta:
+        model = Comment
+        fields = "__all__"
+
+
+class ThreadSerializer(NestedModelSerializer):
     """
     Thread model serializer
     """
 
-    replies = CommentSerializer(many=True)
+    comment = NestedField(
+        CommentSerializer,
+    )
 
     class Meta:
         model = Thread
         fields = "__all__"
 
 
-class ReplySerializer(serializers.ModelSerializer):
+class ReplySerializer(NestedModelSerializer):
     """
     Reply model serializer
     """
 
-    parent = NestedModelSerializer(
-        ThreadSerializer,
-        write_only=True,
-    )
-    comment = NestedModelSerializer(
-        ThreadSerializer,
-        write_only=True,
-    )
+    comment = NestedField(SubCommentSerializer)
 
     class Meta:
         model = Reply

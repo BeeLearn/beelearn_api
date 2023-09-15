@@ -23,7 +23,7 @@ from beelearn.mixins import ContextMixin
 
 from account.serializers import UserSerializer
 
-from .models import Course, Lesson, Category, Module, Topic, TopicComment
+from .models import Course, Lesson, Category, Module, Topic
 
 
 class CourseSerializer(
@@ -57,7 +57,9 @@ class CourseSerializer(
             lesson__module__course=course,
             created_at__gte=timezone.now() - timezone.timedelta(7),
         )
-        return topics.exists() or course.created_at > (timezone.now() - timezone.timedelta(7))
+        return topics.exists() or course.created_at > (
+            timezone.now() - timezone.timedelta(7)
+        )
 
     def get_is_enrolled(self, course: Course):
         return course.course_enrolled_users.contains(self.request.user)
@@ -212,67 +214,6 @@ class TopicSerializer(
 
     def get_has_assessment(self, topic: Topic):
         return not topic.question is None
-
-
-class TopicCommentSerializer(NestedModelSerializer, ContextMixin):
-    """
-    TopicComment model serializer
-    """
-
-    user = UserSerializer(default=serializers.CurrentUserDefault())
-    topic = serializers.PrimaryKeyRelatedField(
-        queryset=Topic.objects.all(),
-        write_only=True,
-    )
-    likes = NestedField(
-        UserSerializer,
-        many=True,
-        write_only=True,
-        required=False,
-    )
-
-    is_liked = serializers.SerializerMethodField()
-
-    def get_is_liked(self, topic_comment: TopicComment):
-        return topic_comment.likes.contains(self.request.user)
-
-
-class SubTopicCommentSerializer(TopicCommentSerializer):
-    is_parent = serializers.SerializerMethodField()
-    parent_id = serializers.SerializerMethodField()
-
-    def get_is_parent(self, subTopicComment: TopicComment):
-        return False
-
-    def get_parent_id(self, subTopicComment: TopicComment):
-        comment = TopicComment.objects.filter(
-            sub_topic_comments=subTopicComment
-        ).first()
-
-        return None if comment is None else comment.pk
-
-    class Meta:
-        exclude = ("sub_topic_comments",)
-        model = TopicComment
-
-
-class ParentTopicCommentSerializer(TopicCommentSerializer):
-    sub_topic_comments = NestedField(
-        SubTopicCommentSerializer,
-        many=True,
-        required=False,
-    )
-
-    def get_sub_topic_comments(self, topic_comment: TopicComment):
-        return SubTopicCommentSerializer(
-            topic_comment.sub_topic_comments.all(),
-            many=True,
-            context=self.context,
-        ).data
-
-    class Meta:
-        fields = "__all__"
-        model = TopicComment
 
 
 class CategorySerializer(serializers.ModelSerializer):

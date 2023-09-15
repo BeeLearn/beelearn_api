@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "f2407980803d1c49ea98c2df99e2d608cb4049ec2355e4ee7903a095f5355dcb"
+            "sha256": "3feeb52deba41ebbd0e52ff553a81c26cd6830d6bd7db4a889e66140b9c74806"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -590,7 +590,7 @@
         },
         "djira": {
             "git": "git+https://github.com/oasisMystre/djira",
-            "ref": "9747f10181dda6defc139641a36285cf8e9452fa"
+            "ref": "aaebd3859a3ec7867a3985a6ae5b69e2b0211f29"
         },
         "drf-writable-nested": {
             "hashes": [
@@ -720,11 +720,11 @@
         },
         "google-cloud-firestore": {
             "hashes": [
-                "sha256:7f7dfa86567c8d66c66c8dba8bc5ef85677c8532b4206055a339413f8071525d",
-                "sha256:833019175b6c82727da71e2db2fdea9bf203d0b8239c696492f7e2b24566bb3e"
+                "sha256:3eedc9b2238d8fdb6c2645da455de7ba8df0a9a1d253815932ac3a98c5eec9cd",
+                "sha256:8dbdbe2fd96f2651076ec1a6eb9b68361ed7c560934a927f2ca55c8c5aadfb30"
             ],
             "markers": "platform_python_implementation != 'PyPy'",
-            "version": "==2.11.1"
+            "version": "==2.12.0"
         },
         "google-cloud-storage": {
             "hashes": [
@@ -936,11 +936,8 @@
             "version": "==3.3.7"
         },
         "martor": {
-            "hashes": [
-                "sha256:93bcc97898c6739c2adadfc4f20640cf27e94dae2e3773d18168b446c3d7e7ed"
-            ],
-            "index": "pypi",
-            "version": "==1.6.28"
+            "git": "git+https://github.com/oasisMystre/django-markdown-editor-grappelli",
+            "ref": "7bc3825baf810eaffe0c5b9a300d3aa52caad6e7"
         },
         "msgpack": {
             "hashes": [
@@ -1342,11 +1339,11 @@
         },
         "setuptools": {
             "hashes": [
-                "sha256:56ee14884fd8d0cd015411f4a13f40b4356775a0aefd9ebc1d3bfb9a1acb32f1",
-                "sha256:eff96148eb336377ab11beee0c73ed84f1709a40c0b870298b0d058828761bae"
+                "sha256:4ac1475276d2f1c48684874089fefcd83bd7162ddaafb81fac866ba0db282a87",
+                "sha256:b454a35605876da60632df1a60f736524eb73cc47bbc9f3f1ef1b644de74fd2a"
             ],
             "markers": "python_version >= '3.8'",
-            "version": "==68.2.1"
+            "version": "==68.2.2"
         },
         "simple-websocket": {
             "hashes": [
@@ -1429,7 +1426,7 @@
                 "sha256:8d36afa7616d8ab714608411b4a3b13e58f463aee519024578e062e141dce20f",
                 "sha256:8f135f6502756bde6b2a9b28989df5fbe87c9970cecaa69041edcce7f0589b14"
             ],
-            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4, 3.5'",
+            "markers": "python_version >= '3.6'",
             "version": "==1.26.16"
         },
         "webencodings": {

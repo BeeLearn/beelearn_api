@@ -67,6 +67,7 @@ class MessageContent(dict):
         channelKey: ChannelKey = "general_channel",
         notificationLayout: NotificationLayout = "Default",
     ):
+        print(payload)
         dict.__init__(
             self,
             badge=badge,
@@ -99,7 +100,7 @@ def Message(
     )
 
 
-def build_inbox_message(
+def create_inbox_message(
     token: str,
     title: str,
     body: str,

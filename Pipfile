@@ -26,7 +26,7 @@ django-extensions = "*"
 django-cloudinary-storage = "*"
 brotli = "*"
 whitenoise = "*"
-martor = "*"
+martor = {git="git+https://github.com/oasisMystre/django-markdown-editor-grappelli"}
 django-nested-admin = "*"
 rest-framework-generic-relations = "*"
 django-debug-toolbar = "*"

@@ -8,7 +8,8 @@ from django.db.models import signals
 
 from account.models import Profile, User
 from beelearn.utils import get_week_start_and_end
-from catalogue.models import Course, Lesson, TopicComment
+from catalogue.models import Course, Lesson
+from messaging.models import Thread
 from reward.models import Price, Reward, Streak
 
 
@@ -53,27 +54,25 @@ def grant_verify_account_reward(instance: Profile, update_fields: List[str], **k
             reward.reward_unlocked_users.add(instance.user)
 
 
-@receiver(signals.post_save, sender=TopicComment)
+@receiver(signals.post_save, sender=Thread)
 def grant_we_are_in_this_together_and_engaged_in_reward(
-    instance: TopicComment, created: bool, **kwargs
+    instance: Thread, created: bool, **kwargs
 ):
     """
     Triggered when a user engages in multiple discussions frequently.
     """
 
     if created:
-        user_comment_count = TopicComment.objects.filter(
-            topic__lesson__module__course=instance.topic.lesson.module.course
-        ).count()
+        user_comment_count = Thread.objects.filter(reference=instance.reference).count()
 
         # Triggered when a user comments on a lesson.
         if user_comment_count == 1:
             reward = Reward.objects.get(type=Reward.RewardType.WE_ARE_IN_THIS_TOGETHER)
-            reward.reward_unlocked_users.add(instance.user)
+            reward.reward_unlocked_users.add(instance.comment.user)
 
         if user_comment_count % 10 == 0:
             reward = Reward.objects.get(type=Reward.RewardType.ENGAGED_IN)
-            reward.reward_unlocked_users.add(instance.user)
+            reward.reward_unlocked_users.add(instance.comment.user)
 
 
 @receiver(signals.m2m_changed, sender=Lesson.lesson_complete_users.through)

@@ -1,3 +1,4 @@
+from typing import Any
 from django.db import models
 
 
@@ -45,6 +46,25 @@ def get_revision_mixin(
 class TimestampMixin(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        abstract = True
+
+
+class SoftDeleteManager(models.Manager):
+    pass
+
+
+class SoftDeleteMixin(models.Model):
+    is_deleted = models.BooleanField(default=False)
+
+    objects = SoftDeleteManager()
+
+    def delete(
+        self, using: Any = ..., keep_parents: bool = ...
+    ) -> tuple[int, dict[str, int]]:
+        self.is_deleted = True
+        self.save()
 
     class Meta:
         abstract = True

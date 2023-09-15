@@ -1,26 +1,39 @@
 from rest_framework import viewsets, mixins
 
-from .models import Thread
-from .serializers import ThreadSerializer
+from .models import Comment, Reply, Thread
+from .serializers import CommentSerializer, ReplySerializer, ThreadSerializer
 
 
-class ThreadViewSet(viewsets.ModelViewSet):
-    queryset = Thread.objects.all()
-    serializer_class = ThreadSerializer
+class CommentViewSet(
+    viewsets.GenericViewSet,
+    mixins.CreateModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
 
-    filter_fields = ("is_parent",)
 
     def get_queryset(self):
         match self.request.method:
-            case "GET":
+            case "GET" | "PATCH":
                 return self.queryset
-            case "POST" | "PATCH" | "DELETE":
+            case "POST" | "DELETE":
                 return self.queryset.filter(user=self.request.user)
 
 
-class ReplyViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin):
-    queryset = Thread.objects.filter(
-        is_parent=False,
-    )
-
+class ThreadViewSet(
+    viewsets.GenericViewSet,
+    mixins.CreateModelMixin,
+    mixins.ListModelMixin,
+):
+    queryset = Thread.objects.all()
     serializer_class = ThreadSerializer
+
+    filter_fields = ("reference",)
+
+
+class ReplyViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin):
+    queryset = Reply.objects.all()
+
+    serializer_class = ReplySerializer

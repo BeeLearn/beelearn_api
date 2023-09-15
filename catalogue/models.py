@@ -1,4 +1,5 @@
 from pathlib import Path
+from uuid import uuid4
 
 from django.db import models
 from django.contrib.contenttypes.models import ContentType
@@ -8,6 +9,7 @@ from martor.models import MartorField
 from account.models import User
 
 from beelearn.models import get_revision_mixin, TimestampMixin
+from messaging.models import Thread
 
 
 class Course(TimestampMixin, get_revision_mixin("course_creator", "course_editors")):
@@ -157,50 +159,15 @@ class Topic(TimestampMixin, get_revision_mixin("topic_creator", "topic_editors")
         "question_content_type",
         "question_id",
     )
-
+    thread_reference = models.UUIDField(
+        default=uuid4,
+        unique=True,
+    )
     def __str__(self):
         return self.title
 
     class Meta:
         ordering = ("-created_at", "-updated_at")
-
-
-class TopicComment(TimestampMixin):
-    """
-    Topic comments
-    """
-
-    is_parent = models.BooleanField(default=False)
-
-    user = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        related_name="topic_comment_users",
-    )
-    topic = models.ForeignKey(
-        Topic,
-        on_delete=models.CASCADE,
-    )
-
-    content = MartorField()
-
-    likes = models.ManyToManyField(
-        User,
-        blank=True,
-        related_name="topic_comment_likes",
-    )
-
-    sub_topic_comments = models.ManyToManyField(
-        "self",
-        blank=True,
-        symmetrical=False,
-    )
-
-    def __str__(self):
-        return self.topic.title
-
-    class Meta:
-        ordering = ("-updated_at", "created_at")
 
 
 class Category(
