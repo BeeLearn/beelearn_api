@@ -2,9 +2,9 @@
 # exit on error
 set -o errexit
 
-pipenv install
+pip install -r requirements.txt
 
-pipenv run python manage.py collectstatic --no-input
-pipenv run python manage.py migrate
+python manage.py collectstatic --no-input
+python manage.py migrate
 
-pipenv run python manage.py runscript create_rewards
+python manage.py runscript create_rewards
