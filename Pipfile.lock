@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "1becd735b8a78ea3e4d48b469412932a6daaf2871426d7d90ecd56fcf873a826"
+            "sha256": "afb26860722ef457ec86be226444498d114b77e27d0c640d3bc196e1905423d0"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -554,12 +554,8 @@
             "version": "==3.2.3"
         },
         "django-grappelli": {
-            "hashes": [
-                "sha256:0bfa9f7ec424f30c33dc7f18d9a1604ad09ac1e9143e0386849a81d1fd2af0ba",
-                "sha256:8cf65cf276ca4a6feead91b3f0602e7d88d7ec049b5ee782e0eefc4214a2674d"
-            ],
-            "index": "pypi",
-            "version": "==3.0.7"
+            "git": "git+https://github.com/sehmaschine/django-grappelli.git",
+            "ref": "74460889d4908a475ebd1ff212d61355237e0afc"
         },
         "django-nested-admin": {
             "hashes": [

@@ -13,7 +13,6 @@ django-cors-headers = "*"
 requests = "*"
 drf-writable-nested = "*"
 django-restql = "*"
-django-grappelli = "*"
 pytz = "*"
 python-socketio = "*"
 sentry-sdk = "*"
@@ -35,6 +34,7 @@ djira = {git = "git+https://github.com/oasisMystre/djira"}
 numpy = "*"
 dj-database-url = "*"
 psycopg = "*"
+django-grappelli = {git = "git+https://github.com/sehmaschine/django-grappelli.git"}
 
 [dev-packages]
 
