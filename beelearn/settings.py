@@ -214,6 +214,7 @@ if not DEBUG:
         },
     }
 
+
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
