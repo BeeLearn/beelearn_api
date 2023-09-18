@@ -44,7 +44,8 @@ class FirebaseTokenAuthentication(TokenAuthentication):
             return authenticate_credentials(key)
         except ExpiredIdTokenError:
             raise APIException("Expired token")
-        except InvalidIdTokenError:
+        except InvalidIdTokenError as error:
+            print(error)
             raise APIException("Invalid token")
 
 

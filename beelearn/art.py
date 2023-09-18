@@ -20,7 +20,7 @@ def create_mask(size: Tuple[int, int]):
     return mask
 
 
-def create_avatar(initials: str, size: Tuple[int, int] = (128, 128)):
+def create_avatar(initials: str, size: Tuple[int, int] = (512, 512)):
     """
     create avatar from initials
     """
@@ -56,7 +56,7 @@ def create_avatar(initials: str, size: Tuple[int, int] = (128, 128)):
     )
 
 
-def circle_image(file, size=(128, 128)):
+def circle_image(file):
     """
     Circle crop an image and resize it to fit the specified size while maintaining aspect ratio.
     """
@@ -69,7 +69,7 @@ def circle_image(file, size=(128, 128)):
     # Resize the image to fit the specified size while maintaining aspect ratio
     image = ImageOps.fit(
         image,
-        size,
+        image.size,
         method=0,
         bleed=0.0,
         centering=(0.5, 0.5),

@@ -11,17 +11,22 @@ from .authentication import FirebaseTokenAuthentication
 
 
 class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
+    queryset = User.objects.all().prefetch_related(
+        "profile",
+        "settings",
+        "purchases",
+    )
     serializer_class = UserSerializer
 
     @permission_classes([AllowAny])
     @authentication_classes([FirebaseTokenAuthentication])
-    def create(self, request, *args, **kwargs):
+    def create(self, request: Request, *args, **kwargs):
         return super().create(request, *args, **kwargs)
 
     @action(
         detail=False,
         url_path="current-user",
+        authentication_classes=[FirebaseTokenAuthentication],
     )
     def current_user(self, request: Request):
         return Response(
@@ -46,12 +51,6 @@ class UserViewSet(viewsets.ModelViewSet):
                 return super().get_queryset()
 
         return super().get_queryset().filter(pk=self.request.user.id)
-
-
-class SettingsViewSet(viewsets.GenericViewSet, mixins.UpdateModelMixin):
-    queryset = Settings.objects.all()
-
-    serializer_class = SettingsSerializer
 
 
 class NotificationViewSet(viewsets.ModelViewSet):

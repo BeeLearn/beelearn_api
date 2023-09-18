@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 import json
 import os
+import dj_database_url
 from pathlib import Path
 
 import sentry_sdk
@@ -133,21 +134,27 @@ if DEBUG:
         }
     }
 else:
+    # DATABASES = {
+    #     "default": {
+    #         "ENGINE": "django_tidb",
+    #         "NAME": os.environ.get("DATABASE_NAME"),
+    #         "USER": os.environ.get("DATABASE_USER"),
+    #         "PASSWORD": os.environ.get("DATABASE_PASSWORD"),
+    #         "HOST": os.environ.get("DATABASE_HOST"),
+    #         "PORT": "4000",
+    #         "OPTIONS": {
+    #             "ssl": {
+    #                 "ca": "/etc/ssl/certs/ca-certificates.crt",
+    #                 "sslmode": "VERIFY_IDENTITY",
+    #             }
+    #         },
+    #     },
+    # }
     DATABASES = {
-        "default": {
-            "ENGINE": "django_tidb",
-            "NAME": os.environ.get("DATABASE_NAME"),
-            "USER": os.environ.get("DATABASE_USER"),
-            "PASSWORD": os.environ.get("DATABASE_PASSWORD"),
-            "HOST": os.environ.get("DATABASE_HOST"),
-            "PORT": "4000",
-            "OPTIONS": {
-                "ssl": {
-                    "ca": "/etc/ssl/certs/ca-certificates.crt",
-                    "sslmode": "VERIFY_IDENTITY",
-                }
-            },
-        },
+        "default": dj_database_url.config(
+            conn_max_age=600,
+            ssl_require=True,
+        ),
     }
 
 # Password validation
@@ -211,7 +218,7 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.BasicAuthentication",
         "rest_framework.authentication.SessionAuthentication",
-        "account.authentication.FirebaseTokenAuthentication",
+        "rest_framework.authentication.TokenAuthentication",
     ],
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated",
@@ -234,9 +241,9 @@ CORS_ALLOWED_ORIGINS = [
 
 
 DJIRA_SETTINGS = {
-    "AUTHENTICATION_CLASSES": [
-        "account.authentication.DjiraFirebaseTokenAuthentication"
-    ],
+    # "AUTHENTICATION_CLASSES": [
+    #     "account.authentication.DjiraFirebaseTokenAuthentication"
+    # ],
 }
 
 
@@ -272,3 +279,5 @@ GRAPPELLI_ADMIN_TITLE = "BeeLearn"
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
+
+TIME_ZONE = "Africa/Lagos"

@@ -57,6 +57,7 @@ class CourseSerializer(
             lesson__module__course=course,
             created_at__gte=timezone.now() - timezone.timedelta(7),
         )
+        
         return topics.exists() or course.created_at > (
             timezone.now() - timezone.timedelta(7)
         )

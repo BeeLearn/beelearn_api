@@ -33,6 +33,8 @@ django-debug-toolbar = "*"
 daphne = "*"
 djira = {git = "git+https://github.com/oasisMystre/djira"}
 numpy = "*"
+dj-database-url = "*"
+psycopg = "*"
 
 [dev-packages]
 

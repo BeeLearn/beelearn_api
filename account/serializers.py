@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework.authtoken.models import Token
 
 
 from django_restql.mixins import DynamicFieldsMixin
@@ -31,6 +32,16 @@ class SettingsSerializer(DynamicFieldsMixin, serializers.ModelSerializer):
         extra_kwargs = {"fcm_token": {"write_only": True}}
 
 
+class TokenSerializer(serializers.ModelSerializer):
+    """
+    Token model serializer
+    """
+
+    class Meta:
+        model = Token
+        fields = ("key",)
+
+
 class UserSerializer(DynamicFieldsMixin, NestedModelSerializer):
     """
     User model serializer
@@ -38,7 +49,14 @@ class UserSerializer(DynamicFieldsMixin, NestedModelSerializer):
 
     profile = NestedField(ProfileSerializer)
     settings = NestedField(SettingsSerializer)
+    token = serializers.SerializerMethodField()
     is_premium = serializers.SerializerMethodField()
+
+    def get_token(self, user: User):
+        return TokenSerializer(
+            Token.objects.get(user=user),
+            read_only=True,
+        ).data
 
     def get_is_premium(self, user: User):
         return user.purchases.filter(
@@ -59,6 +77,7 @@ class UserSerializer(DynamicFieldsMixin, NestedModelSerializer):
             "last_name",
             "profile",
             "settings",
+            "token",
             "is_premium",
         ]
         extra_kwargs = {
