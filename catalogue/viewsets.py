@@ -2,12 +2,13 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import viewsets, mixins, status
 
-from .models import Course, Lesson, Category, Module, Topic
+from .models import Course, Lesson, Category, Module, Topic, TopicQuestion
 from .serializers import (
     CourseSerializer,
     LessonSerializer,
     CategorySerializer,
     ModuleSerializer,
+    TopicQuestionSerializer,
     TopicSerializer,
 )
 
@@ -32,7 +33,7 @@ class CourseViewSet(
 
 
 class ModuleViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
-    queryset = Module.objects.all()
+    queryset = Module.objects.all().order_by("-created_at")
     serializer_class = ModuleSerializer
 
     filter_fields = (
@@ -101,6 +102,9 @@ class TopicViewSet(
             status=status.HTTP_201_CREATED,
         )
 
+class TopicQuestionViewSet(viewsets.GenericViewSet, mixins.UpdateModelMixin):
+    queryset = TopicQuestion.objects.all()
+    serializer_class = TopicQuestionSerializer
 
 class CategoryViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
     queryset = Category.objects.all()

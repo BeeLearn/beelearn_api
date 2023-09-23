@@ -26,22 +26,34 @@ class ChoiceQuestionSerializer(QuestionSerializer):
 class MultipleChoiceQuestionSerializer(ChoiceQuestionSerializer):
     class Meta:
         model = MultiChoiceQuestion
-        fields = "__all__"
+        exclude = (
+            "creator",
+            "editors",
+        )
 
 
 class SingleChoiceQuestionSerializer(ChoiceQuestionSerializer):
     class Meta:
         model = SingleChoiceQuestion
-        fields = "__all__"
+        exclude = (
+            "creator",
+            "editors",
+        )
 
 
 class DragDropQuestionSerializer(QuestionSerializer):
     class Meta:
         model = DragDropQuestion
-        fields = "__all__"
+        exclude = (
+            "creator",
+            "editors",
+        )
 
 
 class TextOptionQuestionSerializer(QuestionSerializer):
     class Meta:
         model = TextOptionQuestion
-        fields = "__all__"
+        exclude = (
+            "creator",
+            "editors",
+        )

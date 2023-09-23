@@ -53,6 +53,10 @@ class Question(TimestampMixin):
         choices=QuestionType.choices,
     )
 
+    @staticmethod
+    def autocomplete_search_fields():
+        return ("id__iexact", "title__icontains",)
+
     def __str__(self) -> str:
         return self.title
 

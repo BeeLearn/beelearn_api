@@ -1,28 +1,32 @@
-from django import forms
 from django.contrib import admin
-from django.contrib.contenttypes.models import ContentType
 
 from nested_admin import NestedStackedInline, NestedModelAdmin
-from .models import Course, Lesson, Category, Module, Topic
+
+from .models import Course, Lesson, Category, Module, Topic, TopicQuestion
 
 
 class TopicInline(NestedStackedInline):
     model = Topic
+    extra = 1
 
 
 class LessonInline(NestedStackedInline):
     model = Lesson
     inlines = (TopicInline,)
+    extra = 1
+
 
 
 class ModuleInline(NestedStackedInline):
     model = Module
     inlines = (LessonInline,)
+    extra = 1
 
 
 @admin.register(Course)
 class CourseAdmin(NestedModelAdmin):
     inlines = (ModuleInline,)
+    extra = 1
 
     list_display = (
         "id",
@@ -93,16 +97,22 @@ class LessonAdmin(NestedModelAdmin):
     )
 
 
-class TopicAdminForm(forms.ModelForm):
-    class Meta:
-        model = Topic
-        fields = "__all__"
+class TopicQuestionInline(admin.StackedInline):
+    model = TopicQuestion
+    extra = 1
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields["question_content_type"].queryset = ContentType.objects.filter(
-            model__icontains="question",
-        )
+    autocomplete_lookup_fields = {
+        "generic": [["question_content_type", "question_id"]],
+    }
+
+
+@admin.register(TopicQuestion)
+class TopicQuestionAdmin(admin.ModelAdmin):
+    autocomplete_lookup_fields = {
+        "generic": [
+            ["question_content_type", "question_id"],
+        ],
+    }
 
 
 @admin.register(Topic)
@@ -129,7 +139,9 @@ class TopicAdmin(admin.ModelAdmin):
         "updated_at",
     )
 
-    form = TopicAdminForm
+    inlines = (TopicQuestionInline,)
+
+    # form = TopicAdminForm
 
 
 @admin.register(Category)

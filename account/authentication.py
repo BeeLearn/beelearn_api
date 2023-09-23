@@ -17,10 +17,11 @@ def authenticate_credentials(key: str):
         uid=decoded_token["uid"],
     )
 
+    firebase_user: UserRecord = get_user(decoded_token["uid"])
+    user.email = decoded_token["email"]
+
     if created:
-        firebase_user: UserRecord = get_user(decoded_token["uid"])
         user.username = decoded_token["uid"]
-        user.email = decoded_token["email"]
         names: str = firebase_user.display_name
         if names:
             names = names.strip().split(" ")
@@ -30,10 +31,10 @@ def authenticate_credentials(key: str):
 
             user.first_name = names[0]
 
-        user.profile.email_verified = firebase_user.email_verified
-        user.profile.save(update_fields=["is_email_verified"])
+    user.profile.email_verified = firebase_user.email_verified
+    user.profile.save(update_fields=["is_email_verified"])
 
-        user.save(update_fields=["email", "first_name", "last_name", "username"])
+    user.save(update_fields=["email", "first_name", "last_name", "username"])
 
     return user, key
 

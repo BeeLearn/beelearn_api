@@ -42,8 +42,6 @@ class Comment(SoftDeleteMixin, TimestampMixin):
             )
         ]
 
-        print(mentions)
-
         return User.objects.filter(username__in=mentions).exclude(id=self.user.pk)
 
     def __str__(self):

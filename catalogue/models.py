@@ -145,11 +145,59 @@ class Topic(TimestampMixin, get_revision_mixin("topic_creator", "topic_editors")
         related_name="topic_complete_users",
     )
 
+    # question_content_type = models.ForeignKey(
+    #     ContentType,
+    #     null=True,
+    #     blank=True,
+    #     on_delete=models.CASCADE,
+    #     limit_choices_to={
+    #         "model__icontains": "question",
+    #     },
+    # )
+    # question_id = models.PositiveBigIntegerField(
+    #     null=True,
+    #     blank=True,
+    # )
+    # question = GenericForeignKey(
+    #     "question_content_type",
+    #     "question_id",
+    # )
+    thread_reference = models.UUIDField(
+        default=uuid4,
+        #unique=True,
+    )
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        ordering = ("-created_at", "-updated_at")
+
+
+class TopicQuestion(models.Model):
+    """
+    Topic questions, Generic Type
+    """
+
+    topic = models.ForeignKey(
+        Topic,
+        on_delete=models.CASCADE,
+        related_name="topic_questions",
+    )
+    answered_users = models.ManyToManyField(
+        User,
+        blank=True,
+    )
     question_content_type = models.ForeignKey(
         ContentType,
         null=True,
         blank=True,
         on_delete=models.CASCADE,
+        related_name="question_content_type",
+        limit_choices_to={
+            "model__icontains": "question",
+            "app_label__istartswith": "assessment",
+        },
     )
     question_id = models.PositiveBigIntegerField(
         null=True,
@@ -159,15 +207,6 @@ class Topic(TimestampMixin, get_revision_mixin("topic_creator", "topic_editors")
         "question_content_type",
         "question_id",
     )
-    thread_reference = models.UUIDField(
-        default=uuid4,
-        unique=True,
-    )
-    def __str__(self):
-        return self.title
-
-    class Meta:
-        ordering = ("-created_at", "-updated_at")
 
 
 class Category(

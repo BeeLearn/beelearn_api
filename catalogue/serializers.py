@@ -23,7 +23,7 @@ from beelearn.mixins import ContextMixin
 
 from account.serializers import UserSerializer
 
-from .models import Course, Lesson, Category, Module, Topic
+from .models import Course, Lesson, Category, Module, Topic, TopicQuestion
 
 
 class CourseSerializer(
@@ -57,7 +57,7 @@ class CourseSerializer(
             lesson__module__course=course,
             created_at__gte=timezone.now() - timezone.timedelta(7),
         )
-        
+
         return topics.exists() or course.created_at > (
             timezone.now() - timezone.timedelta(7)
         )
@@ -110,7 +110,7 @@ class ModuleSerializer(serializers.ModelSerializer, ContextMixin):
 
     def get_lessons(self, module: Module):
         return LessonSerializer(
-            Lesson.objects.filter(module=module),
+            module.lesson_set.order_by("created_at"),
             many=True,
             context=self.context,
         ).data
@@ -155,6 +155,39 @@ class LessonSerializer(serializers.ModelSerializer, ContextMixin):
         )
 
 
+class TopicQuestionSerializer(
+    NestedModelSerializer,
+    serializers.ModelSerializer,
+    ContextMixin,
+):
+    question = GenericRelatedField(
+        {
+            DragDropQuestion: DragDropQuestionSerializer(),
+            TextOptionQuestion: TextOptionQuestionSerializer(),
+            SingleChoiceQuestion: SingleChoiceQuestionSerializer(),
+            MultiChoiceQuestion: MultipleChoiceQuestionSerializer(),
+        }
+    )
+    answered_users = NestedField(
+        UserSerializer,
+        many=True,
+        write_only=True,
+    )
+    is_answered = serializers.SerializerMethodField()
+
+    def get_is_answered(self, question: TopicQuestion):
+        return question.answered_users.contains(self.request.user)
+
+    class Meta:
+        model = TopicQuestion
+        fields = "__all__"
+        extra_kwargs = {
+            "topic": {
+                "read_only": True,
+            }
+        }
+
+
 class TopicSerializer(
     NestedModelSerializer,
     serializers.ModelSerializer,
@@ -172,17 +205,7 @@ class TopicSerializer(
     )
     is_completed = serializers.SerializerMethodField()
     is_unlocked = serializers.SerializerMethodField()
-
-    question = GenericRelatedField(
-        {
-            DragDropQuestion: DragDropQuestionSerializer(),
-            TextOptionQuestion: TextOptionQuestionSerializer(),
-            SingleChoiceQuestion: SingleChoiceQuestionSerializer(),
-            MultiChoiceQuestion: MultipleChoiceQuestionSerializer(),
-        }
-    )
-
-    has_assessment = serializers.SerializerMethodField()
+    topic_questions = serializers.SerializerMethodField()
 
     topic_complete_users = NestedField(
         UserSerializer,
@@ -213,8 +236,12 @@ class TopicSerializer(
     def get_is_unlocked(self, topic: Topic):
         return topic.entitled_users.contains(self.request.user)
 
-    def get_has_assessment(self, topic: Topic):
-        return not topic.question is None
+    def get_topic_questions(self, topic: Topic):
+        return TopicQuestionSerializer(
+            topic.topic_questions,
+            many=True,
+            context=self.context,
+        ).data
 
 
 class CategorySerializer(serializers.ModelSerializer):

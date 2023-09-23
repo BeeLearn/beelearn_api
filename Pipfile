@@ -25,7 +25,7 @@ django-extensions = "*"
 django-cloudinary-storage = "*"
 brotli = "*"
 whitenoise = "*"
-martor = {git="git+https://github.com/oasisMystre/django-markdown-editor-grappelli"}
+martor = {git="git+https://github.com/oasisMystre/django-markdown-editor-grappelli", ref="a3f7639434cd3a9d41d4bf6e21ae885a0e903ef9"}
 django-nested-admin = "*"
 rest-framework-generic-relations = "*"
 django-debug-toolbar = "*"
@@ -35,6 +35,7 @@ numpy = "*"
 dj-database-url = "*"
 psycopg = "*"
 django-grappelli = {git = "git+https://github.com/sehmaschine/django-grappelli.git"}
+django-genericrelationview = {git = "git+https://github.com/macornwell/genericrelationview/"}
 
 [dev-packages]
 
