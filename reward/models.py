@@ -28,14 +28,14 @@ class Price(models.Model):
     def __str__(self):
         return self.type
 
-    # class Meta: # not working on sql
-    #     constraints = [
-    #         models.UniqueConstraint(
-    #             fields=["type","xp", "bits"],
-    #             name="Price must be unique",
-    #             violation_error_message="Price already exist",
-    #         )
-    #     ]
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["type", "xp", "bits"],
+                name="Price must be unique",
+                violation_error_message="Price already exist",
+            )
+        ]
 
 
 class Reward(models.Model):
@@ -62,6 +62,7 @@ class Reward(models.Model):
 
     type = models.TextField(
         choices=RewardType.choices,
+        unique=True,
         max_length=128,
     )
 

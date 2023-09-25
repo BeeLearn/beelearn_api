@@ -1,10 +1,11 @@
 from account.models import Profile, User
 from assessment.models import Choice, SingleChoiceQuestion, TextOptionQuestion
+from beelearn.settings import BASE_DIR
 
 from catalogue.models import Course, Lesson, Module, Topic
 from reward.models import Price, Reward
 
-from .utils import save_file_to_image_field
+from .utils import file_to_image_field, save_file_to_image_field
 
 
 class AccounTestMixin:
@@ -96,7 +97,7 @@ class CourseTestMixin:
 
 class RewardTextMixin:
     def create_test_rewards(self):
-        default_price = Price.objects.create(
+        default_price, _ = Price.objects.get_or_create(
             xp=10,
             bits=5,
             type=Price.PriceType.REWARD_ACHIEVE,
@@ -194,11 +195,17 @@ class RewardTextMixin:
         ]
 
         for reward in rewards:
-            save_file_to_image_field(
-                f"reward/static/rewards/{reward.type.lower()}.png",
-                reward,
-                lambda reward: reward.icon,
-            )
+            if not Reward.objects.filter(type=reward.type).exists():
+                reward.icon = file_to_image_field(
+                    f"reward/static/rewards/{reward.type.lower()}.png"
+                )
+
+        Reward.objects.bulk_create(
+            rewards,
+            update_conflicts=True,
+            update_fields=["type"],
+            unique_fields=["type"],
+        )
 
         return rewards
 

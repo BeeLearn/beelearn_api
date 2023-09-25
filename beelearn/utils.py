@@ -26,6 +26,13 @@ def get_week_start_and_end(today=None):
 TModel = TypeVar("TModel")
 
 
+def file_to_image_field(
+    path: str,
+    base_dir=BASE_DIR,
+):
+    return File(open(path, "rb"), name=os.path.basename(path))
+
+
 def save_file_to_image_field(
     path: str,
     model_instance: TModel,
@@ -40,29 +47,9 @@ def save_file_to_image_field(
         image_instance(model_instance).save(
             os.path.basename(path),
             file_object,
-            save=True,
         )
 
-
-TModel = TypeVar("TModel")
-
-
-def save_file_to_image_field(
-    path: str,
-    model_instance: TModel,
-    image_instance: Callable[[TModel], ImageField],
-    base_dir=BASE_DIR,
-):
-    with open(base_dir / path, "rb") as file:
-        # Create a Django File object from the file
-        file_object = File(file)
-
-        # Set the image_field with the file_object
-        image_instance(model_instance).save(
-            os.path.basename(path),
-            file_object,
-            save=True,
-        )
+        return file_object
 
 
 def deep_merge(first: dict, second: dict):
