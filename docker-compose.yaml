@@ -1,0 +1,14 @@
+service:
+  web:
+    container_name: beelearn_api
+    build:
+      context: .
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    networks:
+      - beelearn
+
+networks:
+  beelearn:
