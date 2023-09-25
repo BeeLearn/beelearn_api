@@ -8,7 +8,7 @@ set +o allexport
 
 pip install -r requirements.txt
 
-if [ -n "$RENDER" ]; then
+if [ -n "$PRODUCTION" ]; then
     python manage.py collectstatic --no-input
 fi
 
