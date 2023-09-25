@@ -109,7 +109,6 @@ def notify(
             ),
         )
 
-    print(messages)
     send_all(messages)
     Notification.objects.bulk_create(notifications)
 

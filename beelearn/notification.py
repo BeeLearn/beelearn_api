@@ -67,7 +67,6 @@ class MessageContent(dict):
         channelKey: ChannelKey = "general_channel",
         notificationLayout: NotificationLayout = "Default",
     ):
-        print(payload)
         dict.__init__(
             self,
             badge=badge,
