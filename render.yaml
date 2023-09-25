@@ -19,5 +19,3 @@ services:
       - key: RENDER_EXTERNAL_HOSTNAME
         value: v1.api.usebeelearn.com,beelearn.onrender.com
       - fromGroup: BeeLearn
-envVarGroups:
-  - name: BeeLearn 
