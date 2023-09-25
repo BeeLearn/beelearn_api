@@ -1,5 +1,5 @@
 from account.models import User
-from catalogue.models import Course, Module, Lesson, Topic
+from catalogue.models import Course, Module, Lesson, Topic, TopicQuestion
 
 
 def run():
@@ -14,3 +14,6 @@ def run():
 
     Topic.entitled_users.through.objects.all().delete()
     Topic.topic_complete_users.through.objects.all().delete()
+
+    TopicQuestion.answered_users.through.objects.all().delete()
+    

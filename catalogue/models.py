@@ -208,6 +208,9 @@ class TopicQuestion(models.Model):
         "question_id",
     )
 
+    def __str__(self):
+        return self.topic.title
+
 
 class Category(
     TimestampMixin, get_revision_mixin("category_creator", "category_editors")

@@ -7,12 +7,14 @@ from django_restql.serializers import NestedModelSerializer
 from assessment.models import (
     DragDropQuestion,
     MultiChoiceQuestion,
+    ReorderChoiceQuestion,
     SingleChoiceQuestion,
     TextOptionQuestion,
 )
 from assessment.serializers import (
     DragDropQuestionSerializer,
     MultipleChoiceQuestionSerializer,
+    ReorderChoiceQuestionSerializer,
     SingleChoiceQuestionSerializer,
     TextOptionQuestionSerializer,
 )
@@ -166,6 +168,7 @@ class TopicQuestionSerializer(
             TextOptionQuestion: TextOptionQuestionSerializer(),
             SingleChoiceQuestion: SingleChoiceQuestionSerializer(),
             MultiChoiceQuestion: MultipleChoiceQuestionSerializer(),
+            ReorderChoiceQuestion: ReorderChoiceQuestionSerializer()
         }
     )
     answered_users = NestedField(

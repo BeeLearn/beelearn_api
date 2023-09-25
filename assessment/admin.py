@@ -7,7 +7,7 @@ from .models import (
     MultiChoiceQuestion,
     Question,
     ReorderChoice,
-    ReorderQuestion,
+    ReorderChoiceQuestion,
     SingleChoiceQuestion,
     TextOptionQuestion,
 )
@@ -57,9 +57,13 @@ class TextOptionQuestionAdmin(QuestionAdmin):
 
 @admin.register(ReorderChoice)
 class ReorderChoice(admin.ModelAdmin):
-    pass
+    list_display = (
+        "id",
+        "name",
+        "position",
+    )
 
 
-@admin.register(ReorderQuestion)
-class ReorderQuestionAdmin(QuestionAdmin):
+@admin.register(ReorderChoiceQuestion)
+class ReorderChoiceQuestionAdmin(QuestionAdmin):
     pass

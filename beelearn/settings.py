@@ -44,7 +44,7 @@ SECRET_KEY = os.environ.get(
 )
 
 # SECURITY WARNING: don"t run with debug turned on in production!
-DEBUG = "RENDER" not in os.environ
+DEBUG = True # "RENDER" not in os.environ
 
 ALLOWED_HOSTS = ["beelearn.onrender.com"]
 
@@ -251,9 +251,9 @@ CORS_ALLOWED_ORIGINS = [
 
 
 DJIRA_SETTINGS = {
-    # "AUTHENTICATION_CLASSES": [
-    #     "account.authentication.DjiraFirebaseTokenAuthentication"
-    # ],
+    "AUTHENTICATION_CLASSES": [
+        "djira.authentication.TokenAuthentication"
+    ],
 }
 
 
@@ -291,5 +291,3 @@ INTERNAL_IPS = [
 ]
 
 TIME_ZONE = "Africa/Lagos"
-
-import martor

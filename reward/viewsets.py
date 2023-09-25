@@ -1,6 +1,7 @@
 from django.db.models import Case, When, Value, IntegerField
 from django.utils.dateparse import parse_datetime
 
+from rest_framework.decorators import action
 from rest_framework import viewsets, mixins
 from rest_framework.request import Request
 
@@ -36,18 +37,11 @@ class StreakViewSet(viewsets.ModelViewSet):
 
     filter_fields = ("date",)
 
-    def list(self, request: Request):
+    def paginate_queryset(self, queryset):
         """
-        Create streak if not exist for the week
+        Disable pagination on-demand
         """
-        start_date = request.query_params.get("start_date")
+        if 'no_page' in self.request.query_params:
+            return None
 
-        if start_date:
-            start_date = parse_datetime(start_date)
-
-        Streak.create_streak_for_week(start_date)
-
-        return super().list(request)
-
-    def get_queryset(self):
-        return super().get_queryset().filter(date__range=get_week_start_and_end())
+        return super().paginate_queryset(queryset)

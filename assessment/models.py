@@ -43,8 +43,8 @@ class Question(TimestampMixin):
             "MULTIPLE_CHOICE",
             "Multiple Choice",
         )  # validate more than one choice from multiple options
-        RE_ORDER_CHOICE = (
-            "RE_ORDER_CHOICE",
+        REORDER_CHOICE = (
+            "REORDER_CHOICE",
             "Reorder Choice",
         )  # Rearrange choice combinations in orders
 
@@ -163,7 +163,7 @@ class ReorderChoice(Choice):
     position = models.PositiveIntegerField()
 
 
-class ReorderQuestion(
+class ReorderChoiceQuestion(
     Question,
     get_revision_mixin(
         "reorder_question_creator",
@@ -181,5 +181,5 @@ class ReorderQuestion(
     type = models.TextField(
         editable=False,
         choices=Question.QuestionType.choices,
-        default=Question.QuestionType.RE_ORDER_CHOICE,
+        default=Question.QuestionType.REORDER_CHOICE,
     )
