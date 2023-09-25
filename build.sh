@@ -6,7 +6,7 @@ set -o allexport
 source .env
 set +o allexport
 
-pip install -r requirements.txt
+pipenv install
 
 if [ -n "$PRODUCTION" ]; then
     python manage.py collectstatic --no-input
