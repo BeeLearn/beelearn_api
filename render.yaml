@@ -2,8 +2,13 @@ services:
   - type: web
     name: beelearn
     runtime: python
+    repo: https://github.com/oasisMystre/beelearn_api
+    plan: standard
     buildCommand: "./build.sh"
     startCommand: "daphne beelearn.asgi:application --bind 0.0.0.0 -v2"
+    domains:
+      - v1.api.usebeelearn.com
+      - beelearn.onrender.com
     envVars:
       - key: SECRET_KEY
         generateValue: true

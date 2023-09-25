@@ -40,13 +40,15 @@ sentry_sdk.init(
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get(
     "SECRET_KEY",
-    default="django-insecure-f&4h0n2)4t1)0*3*6^eo^1^*ww+-3ui$odqw+zkupnu$l_ti#j",
 )
 
 # SECURITY WARNING: don"t run with debug turned on in production!
-DEBUG = True # "RENDER" not in os.environ
+DEBUG = "RENDER" not in os.environ
 
-ALLOWED_HOSTS = ["beelearn.onrender.com"]
+ALLOWED_HOSTS = [
+    "beelearn.onrender.com",
+    "v1.usegong.usegong.com",
+]
 
 RENDER_EXTERNAL_HOSTNAME = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
 
@@ -194,7 +196,7 @@ USE_TZ = True
 STATIC_URL = "static/"
 
 # Following settings only make sense on production and may break development environments.
-if True:
+if not DEBUG:
     # Tell Django to copy statics to the `staticfiles` directory
     # in your application directory on Render.
     STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
@@ -243,22 +245,22 @@ REST_FRAMEWORK = {
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
-    "https://beelearn.onrender.com",
-    "http://beelearn.onrender.com",
+    "http://usebeelearn.com",
     "http://bee-learn.web.app",
     "https://bee-learn.web.app",
+    "https://beelearn.onrender.com",
+    "http://beelearn.onrender.com",
 ]
 
 
 DJIRA_SETTINGS = {
-    "AUTHENTICATION_CLASSES": [
-        "djira.authentication.TokenAuthentication"
-    ],
+    "AUTHENTICATION_CLASSES": ["djira.authentication.TokenAuthentication"],
 }
 
 
 CSRF_TRUSTED_ORIGINS = [
     "https://*.onrender.com",
+    "https://*.usebeelearn.com",
 ]
 
 AUTH_USER_MODEL = "account.user"

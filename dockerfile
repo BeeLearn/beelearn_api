@@ -2,11 +2,12 @@ FROM "python-alphine"
 
 WORKDIR /app
 
-COPY pyproject.toml .
-COPY poetry.lock .
+COPY requirements.tzt .
 
-RUN poetry install
+RUN pip install
 
 COPY . .
+
+RUN ./build.sh
 
 CMD [ "python manage.py runserver" ]
