@@ -3,7 +3,7 @@ services:
     name: beelearn
     runtime: python
     repo: https://github.com/oasisMystre/beelearn_api
-    plan: standard
+    plan: free
     buildCommand: "./build.sh"
     startCommand: "daphne beelearn.asgi:application --bind 0.0.0.0 -v2"
     domains:
@@ -16,3 +16,7 @@ services:
         value: 4
       - key: PYTHON_VERSION
         value: 3.11.4
+      - key: RENDER_EXTERNAL_HOSTNAME
+        value: v1.api.usebeelearn.com,beelearn.onrender.com
+    envVarGroups:
+      - name: BeeLearn 
