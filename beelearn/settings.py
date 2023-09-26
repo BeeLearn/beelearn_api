@@ -247,6 +247,8 @@ CORS_ALLOWED_ORIGINS = [
     "https://bee-learn.web.app",
     "https://beelearn.onrender.com",
     "http://beelearn.onrender.com",
+    "http://academy.usebeelearn.com",
+    "https://academy.usebeelearn.com",
 ]
 
 
