@@ -1,11 +1,9 @@
 from django.db import models
-from django.contrib.auth import get_user_model
 from django.utils.timezone import timedelta, datetime
 from django.contrib.humanize.templatetags.humanize import naturalday
+from account.models import User
 
 from beelearn.utils import get_week_start_and_end
-
-User = get_user_model()
 
 
 class Price(models.Model):
