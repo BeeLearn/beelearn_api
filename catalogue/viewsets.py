@@ -24,10 +24,7 @@ class CourseViewSet(
     mixins.ListModelMixin,
     mixins.UpdateModelMixin,
 ):
-    queryset = Course.objects.prefetch_related(
-        "course_complete_users",
-        "course_enrolled_users",
-    ).all()
+    queryset = Course.objects.all()
     serializer_class = CourseSerializer
 
     search_fields = ("name",)
@@ -39,13 +36,7 @@ class CourseViewSet(
 
 
 class ModuleViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
-    queryset = (
-        Module.objects.prefetch_related(
-            "module_complete_users",
-        )
-        .all()
-        .order_by("-created_at")
-    )
+    queryset = Module.objects.all().order_by("-created_at")
     serializer_class = ModuleSerializer
 
     filter_fields = (

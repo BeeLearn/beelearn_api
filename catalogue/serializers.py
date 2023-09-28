@@ -88,7 +88,7 @@ class CourseSerializer(
         )
 
 
-class ModuleSerializer(serializers.ModelSerializer, ContextMixin):
+class ModuleSerializer(NestedModelSerializer, ContextMixin):
     """
     Module model serializer
     """
