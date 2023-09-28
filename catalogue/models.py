@@ -89,6 +89,7 @@ class Lesson(TimestampMixin, get_revision_mixin("lesson_creator", "lesson_editor
     module = models.ForeignKey(
         Module,
         on_delete=models.CASCADE,
+        related_name="lessons",
     )
     name = models.CharField(max_length=60)
     is_visible = models.BooleanField(

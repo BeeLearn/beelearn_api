@@ -36,7 +36,7 @@ def unlock_next_module(instance: Module, action: Action, pk_set: Set[int], **kwa
             if next_module:
                 # add user as entitled to next module
                 next_module.entitled_users.add(*users)
-                first_lesson = next_module.lesson_set.first()
+                first_lesson = next_module.lessons.first()
                 if first_lesson:
                     first_lesson.entitled_users.add(*users)
                 else:

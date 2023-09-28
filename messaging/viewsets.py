@@ -10,9 +10,12 @@ class CommentViewSet(
     mixins.RetrieveModelMixin,
     mixins.UpdateModelMixin,
 ):
-    queryset = Comment.objects.all()
+    queryset = Comment.objects.prefetch_related(
+        "user",
+        "likes",
+        "replies",
+    ).all()
     serializer_class = CommentSerializer
-
 
     def get_queryset(self):
         match self.request.method:
@@ -34,6 +37,11 @@ class ThreadViewSet(
 
 
 class ReplyViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin):
-    queryset = Reply.objects.all()
+    queryset = Reply.objects.prefetch_related(
+        "comment",
+        "comment__user",
+        "comment__likes",
+        "comment__replies",
+    ).all()
 
     serializer_class = ReplySerializer

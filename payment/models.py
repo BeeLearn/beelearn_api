@@ -9,40 +9,20 @@ class Product(TimestampMixin):
     """
     Products can be consumable or non-consumable
     """
-
-    class Period(models.TextChoices):
-        YEARLY = "YEARLY", "Yearly"
-        MONTHLY = "MONTHLY", "Monthly"
-        LIFETIME = "LIFETIME", "LifeTime"
-        QUARTERLY = "QUARTERLY", "Quarterly"
-
-    skid = models.CharField(
-        null=True,
-        blank=True,
-        max_length=32,
-    )
-    name = models.CharField(max_length=128)
-    price = models.IntegerField(
-        validators=[
-            MinValueValidator(0),
-        ],
-    )
-    description = models.TextField(
-        blank=True,
-        null=True,
-    )
-    period = models.TextField(choices=Period.choices)
+    sku_id = models.CharField(max_length=32)
+    price = models.TextField()
+    amount = models.TextField()
+    currency = models.TextField()
+    name = models.TextField()
+    description = models.TextField()
     flutterwave_plan_id = models.TextField(
         blank=True,
         null=True,
-    )
-    is_premium = (
-        models.BooleanField()
-    )  # determines if user purchase this products the they are premium users
-
+    ) # allow null to create flutterwave planId using signals notnull
+    consumable = models.BooleanField(default=False)
     def __str__(self):
-        return self.name
-
+        return self.sku_id
+ 
 
 class Purchase(TimestampMixin):
     """

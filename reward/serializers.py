@@ -12,7 +12,7 @@ from account.serializers import UserSerializer
 from .models import Price, Reward, Streak
 
 
-class PriceSerializer(serializers.ModelSerializer, ContextMixin):
+class PriceSerializer(NestedModelSerializer, ContextMixin):
     """
     Price model Serializer
     """
@@ -22,7 +22,7 @@ class PriceSerializer(serializers.ModelSerializer, ContextMixin):
         fields = "__all__"
 
 
-class RewardSerializer(serializers.ModelSerializer, ContextMixin):
+class RewardSerializer(NestedModelSerializer, ContextMixin):
     """
     Reward model Serializer
     """

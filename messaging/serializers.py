@@ -17,7 +17,7 @@ class SubCommentSerializer(NestedModelSerializer, ContextMixin, DynamicFieldsMix
     """
 
     user = UserSerializer(
-        exclude=["profile", "settings"],
+        exclude=["profile", "settings", "token"],
         default=serializers.CurrentUserDefault(),
     )
 

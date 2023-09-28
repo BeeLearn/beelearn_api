@@ -55,14 +55,7 @@ class CourseSerializer(
     )
 
     def get_is_new(self, course: Course):
-        topics = Topic.objects.filter(
-            lesson__module__course=course,
-            created_at__gte=timezone.now() - timezone.timedelta(7),
-        )
-
-        return topics.exists() or course.created_at > (
-            timezone.now() - timezone.timedelta(7)
-        )
+        return course.created_at > (timezone.now() - timezone.timedelta(7))
 
     def get_is_enrolled(self, course: Course):
         return course.course_enrolled_users.contains(self.request.user)
@@ -74,7 +67,7 @@ class CourseSerializer(
         return (
             Course.objects.filter(
                 id=course.pk,
-                module__lesson__topic__likes=self.request.user,
+                module__lessons__topic__likes=self.request.user,
             )
             .distinct()
             .exists()
@@ -112,7 +105,7 @@ class ModuleSerializer(serializers.ModelSerializer, ContextMixin):
 
     def get_lessons(self, module: Module):
         return LessonSerializer(
-            module.lesson_set.order_by("created_at"),
+            module.lessons.order_by("created_at"),
             many=True,
             context=self.context,
         ).data
@@ -128,7 +121,7 @@ class ModuleSerializer(serializers.ModelSerializer, ContextMixin):
         )
 
 
-class LessonSerializer(serializers.ModelSerializer, ContextMixin):
+class LessonSerializer(NestedModelSerializer, ContextMixin):
     """
     Lesson model serializer
     """
@@ -138,7 +131,7 @@ class LessonSerializer(serializers.ModelSerializer, ContextMixin):
     is_completed = serializers.SerializerMethodField()
 
     def get_module_id(self, lesson: Lesson):
-        return lesson.module.id
+        return lesson.module.pk
 
     def get_is_unlocked(self, lesson: Lesson):
         return lesson.entitled_users.contains(self.request.user)
@@ -168,7 +161,7 @@ class TopicQuestionSerializer(
             TextOptionQuestion: TextOptionQuestionSerializer(),
             SingleChoiceQuestion: SingleChoiceQuestionSerializer(),
             MultiChoiceQuestion: MultipleChoiceQuestionSerializer(),
-            ReorderChoiceQuestion: ReorderChoiceQuestionSerializer()
+            ReorderChoiceQuestion: ReorderChoiceQuestionSerializer(),
         }
     )
     answered_users = NestedField(
@@ -183,7 +176,10 @@ class TopicQuestionSerializer(
 
     class Meta:
         model = TopicQuestion
-        fields = "__all__"
+        exclude = (
+            "question_id",
+            "question_content_type",
+        )
         extra_kwargs = {
             "topic": {
                 "read_only": True,

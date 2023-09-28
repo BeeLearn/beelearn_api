@@ -41,6 +41,9 @@ class User(AbstractUser):
     def __str__(self):
         return self.username or self.email or self.uid
 
+    # class Meta:
+    #    constrainst = (models.UniqueConstraint(),)
+
 
 class Profile(models.Model):
     user = models.OneToOneField(

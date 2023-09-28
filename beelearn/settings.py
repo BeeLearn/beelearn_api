@@ -43,7 +43,7 @@ SECRET_KEY = os.environ.get(
 )
 
 # SECURITY WARNING: don"t run with debug turned on in production!
-DEBUG = True #"RENDER" not in os.environ
+DEBUG = True  # "RENDER" not in os.environ
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 
@@ -292,3 +292,10 @@ INTERNAL_IPS = [
 ]
 
 TIME_ZONE = "Africa/Lagos"
+
+# django cache setup
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.memcached.PyMemcacheCache",
+    }
+}

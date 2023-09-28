@@ -101,28 +101,5 @@ class Streak(models.Model):
         blank=True,
     )
 
-    @classmethod
-    def create_streak_for_week(cls, start_date: datetime = None):
-        """
-        create streak for week
-        """
-        start_date, end_date = get_week_start_and_end(start_date)
-
-        if cls.objects.filter(date=start_date).exists():
-            return
-
-        current_date = start_date
-        streaks = []
-
-        while current_date <= end_date:
-            streaks.append(cls(date=current_date))
-
-            current_date += timedelta(days=1)
-
-        return cls.objects.bulk_create(
-            streaks,
-            ignore_conflicts=True,
-        )
-
     def __str__(self):
         return naturalday(self.date)

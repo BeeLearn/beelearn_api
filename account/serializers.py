@@ -61,7 +61,6 @@ class UserSerializer(DynamicFieldsMixin, NestedModelSerializer):
     def get_is_premium(self, user: User):
         return user.purchases.filter(
             user=user,
-            product__is_premium=True,
             status=Purchase.Status.SUCCESSFUL,
         ).exists()
 
