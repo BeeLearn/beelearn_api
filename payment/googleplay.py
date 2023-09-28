@@ -5,7 +5,7 @@ from google.oauth2.service_account import Credentials
 
 from beelearn.settings import BASE_DIR
 
-from .googleplay_type import (
+from payment.googleplay_type import (
     TypeAcknowlegementState,
     TypeRegionVerion,
     TypeSubscription,
@@ -122,6 +122,7 @@ class GooglePlayMonetizationSubscription(GooglePlayPublisherService):
 
 class GooglePlayPurchase:
     def __init__(self, credentials: Credentials):
+        self.product = GooglePlayPurchaseProduct(credentials)
         self.subscription = GooglePlayPurchaseSubscription(credentials)
 
 
@@ -151,6 +152,44 @@ class GooglePlayPurchaseSubscription(GooglePlayPublisherService):
             return True, subscription
 
         return False, subscription
+
+
+class GooglePlayPurchaseProduct(GooglePlayPublisherService):
+    def get(self, packageName: str, productId: str, token: str):
+        return (
+            self.service.purchases()
+            .products()
+            .get(
+                token=token,
+                productId=productId,
+                packageName=packageName,
+            )
+            .execute()
+        )
+
+    def acknowledge(self, packageName: str, productId: str, token: str):
+        return (
+            self.service.purchases()
+            .products()
+            .acknowledge(
+                token=token,
+                productId=productId,
+                packageName=packageName,
+            )
+            .execute()
+        )
+
+    def consume(self, packageName: str, productId: str, token: str):
+        return (
+            self.service.purchases()
+            .products()
+            .consume(
+                token=token,
+                productId=productId,
+                packageName=packageName,
+            )
+            .execute()
+        )
 
 
 googleplay = GooglePlay(

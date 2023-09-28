@@ -229,3 +229,58 @@ class TypeSubscriptionPurchase(TypedDict):
     subscribeWithGoogleInfo: TypeSubscribeWithGoogleInfo
     externalAccountIdentifiers: TypeExternalAccountIdentifiers
     pausedStateContext: Dict[Literal["autoResumeTime"], str]
+
+
+class TypeOneTimePurchaseNotificationType(Enum):
+    SUBSCRIPTION_RECOVERED = 1
+    SUBSCRIPTION_RENEWED = 2
+    SUBSCRIPTION_CANCELED = 3
+    SUBSCRIPTION_PURCHASED = 4
+    SUBSCRIPTION_ON_HOLD = 5
+    SUBSCRIPTION_IN_GRACE_PERIOD = 6
+    SUBSCRIPTION_RESTARTED = 7
+    SUBSCRIPTION_PRICE_CHANGE_CONFIRMED = 8
+    SUBSCRIPTION_DEFERRED = 9
+    SUBSCRIPTION_PAUSED = 10
+    SUBSCRIPTION_PAUSE_SCHEDULE_CHANGED = 11
+    SUBSCRIPTION_REVOKED = 12
+    SUBSCRIPTION_EXPIRED = 13
+
+
+class TypeSubscriptionPurchaseNotificationType(Enum):
+    ONE_TIME_PRODUCT_PURCHASED = 1
+    ONE_TIME_PRODUCT_CANCELED = 2
+
+
+class TypePurchaseNotification(TypedDict):
+    version: str
+    purchaseToken: str
+
+
+class TypeOneTimeNotification(TypePurchaseNotification):
+    sku: str
+    notificationType: TypeOneTimePurchaseNotificationType
+
+
+class TypeSubscriptionPurchaseNotification(TypePurchaseNotification):
+    subscriptionId: str
+    notificationType: TypeSubscriptionPurchaseNotificationType
+
+
+class TypePlaystoreWebhookMessageData(TypedDict):
+    version: str
+    packageName: str
+    eventTimeMillis: str
+    oneTimeProductNotification: TypeOneTimeNotification
+    subscriptionNotification: TypeSubscriptionPurchaseNotification
+
+
+class TypePlaystoreWebhookMessage(TypedDict):
+    messageId: str
+    data: str | TypePlaystoreWebhookMessageData
+    attributes: Dict[str, str]
+
+
+class TypePlaystoreWebhook(TypedDict):
+    subscription: str
+    message: TypePlaystoreWebhookMessage

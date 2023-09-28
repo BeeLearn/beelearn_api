@@ -284,3 +284,5 @@ uploads
 data
 .env.prod
 serviceAccountKey.json 
+googleplayServiceAccountKey.json
+badges.json 

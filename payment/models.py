@@ -30,9 +30,11 @@ class Purchase(TimestampMixin):
     """
 
     class Status(models.TextChoices):
-        FAILED = "FAILED", "FAILED"
-        PENDING = "PENDING", "PENDING"
-        SUCCESSFUL = "SUCCESSFUL", "SUCCESSFUL"
+        FAILED = "FAILED", "Failed"
+        PENDING = "PENDING", "Pending"
+        UNKNOWN = "UNKNOWN", "Unknown"
+        CANCELED = "CANCELED", "Canceled"
+        SUCCESSFUL = "SUCCESSFUL", "Successful"
 
     user = models.ForeignKey(
         User,
@@ -46,7 +48,7 @@ class Purchase(TimestampMixin):
     reference = models.TextField(
         null=True,
         blank=True,
-    )
+    ) # same as purchase token
     status = models.TextField(
         choices=Status.choices,
         default=Status.PENDING,
