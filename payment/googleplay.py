@@ -1,3 +1,5 @@
+import json
+import os
 from typing import Dict, List, Literal, Dict, Optional
 
 from googleapiclient.discovery import build
@@ -5,7 +7,7 @@ from google.oauth2.service_account import Credentials
 
 from beelearn.settings import BASE_DIR
 
-from payment.googleplay_type import (
+from .googleplay_type import (
     TypeAcknowlegementState,
     TypeRegionVerion,
     TypeSubscription,
@@ -193,5 +195,7 @@ class GooglePlayPurchaseProduct(GooglePlayPublisherService):
 
 
 googleplay = GooglePlay(
-    Credentials.from_service_account_file(BASE_DIR / "payment/credentials.json"),
+    Credentials.from_service_account_info(
+        json.loads(os.environ.get("GOOGLE_PLAY_SERVICE_ACCOUNT_KEY"))
+    ),
 )
