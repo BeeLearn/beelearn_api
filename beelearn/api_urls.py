@@ -9,6 +9,7 @@ from enhancement.routers import enhancement_router
 from assessment.routers import assessment_router
 
 urlpatterns = [
+    path(r"webhooks/", include("payment.urls")),
     path(r"catalogue/", include(catalogue_router.urls)),
     path(r"account/", include(account_router.urls)),
     path(r"reward/", include(reward_router.urls)),

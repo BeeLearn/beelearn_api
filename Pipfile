@@ -37,11 +37,12 @@ psycopg = "*"
 django-grappelli = {git = "git+https://github.com/sehmaschine/django-grappelli.git"}
 django-genericrelationview = {git = "git+https://github.com/macornwell/genericrelationview/"}
 celery = "*"
-inapppy = "*"
 pymemcache = "*"
 rave-python = {git = "git+https://github.com/oasisMystre/Python-v2"}
 
 [dev-packages]
+ngrok = "*"
+uvicorn = "*"
 
 [requires]
 python_version = "3.10"

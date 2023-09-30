@@ -231,6 +231,23 @@ class TypeSubscriptionPurchase(TypedDict):
     pausedStateContext: Dict[Literal["autoResumeTime"], str]
 
 
+class TypeProductPurchase(TypedDict):
+    kind: str
+    orderId: str
+    quatity: int
+    productId: str
+    regionCode: str
+    purchaseType: int
+    purchaseState: int
+    purchaseToken: str
+    consumptionState: int
+    developerPayload: str
+    purchaseTimeMillis: str
+    acknowledgementState: int
+    obfuscatedExternalAccountId: str
+    obfuscatedExternalProfileId: str
+
+
 class TypeOneTimePurchaseNotificationType(Enum):
     SUBSCRIPTION_RECOVERED = 1
     SUBSCRIPTION_RENEWED = 2
@@ -271,6 +288,7 @@ class TypePlaystoreWebhookMessageData(TypedDict):
     version: str
     packageName: str
     eventTimeMillis: str
+    testNotification: Dict[Literal["version"], str]
     oneTimeProductNotification: TypeOneTimeNotification
     subscriptionNotification: TypeSubscriptionPurchaseNotification
 

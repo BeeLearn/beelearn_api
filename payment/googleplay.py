@@ -9,6 +9,7 @@ from beelearn.settings import BASE_DIR
 
 from .googleplay_type import (
     TypeAcknowlegementState,
+    TypeProductPurchase,
     TypeRegionVerion,
     TypeSubscription,
     TypeSubscriptionState,
@@ -139,7 +140,18 @@ class GooglePlayPurchaseSubscription(GooglePlayPublisherService):
             )
             .execute()
         )
-
+    def acknowledge(self, packageName: str, subscriptionId: str, token: str):
+        return (
+            self.service.purchases()
+            .subscriptions()
+            .acknowledge(
+                token=token,
+                subscriptionId=subscriptionId,
+                packageName=packageName,
+            )
+            .execute()
+        )
+    
     def verify(self, packageName: str, token: str):
         subscription = self.get(packageName, token)
 
@@ -157,7 +169,7 @@ class GooglePlayPurchaseSubscription(GooglePlayPublisherService):
 
 
 class GooglePlayPurchaseProduct(GooglePlayPublisherService):
-    def get(self, packageName: str, productId: str, token: str):
+    def get(self, packageName: str, productId: str, token: str) -> TypeProductPurchase:
         return (
             self.service.purchases()
             .products()

@@ -7,7 +7,6 @@ from .models import Product, Purchase
 class ProductAdmin(admin.ModelAdmin):
     list_display = (
         "id",
-        "sku_id",
         "flutterwave_plan_id",
     )
 

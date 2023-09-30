@@ -9,20 +9,26 @@ class Product(TimestampMixin):
     """
     Products can be consumable or non-consumable
     """
-    sku_id = models.CharField(max_length=32)
+
+    id = models.CharField(
+        unique=True,
+        max_length=32,
+        primary_key=True,
+    )
+    name = models.TextField()
     price = models.TextField()
     amount = models.TextField()
     currency = models.TextField()
-    name = models.TextField()
     description = models.TextField()
     flutterwave_plan_id = models.TextField(
         blank=True,
         null=True,
-    ) # allow null to create flutterwave planId using signals notnull
+    )  # allow null to create flutterwave planId using signals notnull
     consumable = models.BooleanField(default=False)
+
     def __str__(self):
-        return self.sku_id
- 
+        return self.name
+
 
 class Purchase(TimestampMixin):
     """
@@ -36,19 +42,25 @@ class Purchase(TimestampMixin):
         CANCELED = "CANCELED", "Canceled"
         SUCCESSFUL = "SUCCESSFUL", "Successful"
 
+    id = models.TextField(
+        unique=True,
+        primary_key=True,
+    )
     user = models.ForeignKey(
         User,
         related_name="purchases",
         on_delete=models.CASCADE,
+        null=True,
+        blank=True,
     )
     product = models.ForeignKey(
         Product,
         on_delete=models.CASCADE,
     )
-    reference = models.TextField(
+    token = models.TextField(
         null=True,
         blank=True,
-    ) # same as purchase token
+    )
     status = models.TextField(
         choices=Status.choices,
         default=Status.PENDING,
@@ -59,4 +71,4 @@ class Purchase(TimestampMixin):
     )
 
     def __str__(self):
-        return self.user.username
+        return self.user.username if self.user else self.token
