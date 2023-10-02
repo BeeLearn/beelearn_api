@@ -1,6 +1,7 @@
 import json
 import os
 from typing import Callable, TypeVar
+from typing_extensions import deprecated
 
 from django.core.files import File
 from django.db.models import ImageField
@@ -8,7 +9,7 @@ from django.utils.timezone import now, timedelta
 
 from .settings import BASE_DIR
 
-
+@deprecated
 def get_week_start_and_end(today=None):
     """
     Get week start and end for filter based on week
@@ -26,13 +27,12 @@ def get_week_start_and_end(today=None):
 TModel = TypeVar("TModel")
 
 
-def file_to_image_field(
-    path: str,
-    base_dir=BASE_DIR,
-):
+@deprecated
+def file_to_image_field(path: str):
     return File(open(path, "rb"), name=os.path.basename(path))
 
 
+@deprecated
 def save_file_to_image_field(
     path: str,
     model_instance: TModel,
@@ -53,6 +53,9 @@ def save_file_to_image_field(
 
 
 def deep_merge(first: dict, second: dict):
+    """
+    recurvely merge two dict with second dict has higher precedence than first dict
+    """
     for key, value in second.items():  # Use items() to iterate through key-value pairs
         if key in first:
             if isinstance(value, dict) and isinstance(first[key], dict):
@@ -69,6 +72,9 @@ def deep_merge(first: dict, second: dict):
 
 
 def serialize_deep(value: dict):
+    """
+    deep serializer a dict value turn array, dict into string
+    """
     result = dict()
 
     for key, value in value.items():
@@ -78,3 +84,15 @@ def serialize_deep(value: dict):
             result[key] = value
 
     return result
+
+
+def truncate_string(value: str, max_length: int = 48):
+    """
+    truncate a string, end a string with ellipsis when greater than `max_length`
+    """
+    if value is None:
+        return "None"
+
+    ellipsis = "..." if len(value) > max_length else ""
+
+    return "%s%s" % (value[:max_length], ellipsis)

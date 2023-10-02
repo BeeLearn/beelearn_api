@@ -67,4 +67,9 @@ class SettingsAdmin(admin.ModelAdmin):
 
 @admin.register(Notification)
 class NotificationAdmin(admin.ModelAdmin):
-    pass
+    list_display = (
+        "id",
+        "user",
+        "topic",
+        "is_read",
+    )

@@ -5,6 +5,7 @@ from django.contrib.auth.models import AbstractUser
 from django.core.validators import MaxValueValidator, MinValueValidator
 
 from beelearn.models import TimestampMixin
+from beelearn.utils import truncate_string
 
 
 class User(AbstractUser):
@@ -107,22 +108,21 @@ class Notification(TimestampMixin):
     """
 
     class Topic(models.TextChoices):
-        IN_APP = "IN_APP", "In-app"
-        GENERAL = "GENERAL", "General"
-        COMMENTS = "COMMENTS", "Comments"
+        ADS = "ADS", "Ads"
+        REWARD = "REWARD", "Reward"
+        Streak = "STREAK", "Streak"
+        COMMENTS = "COMMENT", "Comment"
 
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
+        related_name="notifications",
     )
-    icon = models.ImageField(
+    icon = models.URLField(
         blank=True,
         null=True,
     )
-    image = models.ImageField(
-        blank=True,
-        null=True,
-    )
+    image = models.URLField()
     title = models.TextField()
     body = models.TextField()
     topic = models.TextField(choices=Topic.choices)
@@ -133,4 +133,4 @@ class Notification(TimestampMixin):
     )
 
     def __str__(self):
-        return self.user.email
+        return truncate_string(self.body)

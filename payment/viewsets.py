@@ -1,9 +1,11 @@
-from rest_framework import status
+from typing import Literal
+from rest_framework import status, exceptions
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 
+from .paystack import paystack
 from .flutterwave import Flutterwave
 from .models import Product, Purchase
 from .inapp_purchase import InAppPurchase
@@ -33,16 +35,37 @@ class PurchaseViewSet(ModelViewSet):
         data = serializer.validated_data
         purchase, _ = InAppPurchase.verify(request.user, data)
 
-        return Response(self.get_serializer(purchase).data, status=status.HTTP_201_CREATED)
+        return Response(
+            self.get_serializer(purchase).data, status=status.HTTP_201_CREATED
+        )
 
-    @action(methods=["POST"], detail=False, url_path="create-payment-link")
+    @action(
+        methods=["POST"],
+        detail=False,
+        url_path="create-payment-link",
+    )
     def create_payment_link(self, request: Request):
         """
         create flutterwave payment link for client
         """
-        response = flutterwave.charge.standard(request.data)
+        data = request.data
+        source: Literal["paystack", "flutterwave"] = data.get("source", "paystack")
 
-        return Response(data=response["data"])
+        if source == "paystack":
+            response = paystack.transaction.initialize(data)
+        elif source == "flutterwave":
+            response = flutterwave.charge.standard(data)
+        else:
+            raise exceptions.ValidationError(
+                {"errors": ["source %s is not supported" % source]}
+            )
+        return Response(
+            data={
+                "source": source,
+                "data": response["data"],
+            },
+            status=status.HTTP_201_CREATED,
+        )
 
     def get_queryset(self):
         return self.queryset.filter(user=self.request.user)

@@ -29,15 +29,16 @@ class PurchaseSerializer(NestedModelSerializer):
     )
     product = NestedField(
         ProductSerializer,
-        read_only=True,
+        accept_pk=True,
     )
 
     class Meta:
         model = Purchase
         fields = "__all__"
         extra_kwargs = {
-            "id": {"read_only": True},
-            "status": {"read_only": True},
+            "status": {
+                "read_only": True,
+            },
         }
 
 
@@ -55,8 +56,9 @@ class InAppPurchaseSerializer(serializers.Serializer):
     """
     InAppPurchase serializer
     """
+
     token = serializers.CharField()
     product = InAppPurchaseProductSerializer()
-    type=serializers.ChoiceField(choices=["consumable", "nonconsumable"])
+    type = serializers.ChoiceField(choices=["consumable", "nonconsumable"])
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     source = serializers.ChoiceField(choices=["google_play", "apple_store"])

@@ -121,6 +121,7 @@ class DragDropQuestion(
     class %main% {
         %int% score = %0%;
     }
+    #choices are main, int and other uncorrelated options
     ```
     We parse the question by using a special parser
     """

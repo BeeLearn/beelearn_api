@@ -51,6 +51,7 @@ class UserSerializer(DynamicFieldsMixin, NestedModelSerializer):
     settings = NestedField(SettingsSerializer)
     token = serializers.SerializerMethodField()
     is_premium = serializers.SerializerMethodField()
+    unread_notifications = serializers.SerializerMethodField()
 
     def get_token(self, user: User):
         return TokenSerializer(
@@ -64,6 +65,12 @@ class UserSerializer(DynamicFieldsMixin, NestedModelSerializer):
             product__consumable=False,
             status=Purchase.Status.SUCCESSFUL,
         ).exists()
+
+    def get_unread_notifications(self, user: User):
+        return user.notifications.filter(
+            user=user,
+            is_read=False,
+        ).count()
 
     class Meta:
         model = User
@@ -79,6 +86,7 @@ class UserSerializer(DynamicFieldsMixin, NestedModelSerializer):
             "settings",
             "token",
             "is_premium",
+            "unread_notifications",
         ]
         extra_kwargs = {
             "password": {"write_only": True},
