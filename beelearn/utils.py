@@ -1,13 +1,15 @@
 import json
 import os
+
 from typing import Callable, TypeVar
 from typing_extensions import deprecated
 
 from django.core.files import File
-from django.db.models import ImageField
+from django.db.models import ImageField, QuerySet, Model
 from django.utils.timezone import now, timedelta
 
 from .settings import BASE_DIR
+
 
 @deprecated
 def get_week_start_and_end(today=None):
@@ -96,3 +98,20 @@ def truncate_string(value: str, max_length: int = 48):
     ellipsis = "..." if len(value) > max_length else ""
 
     return "%s%s" % (value[:max_length], ellipsis)
+
+
+def get_update_fields(old: Model, new: Model):
+    """
+    get model updated fields when not available in signal
+    """
+    return set(
+        map(
+            lambda field: field.name,
+            filter(
+                lambda field: not field.is_relation
+                and hasattr(new, field.name)
+                and getattr(old, field.name) != getattr(new, field.name),
+                old._meta.fields,
+            ),
+        ),
+    )

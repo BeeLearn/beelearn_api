@@ -36,7 +36,8 @@ class PurchaseViewSet(ModelViewSet):
         purchase, _ = InAppPurchase.verify(request.user, data)
 
         return Response(
-            self.get_serializer(purchase).data, status=status.HTTP_201_CREATED
+            self.get_serializer(purchase).data,
+            status=status.HTTP_201_CREATED,
         )
 
     @action(

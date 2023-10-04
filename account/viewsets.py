@@ -5,8 +5,8 @@ from rest_framework.permissions import AllowAny
 from rest_framework.decorators import action, permission_classes, authentication_classes
 
 
-from .models import Notification, User
-from .serializers import NotificationSerializer, UserSerializer
+from .models import Notification, Profile, User
+from .serializers import NotificationSerializer, UserSerializer, ProfileSerializer
 from .authentication import FirebaseTokenAuthentication
 
 
@@ -57,6 +57,14 @@ class UserViewSet(viewsets.ModelViewSet):
                 pk=self.request.user.id,
             )
         )
+
+
+class ProfileSerializer(viewsets.ModelViewSet):
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
+
+    def get_queryset(self):
+        return self.queryset.filter(user=self.request.user)
 
 
 class NotificationViewSet(viewsets.ModelViewSet):

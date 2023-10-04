@@ -61,12 +61,12 @@ class GooglePlayInAppPurchaseHandler(InAppPurchaseHandler):
                 product["androidPackageId"],
                 token,
             )
-
             dbProduct = Product.objects.get(id=product["productId"])
             if response["subscriptionState"] in [
                 TypeSubscriptionState.SUBSCRIPTION_STATE_ACTIVE.value,
                 TypeSubscriptionState.SUBSCRIPTION_STATE_IN_GRACE_PERIOD.value,
             ]:
+                print(product["purchaseId"])
                 return Purchase.objects.update_or_create(
                     user=user,
                     product=dbProduct,
@@ -88,7 +88,6 @@ class GooglePlayInAppPurchaseHandler(InAppPurchaseHandler):
         except HttpError as error:
             raise _transfrom_googleapi_error(error)
         except Exception as error:
-            print(error)
             raise APIException(str(error))
 
     @staticmethod

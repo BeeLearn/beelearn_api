@@ -58,6 +58,7 @@ class Module(TimestampMixin, get_revision_mixin("module_creator", "module_editor
     course = models.ForeignKey(
         Course,
         on_delete=models.CASCADE,
+        related_name="modules",
     )
     name = models.CharField(max_length=60)
     is_visible = models.BooleanField(
@@ -121,6 +122,7 @@ class Topic(TimestampMixin, get_revision_mixin("topic_creator", "topic_editors")
     lesson = models.ForeignKey(
         Lesson,
         on_delete=models.CASCADE,
+        related_name="topics",
     )
     title = models.CharField(max_length=128)
     content = MartorField(

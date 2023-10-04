@@ -73,7 +73,7 @@ class Profile(models.Model):
 
     @property
     def level(self):
-        return self.xp // 1024
+        return self.xp // 512
 
     def __str__(self):
         return self.user.email
@@ -109,9 +109,12 @@ class Notification(TimestampMixin):
 
     class Topic(models.TextChoices):
         ADS = "ADS", "Ads"
+        LIVE = "LIVE", "LIVE"
+        LEVEL = "LEVEL", "Level"
         REWARD = "REWARD", "Reward"
-        Streak = "STREAK", "Streak"
-        COMMENTS = "COMMENT", "Comment"
+        STREAK = "STREAK", "Streak"
+        COMMENT = "COMMENT", "Comment"
+        GENERAL = "GENERAL", "General"
 
     user = models.ForeignKey(
         User,

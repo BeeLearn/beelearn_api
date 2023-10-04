@@ -1,0 +1,13 @@
+REWARD_STREAK_IMAGE = "https://res.cloudinary.com/beelearn/image/upload/v1696372915/static/notifications/streak.png"
+REWARD_LEVEL_UP_IMAGE = "https://res.cloudinary.com/beelearn/image/upload/v1696372915/static/notifications/level_up.png"
+REWARD_XP_LEVEL_1_IMAGE = "https://res.cloudinary.com/beelearn/image/upload/v1696372915/static/notifications/increase_xp_3.png"
+REWARD_XP_LEVEL_2_IMAGE = "https://res.cloudinary.com/beelearn/image/upload/v1696372915/static/notifications/increase_xp_6.png"
+REWARD_XP_LEVEL_3_IMAGE = "https://res.cloudinary.com/beelearn/image/upload/v1696372915/static/notifications/increase_xp_9.png"
+REWARD_XP_LEVEL_4_IMAGE = "https://res.cloudinary.com/beelearn/image/upload/v1696372915/static/notifications/increase_xp_12.png"
+REWARD_LIVE_LEVEL_1_IMAGE = "https://res.cloudinary.com/beelearn/image/upload/v1696372915/static/notifications/increase_heart_1.png"
+REWARD_XP_LEVEL_DECREASE_1_IMAGE = "https://res.cloudinary.com/beelearn/image/upload/v1696372915/static/notifications/decrease_xp_3.png"
+REWARD_XP_LEVEL_DECREASE_2_IMAGE = "https://res.cloudinary.com/beelearn/image/upload/v1696372915/static/notifications/decrease_xp_6.png"
+REWARD_XP_LEVEL_DECREASE_2_IMAGE = "https://res.cloudinary.com/beelearn/image/upload/v1696372915/static/notifications/decrease_xp_9.png"
+REWARD_XP_LEVEL_DECREASE_4_IMAGE = "https://res.cloudinary.com/beelearn/image/upload/v1696372915/static/notifications/decrease_xp_12.png"
+REWARD_LIVE_LEVEL_DECREASE_1_IMAGE = "https://res.cloudinary.com/beelearn/image/upload/v1696372915/static/notifications/decrease_heart_1.png"
+

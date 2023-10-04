@@ -2,15 +2,17 @@ import random
 
 from typing import List, Set
 
-from django.utils import timezone
 from django.dispatch import receiver
 from django.db.models import signals
 
-from account.models import Profile, User
-from beelearn.utils import get_week_start_and_end
+from account.models import Notification, Profile, User
+
 from catalogue.models import Course, Lesson
+
 from messaging.models import Thread
-from reward.models import Price, Reward, Streak
+
+from .models import Price, Reward, Streak
+from .constants import REWARD_STREAK_IMAGE, REWARD_XP_LEVEL_2_IMAGE
 
 
 # api
@@ -117,12 +119,17 @@ def grant_course_master_hat_trick_and_course_ninja_reward(pk_set: Set[int], **kw
 
 
 @receiver(signals.m2m_changed, sender=Reward.reward_unlocked_users.through)
-def award_price_to_user(instance: Reward, pk_set: Set[int], **kwargs):
+def award_reward_price_to_user(instance: Reward, pk_set: Set[int], **kwargs):
     """
     Award achievement price to user
     """
     profiles = []
-    users = User.objects.filter(pk__in=pk_set)
+    notifications = []
+
+    users = User.objects.select_related(
+        "profile",
+        "settings",
+    ).filter(pk__in=pk_set)
 
     for user in users:
         user.profile.xp += instance.price.xp
@@ -130,20 +137,34 @@ def award_price_to_user(instance: Reward, pk_set: Set[int], **kwargs):
 
         profiles.append(user.profile)
 
+        notifications.append(
+            Notification(
+                user=user,
+                body=instance.description,
+                image=instance.icon.url,
+                topic=Notification.Topic.REWARD,
+                title="%s has been unlocked" % instance.title,
+            ),
+        )
+
     Profile.objects.bulk_update(profiles, fields=["xp", "bits"])
+    Notification.objects.bulk_create(notifications)
 
 
 @receiver(signals.m2m_changed, sender=Streak.streak_complete_users.through)
-def award_streak_price_to_user(pk_set: Set[int], **kwargs):
+def award_streak_price_to_user(pk_set: Set[int], action: str, **kwargs):
     """
     Award price to user on complete streak
     """
+    if action == "post_add":
+        users = User.objects.filter(pk__in=pk_set)
+        prices = Price.objects.filter(type=Price.PriceType.STREAK_COMPLETE)
 
-    prices = Price.objects.filter(type=Price.PriceType.STREAK_COMPLETE)
-    users = User.objects.filter(pk__in=pk_set)
+        if len(prices) == 0:
+            return
 
-    if len(prices) > 0:
         profiles = []
+        notifications = []
         price = random.choice(prices)
 
         for user in users:
@@ -151,25 +172,33 @@ def award_streak_price_to_user(pk_set: Set[int], **kwargs):
             user.profile.bits += price.bits
 
             profiles.append(user.profile)
+            notifications.append(
+                Notification(
+                    user=user,
+                    title="Daily Streak Achieved!",
+                    body="You've reached your daily goal. Keep collecting those streaks to unlock fantastic rewards.",
+                    image=REWARD_STREAK_IMAGE,
+                    topic=Notification.Topic.STREAK,
+                )
+            )
+
+            notifications.append(
+                Notification(
+                    user=user,
+                    title="Daily Streak Reward Unlocked!",
+                    body="You've reached your daily goal and unlocked a streak reward!",
+                    image=REWARD_XP_LEVEL_2_IMAGE,
+                    topic=Notification.Topic.REWARD,
+                )
+            )
 
         Profile.objects.bulk_update(profiles, ["xp", "bits"])
-
-
-@receiver(signals.m2m_changed, sender=Streak.streak_complete_users.through)
-def streak_complete(instance: Streak, pk_set: Set[int], action: str, **kwargs):
-    # increase streak count on completion
-    if action == "post_add":
-        if instance.date == timezone.now().date():
-            week_start, week_end = get_week_start_and_end(instance.date)
-
-            for user in User.objects.filter(pk__in=pk_set):
-                streaks = Streak.objects.filter(
-                    date__gte=week_start,
-                    date__lte=week_end,
-                    streak_complete_users=user,
-                )
-
-                if streaks.count() == 7:
-                    profile = Profile.objects.get(user=user)
-                    profile.streaks = profile.streaks + 1
-                    profile.save(update_fields=["streaks"])
+        Notification.objects.bulk_create(notifications)
+        
+        # manually send post_save to notification signals
+        for notification in notifications:
+            signals.post_save.send(
+                Notification,
+                instance=notification,
+                created=True,
+            )

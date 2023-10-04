@@ -144,7 +144,7 @@ class FavoriteAPIHook(APIHook):
         action: Action,
         context,
     ):
-        course = Course.objects.get(module__lesson__topic=instance)
+        course = Course.objects.get(modules__lessons__topics=instance)
 
         return CourseSerializer(
             course,

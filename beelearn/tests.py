@@ -98,8 +98,8 @@ class CourseTestMixin:
 class RewardTextMixin:
     def create_test_rewards(self):
         default_price, _ = Price.objects.get_or_create(
-            xp=10,
-            bits=5,
+            xp=12,
+            bits=6,
             type=Price.PriceType.REWARD_ACHIEVE,
         )
 

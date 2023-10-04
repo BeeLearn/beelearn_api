@@ -58,8 +58,6 @@ def notify(
         "reply.user.fullname": comment.user.get_full_name(),
     }
 
-    debugUrl = "https://png.pngtree.com/element_our/20190529/ourmid/pngtree-black-round-pattern-user-cartoon-avatar-image_1200114.jpg"
-
     for mention in mentions:
         title = "%s mention you in a comment" % comment.user.get_full_name()
         body = comment.content
@@ -69,8 +67,7 @@ def notify(
                 title=title,
                 body=body,
                 payload=payload,
-                # avatar=comment.user.avatar.url,
-                avatar=debugUrl,
+                avatar=comment.user.avatar.url,
                 token=mention.settings.fcm_token,
             ),
         )
@@ -80,7 +77,7 @@ def notify(
                 title=title,
                 metadata=payload,
                 icon=comment.user.avatar.url,
-                topic=Notification.Topic.COMMENTS,
+                topic=Notification.Topic.COMMENT,
             )
         )
 
@@ -94,8 +91,7 @@ def notify(
                 title=title,
                 body=body,
                 payload=payload,
-                # avatar=comment.user.avatar.url,
-                avatar=debugUrl,
+                avatar=comment.user.avatar.url,
                 token=reply.parent.user.settings.fcm_token,
             ),
         )
@@ -105,7 +101,7 @@ def notify(
                 title=title,
                 metadata=payload,
                 icon=comment.user.avatar.url,
-                topic=Notification.Topic.COMMENTS,
+                topic=Notification.Topic.COMMENT,
             ),
         )
 

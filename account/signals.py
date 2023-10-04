@@ -1,28 +1,29 @@
-from typing import List
 
-from django.utils import timezone
 from django.dispatch import receiver
 from django.db.models import signals
+from django.db.models import Prefetch
 
 from rest_framework.authtoken.models import Token
 
-from firebase_admin.messaging import subscribe_to_topic, unsubscribe_from_topic
-
 from beelearn.art import create_avatar
+from beelearn.utils import get_update_fields
+from reward.constants import (
+    REWARD_LEVEL_UP_IMAGE,
+    REWARD_LIVE_LEVEL_1_IMAGE,
+    REWARD_LIVE_LEVEL_DECREASE_1_IMAGE,
+)
 
-from reward.models import Streak
 from .models import Notification, Profile, Settings, User
 
 
 @receiver(signals.pre_save, sender=User)
 def override_user_fields(instance: User, **kwargs):
     if not instance.avatar:
-    #     instance.avatar = circle_image(instance.avatar)
-    # else:
         fullname = instance.get_full_name()
         instance.avatar = create_avatar(
             (fullname if len(fullname) > 1 else instance.email or instance.username)[:2]
         )
+
 
 @receiver(signals.post_save, sender=User)
 def create_new_user_token(instance: User, created: bool, **kwargs):
@@ -37,33 +38,56 @@ def create_new_user_profile_and_settings(instance: User, created: bool, **kwargs
         Settings.objects.create(user=instance)
 
 
-@receiver(signals.post_save, sender=Profile)
-def on_profile_saved(
-    instance: Profile, created: bool, update_fields: List[str], **kwargs
+@receiver(signals.pre_save, sender=Profile)
+def on_profile_changed(
+    instance: Profile,
+    **kwargs,
 ):
-    if not created:
-        if update_fields and "streaks" in update_fields:
-            return
-
-        today = timezone.now()
-        streak, created = Streak.objects.get_or_create(date=today.date())
-
-        if not created:
-            streak.streak_complete_users.remove(instance.user)
-            streak.save()
-
-
-@receiver(signals.post_save, sender=Settings)
-def on_user_settings_changed(instance: Settings, update_fields: List[str], **kwargs):
     """
-    listen to user settings change
+    listen to profile fields changed
+    when xp changed send notification
     """
-    if instance.fcm_token:
-        # subscribe ot unsubscribe user from topics when is_push_notifications_enabled is updated
-        if update_fields and "is_push_notifications_enabled" in update_fields:
-            if instance.is_push_notifications_enabled:
-                for label in Notification.Topic.labels:
-                    subscribe_to_topic(instance.fcm_token, label)
-            else:
-                for label in Notification.Topic.labels:
-                    unsubscribe_from_topic(instance.fcm_token, label)
+    profile = Profile.objects.prefetch_related(
+        Prefetch(
+            "user",
+            User.objects.only("id"),
+        )
+    ).get(id=instance.pk)
+
+    update_fields = get_update_fields(
+        profile,
+        instance,
+    )
+    # check if user leveled up when user level up
+    if "xp" in update_fields:
+        print("OOOKKKAY FUCKED")
+        # could have use a grt condition but this seem more locked in for error correction
+        print(instance.level)
+        if instance.level == profile.level + 1:
+            Notification.objects.create(
+                user=profile.user,
+                topic=Notification.Topic.LEVEL,
+                title="You've just got to level %d!" % instance.level,
+                image=REWARD_LEVEL_UP_IMAGE,
+                body="Earn more xp to level-up to level %d. Keep the momentum going."
+                % (instance.level + 1),
+            )
+
+    if "lives" in update_fields:
+        if instance.lives == profile.lives + 1:
+            Notification.objects.create(
+                user=profile.user,
+                topic=Notification.Topic.LIVE,
+                image=REWARD_LIVE_LEVEL_1_IMAGE,
+                title="An Extra Life Beckons!",
+                body="You've just gained an additional life. Stay unstoppable on your learning journey.",
+            )
+
+        if instance.lives == profile.lives - 1:
+            Notification.objects.create(
+                user=profile.user,
+                topic=Notification.Topic.LIVE,
+                image=REWARD_LIVE_LEVEL_DECREASE_1_IMAGE,
+                title="Oh No! A Life Lost.",
+                body="Refill your hearts to keep the lessons flowing smoothly. You've got this!",
+            )

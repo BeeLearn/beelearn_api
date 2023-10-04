@@ -67,7 +67,7 @@ class CourseSerializer(
         return (
             Course.objects.filter(
                 id=course.pk,
-                module__lessons__topic__likes=self.request.user,
+                modules__lessons__topics__likes=self.request.user,
             )
             .distinct()
             .exists()
@@ -189,7 +189,6 @@ class TopicQuestionSerializer(
 
 class TopicSerializer(
     NestedModelSerializer,
-    serializers.ModelSerializer,
     ContextMixin,
 ):
     """
