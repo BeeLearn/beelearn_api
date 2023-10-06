@@ -154,11 +154,11 @@ class FavoriteAPIHook(APIHook):
     @favourite_observer.rooms
     def favourite_observer_rooms(observer: SignalObserver, pk_set: Set[int], **kwargs):
         for pk in pk_set:
-            yield f"lesson__{pk}"
+            yield f"favourite__{pk}"
 
     @favourite_observer.subscribing_rooms
     def favourite_observer_subscribing_rooms(observer: SignalObserver, scope: Scope):
-        yield f"lesson__{scope.user.pk}"
+        yield f"favourite__{scope.user.pk}"
 
     @action(methods=["POST"])
     async def subscribe(self):

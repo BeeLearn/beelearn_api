@@ -29,7 +29,7 @@ class CourseViewSet(
 
     search_fields = ("name",)
     filter_fields = (
-        "module",
+        "modules",
         "course_enrolled_users",
         "course_complete_users",
     )
