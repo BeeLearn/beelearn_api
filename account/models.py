@@ -61,7 +61,6 @@ class Profile(models.Model):
     )
     xp = models.IntegerField(default=0)  # experience point
     bits = models.IntegerField(default=0)  # used to unlock questions
-    streaks = models.IntegerField(default=0)  # total number of completed streaks
 
     daily_streak_minutes = models.IntegerField(
         validators=[

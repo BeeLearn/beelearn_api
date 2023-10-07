@@ -8,10 +8,13 @@ from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponseNotAllowed
 
+from rest_framework import permissions
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.request import Request
 from rest_framework.response import Response
 
 from socketio import AsyncServer
+from account.models import User
 
 from beelearn.asgi import sio
 
@@ -27,9 +30,64 @@ from .googleplay_type import (
 sio: AsyncServer = sio
 
 
+@api_view(["POST"])
 def flutterwave_webhook(request: Request):
     # todo implement flutterwave webhook handler
+    print(json.loads(request.body))
     return Response()
+
+
+@api_view(["POST"])
+@permission_classes([permissions.AllowAny])
+def paystack_webhook(request: Request):
+    # todo implement flutterwave webhook handler
+    data = request.data
+
+    event = data["event"]
+    data = data["data"]
+
+    match event:
+        case "subscription.create":
+            user = get_object_or_404(User, email=data["customer"]["email"])
+            product = Product.objects.get(paystack_plan_code=data["plan"]["plan_code"])
+            purchase, _ = Purchase.objects.get_or_create(
+                user=user,
+                product=product,
+                order_id=None,
+            )
+            purchase.web_order_id = data["subscription_code"]
+            purchase.save(update_fields=["web_order_id"])
+
+        case "subscription.not_renew" | "subscription.failed" | "subscription.disabled":
+            purchase = get_object_or_404(
+                Purchase,
+                web_order_id=data["subscription_code"],
+                product__paystack_plan_code=data["plan"]["plan_code"],
+            )
+
+            purchase.status = (
+                Purchase.Status.FAILED
+                if event == "failed"
+                else Purchase.Status.CANCELED
+            )
+        case "charge.success":
+            user = get_object_or_404(User, email=data["customer"]["email"])
+            product = Product.objects.get(paystack_plan_code=data["plan"]["plan_code"])
+            purchase, _ = Purchase.objects.get_or_create(
+                user=user,
+                product=product,
+                order_id=None,
+            )
+
+            purchase.status = Purchase.Status.SUCCESSFUL
+            purchase.save(update_fields=["status"])
+
+    return Response(
+        {
+            "status": "successful",
+            "message": "webhook event successful",
+        }
+    )
 
 
 @csrf_exempt
@@ -58,9 +116,7 @@ def googleplay_store_webhook(request: HttpRequest):
                     data["packageName"],
                     subscriptionNotification["purchaseToken"],
                 )
-                print(subscription)
                 subscriptionState = subscription["subscriptionState"]
-                print(subscriptionState)
 
                 product = get_object_or_404(
                     Product,
@@ -100,8 +156,8 @@ def googleplay_store_webhook(request: HttpRequest):
                 else:
                     purchase.status = Purchase.Status.UNKNOWN
 
-                purchase.id = subscription["latestOrderId"]
-                purchase.save(update_fields=["status", "latestOrderId"])
+                purchase.order_id = subscription["latestOrderId"]
+                purchase.save(update_fields=["status", "order_id"])
 
                 return JsonResponse(
                     {

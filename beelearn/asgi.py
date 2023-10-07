@@ -2,6 +2,8 @@ import os
 
 from django.core.asgi import get_asgi_application
 
+from payment.hooks import PurchaseAPIHook
+
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "beelearn.settings")
 
@@ -36,6 +38,7 @@ consumer.register("rewards", RewardAPIHook)
 consumer.register("streaks", StreakAPIHook)
 consumer.register("replies", ReplyAPIHook)
 consumer.register("threads", ThreadAPIHook)
+consumer.register("purchases", PurchaseAPIHook)
 consumer.register("favourites", FavoriteAPIHook)
 consumer.register("notifications", NotificationAPIHook)
 

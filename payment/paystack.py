@@ -1,5 +1,4 @@
 import os
-from typing import Generic, List, Literal, TypeVar, TypedDict
 
 from rest_framework import status, exceptions
 
@@ -11,6 +10,7 @@ from beelearn.external_api import (
     has_required_fields,
     transform_error_response,
 )
+from payment.paystack_type import TypeResponse, TypeTransactionData, TypeTransactionInitialize
 
 
 class Paystack(APICore):
@@ -29,52 +29,7 @@ class Paystack(APICore):
 
         self.transaction = PaystackTransaction(self)
 
-class TypeTransactionInitialize(TypedDict):
-    plan: str
-    currency: str
-    metadata: dict
-    reference: str
-    callback_url: str
-    invoice_limit: str
-    channels: List[
-        Literal[
-            "qr",
-            "card",
-            "bank",
-            "ussd",
-            "mobile_money",
-            "bank_transfer",
-            "eft",
-        ]
-    ]
-    split_code: str
-    subaccount: str
-    transaction_charge: str
-    bearer: Literal["account", "subaccount"]
 
-
-class TypeTransactionData(TypedDict):
-    id: int
-    fees: int
-    domain: str
-    status: str
-    amount: str
-    message: str
-    paid_at: str
-    channel: str
-    reference: str
-    created_at: str
-    geteway_response: str
-    fees_split: str | None
-
-
-TData = TypeVar("TData")
-
-
-class TypeResponse(Generic[TData]):
-    status: bool
-    message: str
-    data: TData
 
 
 class PaystackTransaction(API):
@@ -102,6 +57,73 @@ class PaystackTransaction(API):
     def verify(self, reference: str) -> TypeResponse[TypeTransactionData]:
         response = get(
             self.get_detailed_url(reference),
+            headers=self.core.headers,
+        )
+
+        if response.status_code == status.HTTP_200_OK:
+            return response.json()
+
+        raise transform_error_response(response)
+
+
+class PaystackSubscription(API):
+    api_path = "subscription"
+
+    def get(self, plan_id_or_code: str):
+        response = get(
+            self.get_detailed_url(plan_id_or_code),
+            headers=self.core.headers,
+        )
+
+        if response.status_code == status.HTTP_200_OK:
+            return response.json()
+
+        raise transform_error_response(response)
+
+    def enable(self, code, token):
+        response = post(
+            self.get_detailed_url("enable"),
+            headers=self.core.headers,
+            json={
+                "code": code,
+                "token": token,
+            },
+        )
+
+        if response.status_code == status.HTTP_201_CREATED:
+            return response.json()
+
+        raise transform_error_response(response)
+
+    def disable(self, code, token):
+        response = post(
+            self.get_detailed_url("disable"),
+            headers=self.core.headers,
+            json={
+                "code": code,
+                "token": token,
+            },
+        )
+
+        if response.status_code == status.HTTP_201_CREATED:
+            return response.json()
+
+        raise transform_error_response(response)
+
+    def update_subscription(self, code):
+        response = get(
+            self.get_detailed_url("%s/manage/link" % code),
+            headers=self.core.headers,
+        )
+
+        if response.status_code == status.HTTP_200_OK:
+            return response.json()
+
+        raise transform_error_response(response)
+
+    def send_update_subscription_link(self, code):
+        response = post(
+            self.get_detailed_url("%s/manage/email" % code),
             headers=self.core.headers,
         )
 

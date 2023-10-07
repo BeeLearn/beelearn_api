@@ -1,4 +1,6 @@
+from uuid import uuid4
 from django.db import models
+from django.db.models import Q
 from django.core.validators import MinValueValidator
 
 from account.models import User
@@ -24,6 +26,10 @@ class Product(TimestampMixin):
         blank=True,
         null=True,
     )  # allow null to create flutterwave planId using signals notnull
+    paystack_plan_code = models.TextField(
+        blank=True,
+        null=True,
+    )  # allow null to create paystack planCode using signals notnull
     consumable = models.BooleanField(default=False)
 
     def __str__(self):
@@ -42,10 +48,16 @@ class Purchase(TimestampMixin):
         CANCELED = "CANCELED", "Canceled"
         SUCCESSFUL = "SUCCESSFUL", "Successful"
 
-    id = models.TextField(
-        unique=True,
-        primary_key=True,
+    order_id = models.TextField(
+        null=True,
+        blank=True,
     )
+
+    web_order_id = models.TextField(
+        null=True,
+        blank=True,
+    )
+
     user = models.ForeignKey(
         User,
         related_name="purchases",
@@ -63,7 +75,7 @@ class Purchase(TimestampMixin):
     )
     status = models.TextField(
         choices=Status.choices,
-        default=Status.PENDING,
+        default=Status.UNKNOWN,
     )
     metadata = models.JSONField(
         null=True,

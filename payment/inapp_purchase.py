@@ -66,13 +66,12 @@ class GooglePlayInAppPurchaseHandler(InAppPurchaseHandler):
                 TypeSubscriptionState.SUBSCRIPTION_STATE_ACTIVE.value,
                 TypeSubscriptionState.SUBSCRIPTION_STATE_IN_GRACE_PERIOD.value,
             ]:
-                print(product["purchaseId"])
                 return Purchase.objects.update_or_create(
-                    user=user,
                     product=dbProduct,
+                    token=token,
+                    order_id=product["purchaseId"],
                     defaults={
-                        "token": token,
-                        "id": product["purchaseId"],
+                        "user": user,
                         "status": Purchase.Status.SUCCESSFUL,
                     },
                 )
@@ -99,15 +98,16 @@ class GooglePlayInAppPurchaseHandler(InAppPurchaseHandler):
                 packageName=product["androidPackageId"],
             )
 
-            product = Product.objects.get(id=product["productId"])
+            dbProduct = Product.objects.get(id=product["productId"])
 
             if response["purchaseState"] == 2:
                 return Purchase.objects.update_or_create(
-                    user=user,
-                    status=Purchase.Status.SUCCESSFUL,
-                    token=response["purchaseToken"],
+                    product=dbProduct,
+                    token=token,
+                    order_id=product["purchaseId"],
                     defaults={
-                        "id": product["purchaseId"],
+                        "user": user,
+                        "status": Purchase.Status.SUCCESSFUL,
                     },
                 )
 
@@ -130,7 +130,7 @@ class AppleInAppPurchaseHandler(InAppPurchaseHandler):
 class TypePurchaseData(TypedDict):
     token: str
     product: TypeProduct
-    type: Literal["consumable", "nonconsumable"]
+    type: Literal["consumable", "non-consumable"]
     source: Literal["apple_store", "google_play"]
 
 
@@ -156,13 +156,13 @@ class InAppPurchase:
                     }
                 )
 
-        if data["type"] == "consumable":
+        if data["type"] == "non-consumable":
             return handler.verifySubscription(
                 user,
                 data["product"],
                 data["token"],
             )
-        elif data["type"] == "nonconsumable":
+        elif data["type"] == "consumable":
             return handler.verifyNonSubscription(
                 user,
                 data["product"],
