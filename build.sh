@@ -11,8 +11,6 @@ pipenv install
 if [ -n "$PRODUCTION" ]; then
     python manage.py migrate
     python manage.py collectstatic --no-input
-else 
-    python manage.py runscript clean
 fi
 
 
