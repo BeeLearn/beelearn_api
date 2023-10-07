@@ -2,8 +2,6 @@ import os
 
 from django.core.asgi import get_asgi_application
 
-from payment.hooks import PurchaseAPIHook
-
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "beelearn.settings")
 
@@ -14,6 +12,8 @@ from socketio import ASGIApp
 from djira.consumer import Consumer
 from djira.settings import jira_settings
 
+
+from payment.hooks import PurchaseAPIHook
 from messaging.hooks import ReplyAPIHook, ThreadAPIHook
 from account.hooks import ProfileAPIHook, NotificationAPIHook
 from catalogue.hooks import (
