@@ -137,3 +137,6 @@ class Notification(TimestampMixin):
 
     def __str__(self):
         return truncate_string(self.body)
+
+    class Meta:
+        ordering = ("-created_at","-updated_at")
