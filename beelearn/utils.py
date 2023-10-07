@@ -29,7 +29,6 @@ def get_week_start_and_end(today=None):
 TModel = TypeVar("TModel")
 
 
-@deprecated
 def file_to_image_field(path: str):
     return File(open(path, "rb"), name=os.path.basename(path))
 
