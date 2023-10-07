@@ -9,9 +9,12 @@ set +o allexport
 pipenv install
 
 if [ -n "$PRODUCTION" ]; then
+    python manage.py migrate
     python manage.py collectstatic --no-input
+else 
+    python manage.py runscript clean
 fi
 
-python manage.py migrate
 
 python manage.py runscript create_rewards
+python manage.py runscript create_streaks

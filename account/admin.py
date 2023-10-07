@@ -39,7 +39,6 @@ class ProfileAdmin(admin.ModelAdmin):
         "lives",
         "xp",
         "bits",
-        "streaks",
         "daily_streak_minutes",
     )
 

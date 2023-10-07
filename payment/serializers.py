@@ -59,6 +59,6 @@ class InAppPurchaseSerializer(serializers.Serializer):
 
     token = serializers.CharField()
     product = InAppPurchaseProductSerializer()
-    type = serializers.ChoiceField(choices=["consumable", "nonconsumable"])
+    type = serializers.ChoiceField(choices=["consumable", "non-consumable"])
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     source = serializers.ChoiceField(choices=["google_play", "apple_store"])

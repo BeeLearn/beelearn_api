@@ -8,12 +8,14 @@ class ProductAdmin(admin.ModelAdmin):
     list_display = (
         "id",
         "flutterwave_plan_id",
+        "paystack_plan_code",
     )
 
     search_fields = (
         "name",
         "price",
         "flutterwave_plan_id",
+        "paystack_plan_code",
     )
 
 
@@ -24,6 +26,8 @@ class PurchaseAdmin(admin.ModelAdmin):
         "user",
         "product",
         "status",
+        "web_order_id",
+        "order_id",
     )
 
     search_fields = (
