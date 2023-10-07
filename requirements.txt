@@ -100,7 +100,7 @@ txaio==23.1.1
 typing_extensions==4.8.0
 tzdata==2023.3
 uritemplate==4.1.1
-urllib3==1.26.16
+urllib3==1.26.17
 vine==5.0.0
 wcwidth==0.2.6
 webencodings==0.5.1
