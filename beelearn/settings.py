@@ -38,12 +38,10 @@ sentry_sdk.init(
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get(
-    "SECRET_KEY",
-)
+SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don"t run with debug turned on in production!
-DEBUG = True  # "RENDER" not in os.environ
+DEBUG = "RENDER" not in os.environ
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "quiet-rattler-correct.ngrok-free.app"]
 
@@ -135,22 +133,6 @@ if DEBUG:
         }
     }
 else:
-    # DATABASES = {
-    #     "default": {
-    #         "ENGINE": "django_tidb",
-    #         "NAME": os.environ.get("DATABASE_NAME"),
-    #         "USER": os.environ.get("DATABASE_USER"),
-    #         "PASSWORD": os.environ.get("DATABASE_PASSWORD"),
-    #         "HOST": os.environ.get("DATABASE_HOST"),
-    #         "PORT": "4000",
-    #         "OPTIONS": {
-    #             "ssl": {
-    #                 "ca": "/etc/ssl/certs/ca-certificates.crt",
-    #                 "sslmode": "VERIFY_IDENTITY",
-    #             }
-    #         },
-    #     },
-    # }
     DATABASES = {
         "default": dj_database_url.config(
             conn_max_age=600,
@@ -202,10 +184,6 @@ if not DEBUG:
 
     # Turn on WhiteNoise storage backend that takes care of compressing static files
     # and creating unique names for each version so they can safely be cached forever.
-    # STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-
-    # DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
-
     STORAGES = {
         "default": {
             "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
@@ -243,15 +221,18 @@ REST_FRAMEWORK = {
 }
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
     "http://usebeelearn.com",
-    "http://bee-learn.web.app",
-    "https://bee-learn.web.app",
-    "https://beelearn.onrender.com",
-    "http://beelearn.onrender.com",
     "http://academy.usebeelearn.com",
     "https://academy.usebeelearn.com",
 ]
+
+# only allow localhost and firebase default url in DEBUG mode
+if DEBUG:
+    CORS_ALLOWED_ORIGINS += [
+        "http://localhost:3000",
+        "http://bee-learn.web.app",
+        "https://bee-learn.web.app",
+    ]
 
 
 DJIRA_SETTINGS = {
@@ -259,13 +240,12 @@ DJIRA_SETTINGS = {
 }
 
 
-CSRF_TRUSTED_ORIGINS = [
-    "https://*.onrender.com",
-    "https://*.usebeelearn.com",
-]
+CSRF_TRUSTED_ORIGINS = ["https://*.usebeelearn.com"]
+
+if DEBUG:
+    CSRF_TRUSTED_ORIGINS += ["https://*.onrender.com"]
 
 AUTH_USER_MODEL = "account.user"
-
 
 cred = credentials.Certificate(
     json.loads(os.environ.get("FIREBASE_SERVICE_ACCOUNT_KEY"))
