@@ -46,11 +46,12 @@ DEBUG = "RENDER" not in os.environ
 ALLOWED_HOSTS = ["v1.api.usebeelearn.com"]
 
 RENDER_EXTERNAL_HOSTNAME = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
+BEELEARN_EXTERNAL_HOSTNAME = os.environ.get("BEELEARN_EXTERNAL_HOSTNAME")
 
 if RENDER_EXTERNAL_HOSTNAME:
     ALLOWED_HOSTS += RENDER_EXTERNAL_HOSTNAME.split(",")
+    ALLOWED_HOSTS += BEELEARN_EXTERNAL_HOSTNAME.split(",")
 
-print(ALLOWED_HOSTS)
 # Application definition
 INSTALLED_APPS = [
     "grappelli",
