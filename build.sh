@@ -8,7 +8,7 @@ set +o allexport
 
 pipenv install
 
-if [ -n "$PRODUCTION" ]; then
+if [ -n "$RENDER" ]; then
     python manage.py migrate
     python manage.py collectstatic --no-input
 fi
