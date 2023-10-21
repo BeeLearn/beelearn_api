@@ -99,8 +99,11 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "beelearn.middleware.LoggerMiddleware",
 ]
+
+# add a logger if not in production
+if DEBUG:
+    MIDDLEWARE += ["beelearn.middleware.LoggerMiddleware"]
 
 ROOT_URLCONF = "beelearn.urls"
 
