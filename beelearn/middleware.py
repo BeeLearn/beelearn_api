@@ -8,8 +8,7 @@ class LoggerMiddleware:
         self.get_response = get_response
 
     def __call__(self, request: HttpRequest):
-        # print(request.headers)
-
+        print(request.body)
         response = self.get_response(request)
         if hasattr(response, "data"):
             print(response.data)

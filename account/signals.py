@@ -52,17 +52,18 @@ def on_profile_changed(
             "user",
             User.objects.only("id"),
         )
-    ).get(id=instance.pk)
+    ).filter(id=instance.pk).first()
 
+    if profile is None:
+        return
+    
     update_fields = get_update_fields(
         profile,
         instance,
     )
     # check if user leveled up when user level up
     if "xp" in update_fields:
-        print("OOOKKKAY FUCKED")
         # could have use a grt condition but this seem more locked in for error correction
-        print(instance.level)
         if instance.level == profile.level + 1:
             Notification.objects.create(
                 user=profile.user,

@@ -106,7 +106,6 @@ def googleplay_store_webhook(request: HttpRequest):
             data: TypePlaystoreWebhookMessageData = json.loads(
                 base64.b64decode(data).decode("utf-8")
             )
-            print(data)
             testNotification = data.get("testNotification")
             subscriptionNotification = data.get("subscriptionNotification")
             oneTimeSubscriptionNotification = data.get("oneTimeProductNotification")

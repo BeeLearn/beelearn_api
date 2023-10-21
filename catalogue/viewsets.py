@@ -1,9 +1,7 @@
-from django.db.models import Exists
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import viewsets, mixins, status
 
-from django_restql.mixins import EagerLoadingMixin
 
 from .models import Course, Lesson, Category, Module, Topic, TopicQuestion
 from .serializers import (
@@ -30,6 +28,7 @@ class CourseViewSet(
     search_fields = ("name",)
     filter_fields = (
         "modules",
+        "created_at",
         "course_enrolled_users",
         "course_complete_users",
     )
