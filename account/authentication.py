@@ -12,7 +12,7 @@ from .models import Profile, User
 
 
 def get_first_and_last_name(full_name: str):
-    first_name, last_name = None, None
+    first_name, last_name = "", ""
 
     if full_name:
         names = full_name.strip().split(" ")
