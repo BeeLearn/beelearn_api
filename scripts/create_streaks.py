@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from beelearn.utils import get_week_start_and_end
 
 from reward.models import Streak
 
@@ -9,13 +10,16 @@ def run():
         today.year + 2,
         1,
         1,
-    )
+    ).date()
+
+    start, _ = get_week_start_and_end()
+
 
     streaks = []
 
-    while today < end:
-        streaks.append(Streak(date=today))
-        today += timedelta(days=1)
+    while start < end:
+        streaks.append(Streak(date=start))
+        start += timedelta(days=1)
 
     Streak.objects.bulk_create(
         streaks,

@@ -21,7 +21,7 @@ def override_user_fields(instance: User, **kwargs):
     if not instance.avatar:
         fullname = instance.get_full_name()
         instance.avatar = create_avatar(
-            (fullname if len(fullname) > 1 else instance.email or instance.username)[:2]
+            (fullname if len(fullname) > 1 else instance.email or instance.username)[:2].capitalize()
         )
 
 

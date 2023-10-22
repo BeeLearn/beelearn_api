@@ -5,6 +5,7 @@ from io import BytesIO
 from PIL import Image, ImageDraw, ImageOps, ImageFont
 
 from django.core.files.uploadedfile import InMemoryUploadedFile
+from django.core.files.storage import FileSystemStorage
 
 from .settings import BASE_DIR
 
@@ -20,13 +21,13 @@ def create_mask(size: Tuple[int, int]):
     return mask
 
 
-def create_avatar(initials: str, size: Tuple[int, int] = (512, 512)):
+def create_avatar(initials: str, size: Tuple[int, int] = (256, 256)):
     """
     create avatar from initials
     """
     font = ImageFont.truetype(
         open(BASE_DIR / "beelearn/static/fonts/albert-regular.ttf", "rb"),
-        size=64,
+        size=128,
     )
 
     image = Image.new("RGB", size, (196, 181, 253))
@@ -91,3 +92,12 @@ def circle_image(file):
     )
 
     return file
+
+
+# with open("test.png", "wb") as file:
+#     avatar = create_avatar(
+#             "AB"
+#         )
+#     avatar.seek(0)
+#     FileSystemStorage(location=BASE_DIR / "beelearn").save(avatar.name, avatar)
+  

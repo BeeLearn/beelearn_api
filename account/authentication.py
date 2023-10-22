@@ -11,28 +11,39 @@ from djira.authentication import TokenAuthentication as DjiraTokenAuthentication
 from .models import Profile, User
 
 
+def get_first_and_last_name(full_name: str):
+    first_name, last_name = None, None
+
+    if full_name:
+        names = full_name.strip().split(" ")
+        first_name = names[0]
+
+        if len(names) > 0:
+            last_name = names[1]
+
+    return first_name, last_name
+
+
 def authenticate_credentials(key: str):
     decoded_token = verify_id_token(key)
+    firebase_user: UserRecord = get_user(decoded_token["uid"])
+
+    first_name, last_name = get_first_and_last_name(firebase_user.display_name)
+
     user, created = User.objects.get_or_create(
         uid=decoded_token["uid"],
+        defaults={
+            "last_name": last_name,
+            "first_name": first_name,
+            "username": decoded_token["uid"],
+            "email": decoded_token["email"],
+        },
     )
 
-    firebase_user: UserRecord = get_user(decoded_token["uid"])
-    user.email = decoded_token["email"]
-
-    if created:
-        user.username = decoded_token["uid"]
-        names: str = firebase_user.display_name
-        if names:
-            names = names.strip().split(" ")
-
-            if len(names) > 0:
-                user.last_name = names[1]
-
-            user.first_name = names[0]
     try:
-        user.profile.email_verified = firebase_user.email_verified
-        user.profile.save(update_fields=["is_email_verified"])
+        if user.profile.is_email_verified != firebase_user.email_verified:
+            user.profile.is_email_verified = firebase_user.email_verified
+            user.profile.save(update_fields=["is_email_verified"])
     except Profile.DoesNotExist:
         # race condition issues, not likeable to occur
         raise NotFound(
@@ -42,7 +53,14 @@ def authenticate_credentials(key: str):
             "profile/no-found",
         )
 
-    user.save(update_fields=["email", "first_name", "last_name", "username"])
+    user.save(
+        update_fields=[
+            "email",
+            "first_name",
+            "last_name",
+            "username",
+        ],
+    )
 
     return user, key
 

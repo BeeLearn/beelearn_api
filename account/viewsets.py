@@ -2,6 +2,7 @@ from rest_framework import viewsets
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
+from rest_framework.parsers import JSONParser, MultiPartParser, FormParser, FileUploadParser
 from rest_framework.decorators import action, permission_classes, authentication_classes
 
 
@@ -17,6 +18,7 @@ class UserViewSet(viewsets.ModelViewSet):
         "purchases",
     )
     serializer_class = UserSerializer
+    parser_classes = [JSONParser, MultiPartParser, FormParser, FileUploadParser]
 
     @permission_classes([AllowAny])
     @authentication_classes([FirebaseTokenAuthentication])

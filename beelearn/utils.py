@@ -11,7 +11,6 @@ from django.utils.timezone import now, timedelta
 from .settings import BASE_DIR
 
 
-@deprecated
 def get_week_start_and_end(today=None):
     """
     Get week start and end for filter based on week
