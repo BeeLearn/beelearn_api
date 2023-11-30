@@ -1,6 +1,5 @@
 from account.models import Profile, User
-from assessment.models import Choice, SingleChoiceQuestion, TextOptionQuestion
-from beelearn.settings import BASE_DIR
+from assessment.models import Option, SingleChoiceQuestion, TextOptionQuestion
 
 from catalogue.models import Course, Lesson, Module, Topic
 from reward.models import Price, Reward
@@ -231,22 +230,22 @@ class QuestionTestMixin:
         # SingleChoiceQuestion.objects.bulk_create(single_choice_questions)
 
         single_choice_question_1.choices.add(
-            Choice.objects.create(name="Casting Style Sheets"),
-            Choice.objects.create(name="Cascading Some Styles"),
-            Choice.objects.create(name="Cascading Selection Styles"),
-            Choice.objects.create(name="Cascading Style Sheets"),
+            Option.objects.create(name="Casting Style Sheets"),
+            Option.objects.create(name="Cascading Some Styles"),
+            Option.objects.create(name="Cascading Selection Styles"),
+            Option.objects.create(name="Cascading Style Sheets"),
         )
 
         single_choice_question_2.choices.add(
-            Choice.objects.create(name="paragraphs"),
-            Choice.objects.create(name="style declarations"),
-            Choice.objects.create(name="elements"),
+            Option.objects.create(name="paragraphs"),
+            Option.objects.create(name="style declarations"),
+            Option.objects.create(name="elements"),
         )
         single_choice_question_3.choices.add(
-            Choice.objects.create(name="css"),
-            Choice.objects.create(name="add"),
-            Choice.objects.create(name="style"),
-            Choice.objects.create(name="class"),
+            Option.objects.create(name="css"),
+            Option.objects.create(name="add"),
+            Option.objects.create(name="style"),
+            Option.objects.create(name="class"),
         )
 
         text_option_questions = [

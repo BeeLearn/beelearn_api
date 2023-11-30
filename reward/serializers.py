@@ -48,6 +48,7 @@ class StreakSerializer(
     """
 
     is_today = serializers.SerializerMethodField()
+    is_expired = serializers.SerializerMethodField()
     is_complete = serializers.SerializerMethodField()
 
     streak_complete_users = NestedField(
@@ -55,6 +56,9 @@ class StreakSerializer(
         many=True,
         write_only=True,
     )
+
+    def get_is_expired(self, instance: Streak):
+        return instance.date < timezone.localdate() and not self.get_is_complete(instance)
 
     def get_is_today(self, instance: Streak):
         return instance.date == timezone.localdate()

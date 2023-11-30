@@ -46,13 +46,17 @@ class UserSerializer(DynamicFieldsMixin, NestedModelSerializer):
     """
     User model serializer
     """
-
     profile = NestedField(ProfileSerializer)
     settings = NestedField(SettingsSerializer)
+
     token = serializers.SerializerMethodField()
+    full_name= serializers.SerializerMethodField()
     is_premium = serializers.SerializerMethodField()
     unread_notifications = serializers.SerializerMethodField()
 
+    def get_full_name(self, user: User):
+        return user.get_full_name()
+    
     def get_token(self, user: User):
         return TokenSerializer(
             Token.objects.get(user=user),
@@ -74,21 +78,15 @@ class UserSerializer(DynamicFieldsMixin, NestedModelSerializer):
 
     class Meta:
         model = User
-        fields = [
-            "id",
-            "user_type",
-            "username",
-            "email",
-            "avatar",
-            "first_name",
-            "last_name",
-            "profile",
-            "settings",
-            "token",
-            "is_premium",
-            "unread_notifications",
-        ]
+        exclude = (
+            "user_permissions",
+            "groups",
+            "last_login",
+            "is_active",
+        )
         extra_kwargs = {
+            "is_staff": {"read_only": True},
+            "is_superuser": {"read_only": True},
             "password": {"write_only": True},
             "subscription": {"read_only": True},
         }

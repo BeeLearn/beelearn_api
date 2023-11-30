@@ -84,7 +84,7 @@ INSTALLED_APPS = [
     "reward.apps.RewardConfig",
     "payment.apps.PaymentConfig",
     "messaging.apps.MessagingConfig",
-    "enhancement.apps.EnhancementConfig",
+    "leaderboard.apps.LeaderboardConfig",
 ]
 
 MIDDLEWARE = [
@@ -237,6 +237,9 @@ CORS_ALLOWED_ORIGINS = [
 if DEBUG:
     CORS_ALLOWED_ORIGINS += [
         "http://localhost:3000",
+        "http://localhost:5000",
+        "http://192.168.43.14:3000",
+        "http://192.168.42.183:3000",
         "http://bee-learn.web.app",
         "https://bee-learn.web.app",
     ]

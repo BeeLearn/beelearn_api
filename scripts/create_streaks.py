@@ -12,7 +12,7 @@ def run():
         1,
     ).date()
 
-    start, _ = get_week_start_and_end()
+    start = datetime(today.year, today.month, 1).date()
 
 
     streaks = []

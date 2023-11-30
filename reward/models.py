@@ -15,6 +15,7 @@ class Price(models.Model):
         REWARD_ACHIEVE = "REWARD_ACHIEVE", "Reward achieved"
         LESSON_COMPLETE = "LESSON_COMPLETE", "Lesson completed"
         STREAK_COMPLETE = "STREAK_COMPLETE", "Streak completed"
+        LEAGUE_COMPLETE = "LEAGUE_COMPLETE", "League Completed"
 
     type = models.TextField(
         choices=PriceType.choices,

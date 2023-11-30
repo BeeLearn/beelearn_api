@@ -1,9 +1,13 @@
 from django.utils import timezone
+from django.contrib.contenttypes.models import ContentType
 
 from rest_framework import serializers
 
 from django_restql.fields import NestedField
 from django_restql.serializers import NestedModelSerializer
+
+from generic_relations.relations import GenericRelatedField
+
 from assessment.models import (
     DragDropQuestion,
     MultiChoiceQuestion,
@@ -18,11 +22,9 @@ from assessment.serializers import (
     SingleChoiceQuestionSerializer,
     TextOptionQuestionSerializer,
 )
-
-from generic_relations.relations import GenericRelatedField
+from beelearn.fields import ContentTypeField, GenericForeignKeyField
 
 from beelearn.mixins import ContextMixin
-
 from account.serializers import UserSerializer
 
 from .models import Course, Lesson, Category, Module, Topic, TopicQuestion
@@ -37,6 +39,10 @@ class CourseSerializer(
     Course model serializer
     """
 
+    creator = serializers.HiddenField(
+        default=serializers.CurrentUserDefault(),
+    )
+
     is_new = serializers.SerializerMethodField()
     is_liked = serializers.SerializerMethodField()
     is_enrolled = serializers.SerializerMethodField()
@@ -45,12 +51,14 @@ class CourseSerializer(
     course_enrolled_users = NestedField(
         UserSerializer,
         many=True,
+        required=False,
         write_only=True,
     )
 
     course_complete_users = NestedField(
         UserSerializer,
         many=True,
+        required=False,
         write_only=True,
     )
 
@@ -65,9 +73,9 @@ class CourseSerializer(
 
     def get_is_liked(self, course: Course):
         return (
-            Course.objects.filter(
+            course.modules.filter(
                 id=course.pk,
-                modules__lessons__topics__likes=self.request.user,
+                lessons__topics__likes=self.request.user,
             )
             .distinct()
             .exists()
@@ -75,14 +83,8 @@ class CourseSerializer(
 
     class Meta:
         model = Course
-        exclude = (
-            "editors",
-            "creator",
-        )
+        exclude = "editors",
         read_only_fields = (
-            "name",
-            "content",
-            "description",
             "created_at",
             "updated_at",
         )
@@ -93,6 +95,9 @@ class ModuleSerializer(NestedModelSerializer, ContextMixin):
     Module model serializer
     """
 
+    creator = serializers.HiddenField(
+        default=serializers.CurrentUserDefault(),
+    )
     is_unlocked = serializers.SerializerMethodField()
     is_completed = serializers.SerializerMethodField()
     lessons = serializers.SerializerMethodField()
@@ -109,16 +114,18 @@ class ModuleSerializer(NestedModelSerializer, ContextMixin):
             many=True,
             context=self.context,
         ).data
-
+    
     class Meta:
         model = Module
         exclude = (
-            "course",
             "entitled_users",
             "module_complete_users",
             "editors",
-            "creator",
         )
+        extra_kwargs = {
+            "course": {"write_only": True},
+            "creator": {"write_only": True},
+        }
 
 
 class LessonSerializer(NestedModelSerializer, ContextMixin):
@@ -126,6 +133,9 @@ class LessonSerializer(NestedModelSerializer, ContextMixin):
     Lesson model serializer
     """
 
+    creator = serializers.HiddenField(
+        default=serializers.CurrentUserDefault(),
+    )
     module_id = serializers.SerializerMethodField()
     is_unlocked = serializers.SerializerMethodField()
     is_completed = serializers.SerializerMethodField()
@@ -142,33 +152,41 @@ class LessonSerializer(NestedModelSerializer, ContextMixin):
     class Meta:
         model = Lesson
         exclude = (
-            "module",
             "entitled_users",
             "lesson_complete_users",
-            "creator",
             "editors",
         )
+
+        extra_kwargs = {
+            "creators": {
+                "write_only": True,
+            },
+            "module": {
+                "write_only": True,
+            },
+        }
 
 
 class TopicQuestionSerializer(
     NestedModelSerializer,
-    serializers.ModelSerializer,
     ContextMixin,
 ):
-    question = GenericRelatedField(
+    question = GenericForeignKeyField(
         {
-            DragDropQuestion: DragDropQuestionSerializer(),
-            TextOptionQuestion: TextOptionQuestionSerializer(),
-            SingleChoiceQuestion: SingleChoiceQuestionSerializer(),
-            MultiChoiceQuestion: MultipleChoiceQuestionSerializer(),
-            ReorderChoiceQuestion: ReorderChoiceQuestionSerializer(),
-        }
+            DragDropQuestion: DragDropQuestionSerializer,
+            TextOptionQuestion: TextOptionQuestionSerializer,
+            SingleChoiceQuestion: SingleChoiceQuestionSerializer,
+            MultiChoiceQuestion: MultipleChoiceQuestionSerializer,
+            ReorderChoiceQuestion: ReorderChoiceQuestionSerializer,
+        },
     )
     answered_users = NestedField(
         UserSerializer,
         many=True,
+        required=False,
         write_only=True,
     )
+    question_content_type = ContentTypeField()
     is_answered = serializers.SerializerMethodField()
 
     def get_is_answered(self, question: TopicQuestion):
@@ -176,14 +194,17 @@ class TopicQuestionSerializer(
 
     class Meta:
         model = TopicQuestion
-        exclude = (
-            "question_id",
-            "question_content_type",
-        )
+        fields = "__all__"
+
         extra_kwargs = {
-            "topic": {
-                "read_only": True,
-            }
+            "question_content_type": {
+                "required": False,
+                "write_only": True,
+            },
+            "question_id": {
+                "required": False,
+                "write_only": True,
+            },
         }
 
 
@@ -195,10 +216,15 @@ class TopicSerializer(
     Topic model serializer
     """
 
+    creator = serializers.HiddenField(
+        default=serializers.CurrentUserDefault(),
+    )
+
     is_liked = serializers.SerializerMethodField()
     likes = NestedField(
         UserSerializer,
         many=True,
+        required=False,
         write_only=True,
     )
     is_completed = serializers.SerializerMethodField()
@@ -208,22 +234,20 @@ class TopicSerializer(
     topic_complete_users = NestedField(
         UserSerializer,
         many=True,
+        required=False,
         write_only=True,
     )
-
     entitled_users = NestedField(
         UserSerializer,
         many=True,
+        required=False,
         write_only=True,
     )
-
-    class Meta:
-        model = Topic
-        exclude = (
-            "lesson",
-            "creator",
-            "editors",
-        )
+    topic_questions = NestedField(
+        TopicQuestionSerializer,
+        many=True,
+        required=False,
+    )
 
     def get_is_liked(self, topic: Topic):
         return topic.likes.contains(self.request.user)
@@ -234,12 +258,18 @@ class TopicSerializer(
     def get_is_unlocked(self, topic: Topic):
         return topic.entitled_users.contains(self.request.user)
 
-    def get_topic_questions(self, topic: Topic):
-        return TopicQuestionSerializer(
-            topic.topic_questions,
-            many=True,
-            context=self.context,
-        ).data
+    class Meta:
+        model = Topic
+        exclude = ("editors",)
+
+        extra_kwargs = {
+            "creator": {
+                "write_only": True,
+            },
+            "lesson": {
+                "write_only": True,
+            },
+        }
 
 
 class CategorySerializer(serializers.ModelSerializer):

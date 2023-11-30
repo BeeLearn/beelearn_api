@@ -8,6 +8,7 @@ from django.db.models import signals
 from account.models import Notification, Profile, User
 
 from catalogue.models import Course, Lesson
+from leaderboard.models import UserLeague
 
 from messaging.models import Thread
 
@@ -125,6 +126,7 @@ def award_reward_price_to_user(instance: Reward, pk_set: Set[int], **kwargs):
     """
     profiles = []
     notifications = []
+    userleagues = []
 
     users = User.objects.select_related(
         "profile",
@@ -134,8 +136,10 @@ def award_reward_price_to_user(instance: Reward, pk_set: Set[int], **kwargs):
     for user in users:
         user.profile.xp += instance.price.xp
         user.profile.bits += instance.price.bits
+        user.userleague.xp += instance.price.xp
 
         profiles.append(user.profile)
+        userleagues.append(user.userleague)
 
         notifications.append(
             Notification(
@@ -147,7 +151,14 @@ def award_reward_price_to_user(instance: Reward, pk_set: Set[int], **kwargs):
             ),
         )
 
-    Profile.objects.bulk_update(profiles, fields=["xp", "bits"])
+    Profile.objects.bulk_update(
+        profiles,
+        fields=["xp", "bits"],
+    )
+    UserLeague.objects.bulk_update(
+        userleagues,
+        fields=["xp"],
+    )
     Notification.objects.bulk_create(notifications)
 
 
@@ -165,13 +176,17 @@ def award_streak_price_to_user(pk_set: Set[int], action: str, **kwargs):
 
         profiles = []
         notifications = []
+        userleagues = []
+
         price = random.choice(prices)
 
         for user in users:
             user.profile.xp += price.xp
             user.profile.bits += price.bits
+            user.userleague.xp += price.xp
 
             profiles.append(user.profile)
+            userleagues.append(user.userleague)
             notifications.append(
                 Notification(
                     user=user,
@@ -192,9 +207,16 @@ def award_streak_price_to_user(pk_set: Set[int], action: str, **kwargs):
                 )
             )
 
-        Profile.objects.bulk_update(profiles, ["xp", "bits"])
+        Profile.objects.bulk_update(
+            profiles,
+            ["xp", "bits"],
+        )
+        UserLeague.objects.bulk_update(
+            userleagues,
+            fields=["xp"],
+        )
         Notification.objects.bulk_create(notifications)
-        
+
         # manually send post_save to notification signals
         for notification in notifications:
             signals.post_save.send(

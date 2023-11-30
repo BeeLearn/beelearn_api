@@ -17,7 +17,6 @@ Action = Literal["post_add"]
 def unlock_next_module(instance: Module, action: Action, pk_set: Set[int], **kwargs):
     """
     Unlock next module when a module is marked as completed
-
     when all course modules are completed then course is marked as completed
     """
 
@@ -52,7 +51,6 @@ def unlock_next_module(instance: Module, action: Action, pk_set: Set[int], **kwa
 def unlock_next_lesson(instance: Lesson, action: Action, pk_set: Set[int], **kwargs):
     """
     unlock next lesson when a topic is marked as completed.
-
     When all module lessons are completed, the `unlock_next_module` event is triggered
     """
     match action:
@@ -99,5 +97,3 @@ def unlock_next_topic(instance: Topic, action: Action, pk_set: Set[int], **kwarg
             else:
                 # add user to those that have complete topic
                 instance.lesson.lesson_complete_users.add(*users)
-
-

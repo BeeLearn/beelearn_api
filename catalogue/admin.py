@@ -16,7 +16,6 @@ class LessonInline(NestedStackedInline):
     extra = 1
 
 
-
 class ModuleInline(NestedStackedInline):
     model = Module
     inlines = (LessonInline,)
@@ -30,6 +29,7 @@ class CourseAdmin(NestedModelAdmin):
 
     list_display = (
         "id",
+        "creator",
         "name",
         "is_visible",
         "number_of_enrolled_users",
@@ -102,15 +102,43 @@ class TopicQuestionInline(admin.StackedInline):
     extra = 1
 
     autocomplete_lookup_fields = {
-        "generic": [["question_content_type", "question_id"]],
+        "generic": [
+            [
+                "question_content_type",
+                "question_id",
+            ]
+        ],
     }
 
 
 @admin.register(TopicQuestion)
 class TopicQuestionAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "question",
+        "number_of_answered_users",
+        "question_created_at",
+        "question_updated_at",
+    )
+
+    def question(self, instance: TopicQuestion):
+        return instance.question.title
+
+    def question_created_at(self, instance: TopicQuestion):
+        return instance.question.created_at
+
+    def question_updated_at(self, instance: TopicQuestion):
+        return instance.question.updated_at
+
+    def number_of_answered_users(self, instance: TopicQuestion):
+        return instance.answered_users.count()
+
     autocomplete_lookup_fields = {
         "generic": [
-            ["question_content_type", "question_id"],
+            [
+                "question_content_type",
+                "question_id",
+            ],
         ],
     }
 

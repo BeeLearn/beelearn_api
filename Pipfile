@@ -39,6 +39,8 @@ django-genericrelationview = {git = "git+https://github.com/macornwell/genericre
 celery = "*"
 pymemcache = "*"
 rave-python = {git = "git+https://github.com/oasisMystre/Python-v2"}
+twisted = {extras = ["http2", "tls"], version = "*"}
+psycopg2-binary = "*"
 
 [dev-packages]
 ngrok = "*"

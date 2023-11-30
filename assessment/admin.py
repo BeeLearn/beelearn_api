@@ -2,11 +2,12 @@ from django.contrib import admin
 
 from .models import (
     Choice,
+    Option,
     ChoiceQuestion,
     DragDropQuestion,
     MultiChoiceQuestion,
     Question,
-    ReorderChoice,
+    ReorderOption,
     ReorderChoiceQuestion,
     SingleChoiceQuestion,
     TextOptionQuestion,
@@ -18,8 +19,8 @@ class ChoiceInline(admin.StackedInline):
     extra = 2
 
 
-@admin.register(Choice)
-class ChoiceAdmin(admin.ModelAdmin):
+@admin.register(Option)
+class Optiondmin(admin.ModelAdmin):
     list_display = ("name", "is_answer")
 
 
@@ -45,6 +46,14 @@ class SingleChoiceQuestionAdmin(QuestionAdmin):
     pass
 
 
+@admin.register(Choice)
+class ChoiceAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "name",
+    )
+
+
 @admin.register(DragDropQuestion)
 class DragDropQuestionAdmin(QuestionAdmin):
     pass
@@ -55,8 +64,8 @@ class TextOptionQuestionAdmin(QuestionAdmin):
     pass
 
 
-@admin.register(ReorderChoice)
-class ReorderChoice(admin.ModelAdmin):
+@admin.register(ReorderOption)
+class ReorderOption(admin.ModelAdmin):
     list_display = (
         "id",
         "name",

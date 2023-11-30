@@ -1,6 +1,7 @@
 from uuid import uuid4
 
 from django.db import models
+from django.db.models import QuerySet
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MaxValueValidator, MinValueValidator
 
@@ -14,6 +15,10 @@ class User(AbstractUser):
     """
 
     USER_AVATAR_PATH = "assets/users/avatars/"
+
+    profile: "Profile"
+    settings: "Settings"
+    notifications: QuerySet["Notification"]
 
     class UserType(models.TextChoices):
         STUDENT = "STUDENT", "Student"
@@ -108,7 +113,7 @@ class Notification(TimestampMixin):
 
     class Topic(models.TextChoices):
         ADS = "ADS", "Ads"
-        LIVE = "LIVE", "LIVE"
+        LIVE = "LIVE", "Live"
         LEVEL = "LEVEL", "Level"
         REWARD = "REWARD", "Reward"
         STREAK = "STREAK", "Streak"
@@ -138,4 +143,4 @@ class Notification(TimestampMixin):
         return truncate_string(self.body)
 
     class Meta:
-        ordering = ("-created_at","-updated_at")
+        ordering = ("-created_at", "-updated_at")

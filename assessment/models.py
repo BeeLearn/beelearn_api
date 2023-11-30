@@ -5,7 +5,7 @@ from martor.models import MartorField
 from beelearn.models import TimestampMixin, get_revision_mixin
 
 
-class Choice(models.Model):
+class Option(models.Model):
     """
     Represent single unit of answer combination with a marker to check if its correct
     """
@@ -37,7 +37,7 @@ class Question(TimestampMixin):
         )  # compare array of strings as option
         SINGLE_CHOICE = (
             "SINGLE_CHOICE",
-            "Multiple Choice",
+            "Single Choice",
         )  # validate single choice from multiple options
         MULTIPLE_CHOICE = (
             "MULTIPLE_CHOICE",
@@ -55,17 +55,20 @@ class Question(TimestampMixin):
 
     @staticmethod
     def autocomplete_search_fields():
-        return ("id__iexact", "title__icontains",)
+        return (
+            "id__iexact",
+            "title__icontains",
+        )
 
     def __str__(self) -> str:
-        return self.title
+        return str(self.id)
 
     class Meta:
         abstract = True
 
 
 class ChoiceQuestion(Question):
-    choices = models.ManyToManyField(Choice)
+    choices = models.ManyToManyField(Option)
 
     class Meta:
         abstract = True
@@ -106,6 +109,11 @@ class SingleChoiceQuestion(
         default=Question.QuestionType.SINGLE_CHOICE,
     )
 
+class Choice(models.Model):
+    name = models.TextField()
+
+    def __str__(self):
+        return self.name
 
 class DragDropQuestion(
     Question,
@@ -127,7 +135,7 @@ class DragDropQuestion(
     """
 
     question = MartorField()
-    choices = models.TextField()
+    choices = models.ManyToManyField(Choice)
     type = models.TextField(
         editable=False,
         choices=Question.QuestionType.choices,
@@ -155,7 +163,7 @@ class TextOptionQuestion(
     )
 
 
-class ReorderChoice(Choice):
+class ReorderOption(Option):
     """
     Reorder question choice with correct position combinations
     """
@@ -175,9 +183,7 @@ class ReorderChoiceQuestion(
     Reorder questions, reorder list for correct
     """
 
-    choices = models.ManyToManyField(
-        ReorderChoice,
-    )
+    choices = models.ManyToManyField(ReorderOption)
 
     type = models.TextField(
         editable=False,

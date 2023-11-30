@@ -9,25 +9,25 @@ class LoggerMiddleware:
         self.get_response = get_response
 
     def __call__(self, request: HttpRequest):
-        print(
-            "%s[%s] request body:"
-            % (
-                request.get_full_path(),
-                request.method,
-            ),
-            request.body,
-        )
+        # print(
+        #     "%s[%s] request body:"
+        #     % (
+        #         request.get_full_path(),
+        #         request.method,
+        #     ),
+        #     request.body,
+        # )
 
         response = self.get_response(request)
 
-        if hasattr(response, "data"):
-            print(
-                "%s[%s] response body:"
-                % (
-                    request.get_full_path(),
-                    response.data,
-                ),
-                request.body,
-            )
+        # if hasattr(response, "data"):
+        #     print(
+        #         "%s[%s] response body:"
+        #         % (
+        #             request.get_full_path(),
+        #             response.data,
+        #         ),
+        #         request.body,
+        #     )
 
         return response

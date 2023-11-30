@@ -2,6 +2,7 @@ from pathlib import Path
 from uuid import uuid4
 
 from django.db import models
+from django.core.exceptions import ValidationError
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
 
@@ -19,8 +20,14 @@ class Course(TimestampMixin, get_revision_mixin("course_creator", "course_editor
 
     COURSE_IMAGE_PATH = Path("assets/courses")
 
-    name = models.CharField(max_length=128)
-    image = models.ImageField(upload_to=COURSE_IMAGE_PATH / "backgrounds")
+    name = models.CharField(
+        max_length=128,
+        help_text="Course name",
+    )
+    illustration = models.ImageField(
+        upload_to=COURSE_IMAGE_PATH / "backgrounds",
+        help_text="Course art cover perferly 512x512 size",
+    )
     description = models.TextField(
         null=True,
         blank=True,
@@ -29,6 +36,7 @@ class Course(TimestampMixin, get_revision_mixin("course_creator", "course_editor
     )
     is_visible = models.BooleanField(
         default=True,
+        help_text="Is course visible to learners?",
     )
     course_enrolled_users = models.ManyToManyField(
         User,
@@ -60,9 +68,19 @@ class Module(TimestampMixin, get_revision_mixin("module_creator", "module_editor
         on_delete=models.CASCADE,
         related_name="modules",
     )
-    name = models.CharField(max_length=60)
+    name = models.CharField(
+        max_length=60,
+        help_text="Module name",
+    )
+    description = models.TextField(
+        null=True,
+        blank=True,
+        max_length=255,
+        help_text="Module description (Optional)",
+    )
     is_visible = models.BooleanField(
         default=True,
+        help_text="Is module visible to learners?",
     )
     entitled_users = models.ManyToManyField(
         User,
@@ -92,9 +110,19 @@ class Lesson(TimestampMixin, get_revision_mixin("lesson_creator", "lesson_editor
         on_delete=models.CASCADE,
         related_name="lessons",
     )
-    name = models.CharField(max_length=60)
+    name = models.CharField(
+        max_length=60,
+        help_text="Lesson name",
+    )
+    description = models.TextField(
+        null=True,
+        blank=True,
+        max_length=255,
+        help_text="Lesson description (Optional)",
+    )
     is_visible = models.BooleanField(
         default=True,
+        help_text="Is lesson visible to learners?",
     )
     entitled_users = models.ManyToManyField(
         User,
@@ -124,13 +152,24 @@ class Topic(TimestampMixin, get_revision_mixin("topic_creator", "topic_editors")
         on_delete=models.CASCADE,
         related_name="topics",
     )
-    title = models.CharField(max_length=128)
+    title = models.CharField(
+        max_length=128,
+        help_text="Topic title",
+    )
+    description = models.TextField(
+        null=True,
+        blank=True,
+        max_length=255,
+        help_text="Topic description (Optional)",
+    )
     content = MartorField(
         blank=True,
         null=True,
+        help_text="Topic content in markdown format",
     )
     is_visible = models.BooleanField(
         default=True,
+        help_text="Is topic visible to learners?",
     )
     likes = models.ManyToManyField(
         User,
@@ -147,27 +186,9 @@ class Topic(TimestampMixin, get_revision_mixin("topic_creator", "topic_editors")
         blank=True,
         related_name="topic_complete_users",
     )
-
-    # question_content_type = models.ForeignKey(
-    #     ContentType,
-    #     null=True,
-    #     blank=True,
-    #     on_delete=models.CASCADE,
-    #     limit_choices_to={
-    #         "model__icontains": "question",
-    #     },
-    # )
-    # question_id = models.PositiveBigIntegerField(
-    #     null=True,
-    #     blank=True,
-    # )
-    # question = GenericForeignKey(
-    #     "question_content_type",
-    #     "question_id",
-    # )
     thread_reference = models.UUIDField(
         default=uuid4,
-        #unique=True,
+        unique=True,
     )
 
     def __str__(self):
@@ -215,6 +236,11 @@ class TopicQuestion(models.Model):
         return self.topic.title
 
 
+def allow_visible_course_only_validator(instance: Course):
+    if not instance.is_visible:
+        raise ValidationError("Only visible course can be added to categories")
+
+
 class Category(
     TimestampMixin, get_revision_mixin("category_creator", "category_editors")
 ):
@@ -222,10 +248,26 @@ class Category(
     Collections of courses that are related
     """
 
-    courses = models.ManyToManyField(Course, blank=True)
-    name = models.TextField(max_length=60)
+    courses = models.ManyToManyField(
+        Course,
+        blank=True,
+    )
+    name = models.TextField(
+        max_length=64,
+        help_text="Category name",
+    )
+    description = models.TextField(
+        null=True,
+        blank=True,
+        max_length=128,
+        help_text="Category description (Optional)",
+    )
 
     tags = None  # category tags
+
+    # def clean(self):
+    #     for course in self.courses:
+    #         allow_visible_course_only_validator(course)
 
     def __str__(self):
         return self.name

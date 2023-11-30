@@ -1,12 +1,19 @@
 FROM python:3.10.12
 
-RUN apt-get update && apt-get install -y git
+ENV PYTHONUNBUFFERED 1
+ENV PYTHONDONTWRITEBYTECODE 1
 
 RUN \
     --mount=type=cache,target=/var/cache/apt \
-    apt-get install -y binutils binutils libproj-dev gdal-bin postgresql-client
+    apt-get update && apt-get install -y git
 
-WORKDIR /app
+RUN \
+    --mount=type=cache,target=/var/cache/apt \
+    apt-get install -y nginx curl
+
+RUN mkdir -p /app/beelearn
+
+WORKDIR /app/beelearn
 
 COPY requirements.txt requirements.txt
 
@@ -14,9 +21,11 @@ RUN \
     --mount=type=cache,target=/var/cache/pip \
     pip install -r requirements.txt 
 
-ENV PYTHONUNBUFFERED 1
-ENV PYTHONDONTWRITEBYTECODE 1
+COPY . .
+
+RUN python manage.py collectstatic
+
+VOLUME [ "/opt/beelearn/static" ]
 
 EXPOSE 8000
 
-COPY . .

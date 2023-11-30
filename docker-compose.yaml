@@ -1,14 +1,35 @@
-service:
-  web:
-    container_name: beelearn_api
-    build:
-      context: .
+services:
+  nginx:
+    build: ./nginx
+    depends_on:
+      - daphne
+    networks:
+      - webnet
+    volumes:
+      - ./nginx:/etc/nginx/conf.d 
+      - ./static:/static
+    ports:
+      -"80:80"
+    environment:
+      - NGINX_HOST=localhost 
+      - NGINX_PORT=80 
+      - DAPHNE_HOST=daphne
+      - DAPHNE_PORT=8000
+    # command: /bin/bash -c "envsubst < /etc/nginx/conf.d/service.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
+  
+  daphne:
+    container_name: beelearn_api 
+    build: .
+    command: daphne -b 0.0.0.0 -p 8000 beelearn.asgi:application
+    volumes:
+      - .:/app 
     ports:
       - "8000:8000"
     env_file:
       - .env
     networks:
-      - beelearn
+      - webnet
 
 networks:
-  beelearn:
+  webnet:
+
