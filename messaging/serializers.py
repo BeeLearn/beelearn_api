@@ -23,6 +23,7 @@ class SubCommentSerializer(NestedModelSerializer, ContextMixin, DynamicFieldsMix
 
     is_liked = serializers.SerializerMethodField()
     like_count = serializers.SerializerMethodField()
+    reply_count = serializers.SerializerMethodField()
 
     likes = NestedField(
         UserSerializer,
@@ -36,6 +37,9 @@ class SubCommentSerializer(NestedModelSerializer, ContextMixin, DynamicFieldsMix
 
     def get_like_count(self, comment: Comment):
         return comment.likes.count()
+    
+    def get_reply_count(self, comment: Comment):
+        return comment.replies.count()
 
     class Meta:
         model = Comment
@@ -62,9 +66,7 @@ class ThreadSerializer(NestedModelSerializer):
     Thread model serializer
     """
 
-    comment = NestedField(
-        CommentSerializer,
-    )
+    comment = NestedField(SubCommentSerializer)
 
     class Meta:
         model = Thread

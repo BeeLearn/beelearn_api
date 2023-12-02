@@ -78,6 +78,7 @@ INSTALLED_APPS = [
     "rest_framework.authtoken",
     "djira.apps.DJiraConfig",
     # apps
+    "metadata.apps.MetadataConfig",
     "catalogue.apps.CatalogueConfig",
     "assessment.apps.AssessmentConfig",
     "account.apps.AccountConfig",

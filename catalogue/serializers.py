@@ -22,10 +22,15 @@ from assessment.serializers import (
     SingleChoiceQuestionSerializer,
     TextOptionQuestionSerializer,
 )
-from beelearn.fields import ContentTypeField, GenericForeignKeyField
 
 from beelearn.mixins import ContextMixin
+from beelearn.fields import ContentTypeField, GenericForeignKeyField
+
+from messaging.models import Thread
+
 from account.serializers import UserSerializer
+
+from metadata.serializers import TagSerializer
 
 from .models import Course, Lesson, Category, Module, Topic, TopicQuestion
 
@@ -47,6 +52,8 @@ class CourseSerializer(
     is_liked = serializers.SerializerMethodField()
     is_enrolled = serializers.SerializerMethodField()
     is_completed = serializers.SerializerMethodField()
+
+    tags = NestedField(TagSerializer)
 
     course_enrolled_users = NestedField(
         UserSerializer,
@@ -171,6 +178,9 @@ class TopicQuestionSerializer(
     NestedModelSerializer,
     ContextMixin,
 ):
+    """
+    TopicQuestion model serializer
+    """
     question = GenericForeignKeyField(
         {
             DragDropQuestion: DragDropQuestionSerializer,
@@ -194,7 +204,7 @@ class TopicQuestionSerializer(
 
     class Meta:
         model = TopicQuestion
-        fields = "__all__"
+        exclude = ()
 
         extra_kwargs = {
             "question_content_type": {
@@ -221,16 +231,17 @@ class TopicSerializer(
     )
 
     is_liked = serializers.SerializerMethodField()
+    is_completed = serializers.SerializerMethodField()
+    is_unlocked = serializers.SerializerMethodField()
+    thread_count = serializers.SerializerMethodField()
+    topic_questions = serializers.SerializerMethodField()
+
     likes = NestedField(
         UserSerializer,
         many=True,
         required=False,
         write_only=True,
     )
-    is_completed = serializers.SerializerMethodField()
-    is_unlocked = serializers.SerializerMethodField()
-    topic_questions = serializers.SerializerMethodField()
-
     topic_complete_users = NestedField(
         UserSerializer,
         many=True,
@@ -257,6 +268,9 @@ class TopicSerializer(
 
     def get_is_unlocked(self, topic: Topic):
         return topic.entitled_users.contains(self.request.user)
+    
+    def get_thread_count(self, topic: Topic):
+        return Thread.objects.filter(reference=topic.thread_reference).count()
 
     class Meta:
         model = Topic

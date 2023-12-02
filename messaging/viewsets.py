@@ -36,12 +36,21 @@ class ThreadViewSet(
     filter_fields = ("reference",)
 
 
-class ReplyViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin):
+class ReplyViewSet(
+    viewsets.GenericViewSet,
+    mixins.ListModelMixin,
+    mixins.CreateModelMixin,
+):
     queryset = Reply.objects.prefetch_related(
         "comment",
         "comment__user",
         "comment__likes",
         "comment__replies",
     ).all()
+
+    filter_fields = (
+        "parent",
+        "comment",
+    )
 
     serializer_class = ReplySerializer

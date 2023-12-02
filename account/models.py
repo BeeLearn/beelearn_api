@@ -8,6 +8,8 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from beelearn.models import TimestampMixin
 from beelearn.utils import truncate_string
 
+from metadata.models import Category
+
 
 class User(AbstractUser):
     """
@@ -39,6 +41,11 @@ class User(AbstractUser):
         upload_to=USER_AVATAR_PATH,
     )
 
+    categories = models.ManyToManyField(
+        Category,
+        blank=True,
+    )
+
     REQUIRED_FIELDS = (
         "uid",
         "email",
@@ -46,10 +53,6 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.username or self.email or self.uid
-
-    # class Meta:
-    #    constrainst = (models.UniqueConstraint(),)
-
 
 class Profile(models.Model):
     user = models.OneToOneField(

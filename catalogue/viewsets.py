@@ -3,8 +3,10 @@ from django.db.models.query import Q
 from rest_framework import viewsets, mixins
 from rest_framework.exceptions import ValidationError
 
-from beelearn.mixins import BreadCrumbListModelMixin, BulkDeleteMixin, ContextMixin
 from beelearn.permissions import IsAdminOnlyAction
+from beelearn.mixins import BreadCrumbListModelMixin, BulkDeleteMixin
+
+from messaging.models import Thread
 
 from .models import Course, Lesson, Category, Module, Topic, TopicQuestion
 from .serializers import (

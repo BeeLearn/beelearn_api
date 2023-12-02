@@ -10,6 +10,8 @@ from payment.models import Purchase
 
 from .models import Notification, Settings, User, Profile
 
+from metadata.serializers import CategorySerializer
+
 
 class ProfileSerializer(DynamicFieldsMixin, serializers.ModelSerializer):
     """
@@ -53,6 +55,8 @@ class UserSerializer(DynamicFieldsMixin, NestedModelSerializer):
     full_name= serializers.SerializerMethodField()
     is_premium = serializers.SerializerMethodField()
     unread_notifications = serializers.SerializerMethodField()
+
+    categories = CategorySerializer(many=True)
 
     def get_full_name(self, user: User):
         return user.get_full_name()

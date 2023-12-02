@@ -10,7 +10,8 @@ from martor.models import MartorField
 from account.models import User
 
 from beelearn.models import get_revision_mixin, TimestampMixin
-from messaging.models import Thread
+
+from metadata.models import Tag
 
 
 class Course(TimestampMixin, get_revision_mixin("course_creator", "course_editors")):
@@ -24,7 +25,7 @@ class Course(TimestampMixin, get_revision_mixin("course_creator", "course_editor
         max_length=128,
         help_text="Course name",
     )
-    illustration = models.ImageField(
+    illustration = models.FileField(
         upload_to=COURSE_IMAGE_PATH / "backgrounds",
         help_text="Course art cover perferly 512x512 size",
     )
@@ -49,7 +50,7 @@ class Course(TimestampMixin, get_revision_mixin("course_creator", "course_editor
         related_name="course_complete_users",
     )  # users that have complete this course
 
-    tags = None  # course tag
+    tags = models.ManyToManyField(Tag)
 
     def __str__(self):
         return self.name
