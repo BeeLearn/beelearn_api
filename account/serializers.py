@@ -56,7 +56,7 @@ class UserSerializer(DynamicFieldsMixin, NestedModelSerializer):
     is_premium = serializers.SerializerMethodField()
     unread_notifications = serializers.SerializerMethodField()
 
-    categories = CategorySerializer(many=True)
+    categories = NestedField(CategorySerializer, many=True)
 
     def get_full_name(self, user: User):
         return user.get_full_name()

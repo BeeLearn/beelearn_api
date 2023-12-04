@@ -66,6 +66,8 @@ def authenticate_credentials(key: str):
 
 
 class FirebaseTokenAuthentication(TokenAuthentication):
+    keyword = 'Bearer'
+
     def authenticate_credentials(self, key):
         try:
             return authenticate_credentials(key)

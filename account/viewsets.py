@@ -10,6 +10,7 @@ from rest_framework.parsers import (
     FileUploadParser,
 )
 from rest_framework.decorators import action, permission_classes, authentication_classes
+from rest_framework.validators import ValidationError
 
 
 from .models import Notification, Profile, User
@@ -36,8 +37,8 @@ class UserViewSet(viewsets.ModelViewSet):
         url_path="current-user",
         authentication_classes=[
             SessionAuthentication,
-            TokenAuthentication,
             FirebaseTokenAuthentication,
+            TokenAuthentication,
         ],
     )
     def current_user(self, request: Request):
@@ -56,6 +57,17 @@ class UserViewSet(viewsets.ModelViewSet):
         serializer.save()
 
         return Response(serializer.data)
+
+    @action(["POST"], detail=False, url_path="username-exist")
+    def username_exist(self, request: Request):
+        value = request.data.get("username")
+
+        if value is None:
+            raise ValidationError("username is required")
+
+        exists = User.objects.filter(username=value).exists()
+
+        return Response({"exists": exists})
 
     def get_queryset(self):
         match self.request.method:
