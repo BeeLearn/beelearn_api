@@ -22,6 +22,11 @@ class User(AbstractUser):
     settings: "Settings"
     notifications: QuerySet["Notification"]
 
+    class Gender(models.TextChoices):
+        OTHER = "OTHER", "Other"
+        MALE = "MALE", "Male"
+        FEMALE = "FEMALE", "Female"
+
     class UserType(models.TextChoices):
         STUDENT = "STUDENT", "Student"
         CURATOR = "CURATOR", "Curator"
@@ -40,6 +45,8 @@ class User(AbstractUser):
         null=True,
         upload_to=USER_AVATAR_PATH,
     )
+
+    gender = models.TextField(choices=Gender.choices)
 
     categories = models.ManyToManyField(
         Category,
