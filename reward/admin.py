@@ -21,18 +21,11 @@ class RewardAdmin(admin.ModelAdmin):
     )
 
 
-# @admin.register(Achievement)
-# class AchievementAdmin(admin.ModelAdmin):
-#     list_display = (
-#         "id",
-#         "user",
-#         "reward",
-#     )
-
-
 @admin.register(Streak)
 class StreakAdmin(admin.ModelAdmin):
     list_display = (
         "id",
         "date",
     )
+
+    list_filter = ("date",)

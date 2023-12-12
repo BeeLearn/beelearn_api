@@ -1,19 +1,25 @@
-from account.models import Notification, Profile
-from payment.models import Purchase
-from .clear_rewards import run as run_clear_rewards 
-from .reset_courses import run as run_reset_courses 
+from multiprocessing import Process
+
+import reward.seed as reward
+import payment.seed as payment
+import metadata.seed as metadata
+import catalogue.seed as catalogue
+import messaging.seed as messaging
+import leaderboard.seed as leaderboard
+
 
 def run():
-    run_clear_rewards()
-    run_reset_courses()
+    processes = [
+        Process(target=payment.down),
+        Process(target=reward.down),
+        Process(target=metadata.down),
+        Process(target=catalogue.down),
+        Process(target=messaging.down),
+        Process(target=leaderboard.down),
+    ]
 
-    profiles = []
+    for process in processes:
+        process.start()
 
-    for profile in Profile.objects.all():
-        profile.xp = 0
-        profile.bits = 0
-        profiles.append(profile)
-
-    Profile.objects.bulk_update(profiles, ["xp", "bits"])
-    Notification.objects.all().delete()
-    Purchase.objects.all().delete()
+    for process in processes:
+        process.join()

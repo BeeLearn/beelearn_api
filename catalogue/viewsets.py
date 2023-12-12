@@ -6,8 +6,6 @@ from rest_framework.exceptions import ValidationError
 from beelearn.permissions import IsAdminOnlyAction
 from beelearn.mixins import BreadCrumbListModelMixin, BulkDeleteMixin
 
-from messaging.models import Thread
-
 from .models import Course, Lesson, Category, Module, Topic, TopicQuestion
 from .serializers import (
     CourseSerializer,
@@ -37,6 +35,7 @@ class CourseViewSet(
     filter_fields = (
         "modules",
         "created_at",
+        "tags",
         "course_enrolled_users",
         "course_complete_users",
     )
@@ -84,7 +83,9 @@ class ModuleViewSet(
                 "id": course.id,
                 "name": course.name,
                 "description": course.description,
-                "illustration": self.request.build_absolute_uri(course.illustration.url),
+                "illustration": self.request.build_absolute_uri(
+                    course.illustration.url
+                ),
             }
         }
 
@@ -163,12 +164,18 @@ class TopicViewSet(
         pk = self.request.query_params.get("lesson")
 
         if not pk:
-            raise ValidationError({"lesson": ["lesson id is required in query"]})
+            # raise ValidationError(
+            #     {
+            #         "lesson": ["lesson id is required in query"],
+            #     },
+            # )
+            return None
 
         lesson = Lesson.objects.prefetch_related(
             "module",
             "module__course",
         ).get(id=pk)
+
         module = lesson.module
         course = module.course
 
@@ -184,6 +191,9 @@ class TopicViewSet(
             "lesson": {
                 "id": lesson.id,
                 "name": lesson.name,
+                "is_completed": lesson.lesson_complete_users.contains(
+                    self.request.user
+                ),
             },
         }
 

@@ -1,3 +1,4 @@
+from django.db.models.query import Q
 from django.contrib.contenttypes.models import ContentType
 
 from rest_framework.request import Request
@@ -5,6 +6,7 @@ from rest_framework import mixins, viewsets
 from rest_framework.exceptions import NotAcceptable, NotFound
 
 from beelearn.mixins import BulkDeleteMixin
+from beelearn.permissions import IsAdminOnlyAction
 
 from .models import (
     SingleChoiceQuestion,
@@ -29,6 +31,8 @@ class QuestionViewSet(
     mixins.UpdateModelMixin,
     BulkDeleteMixin,
 ):
+    ADMIN_ONLY_ACTIONS = ["get", "post", "patch", "delete"]
+
     queryset = SingleChoiceQuestion.objects.all()
     serializer_classes = {
         DragDropQuestion: DragDropQuestionSerializer,
@@ -37,11 +41,17 @@ class QuestionViewSet(
         MultiChoiceQuestion: MultipleChoiceQuestionSerializer,
         ReorderChoiceQuestion: ReorderChoiceQuestionSerializer,
     }
+    permission_classes = [IsAdminOnlyAction]
 
     content_type_field = "content_type"
 
     def get_queryset(self):
-        return self.model_class.objects.all()
+        user = self.request.user
+
+        if user.is_staff:
+            return super().get_queryset().filter(Q(creator=user) | Q(editors=user))
+
+        return super().get_queryset().exclude(is_visible=False)
 
     @property
     def model_class(self):

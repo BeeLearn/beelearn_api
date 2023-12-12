@@ -40,7 +40,7 @@ class User(AbstractUser):
         choices=UserType.choices,
         default=UserType.STUDENT,
     )
-    avatar = models.ImageField(
+    avatar = models.FileField(
         blank=True,
         null=True,
         upload_to=USER_AVATAR_PATH,
@@ -54,8 +54,7 @@ class User(AbstractUser):
     )
 
     REQUIRED_FIELDS = (
-        "uid",
-        "email",
+        "password",
     )
 
     def __str__(self):

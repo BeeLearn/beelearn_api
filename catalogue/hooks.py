@@ -130,15 +130,15 @@ class FavoriteAPIHook(APIHook):
         m2m_changed,
         Topic.likes.through,
     )
-    def favourite_observer(observer: SignalObserver, action: str, **kwargs):
+    def favorite_observer(observer: SignalObserver, action: str, **kwargs):
         match action:
             case "post_add":
                 observer.dispatch(Action.UPDATE, **kwargs)
             case "post_remove":
                 observer.dispatch(Action.DELETE, **kwargs)
 
-    @favourite_observer.serializer
-    def favourite_observer_serializer(
+    @favorite_observer.serializer
+    def favorite_observer_serializer(
         observer: SignalObserver,
         instance: Topic,
         action: Action,
@@ -151,23 +151,23 @@ class FavoriteAPIHook(APIHook):
             context=context,
         ).data
 
-    @favourite_observer.rooms
+    @favorite_observer.rooms
     def favourite_observer_rooms(observer: SignalObserver, pk_set: Set[int], **kwargs):
         for pk in pk_set:
-            yield f"favourite__{pk}"
+            yield f"favorite__{pk}"
 
-    @favourite_observer.subscribing_rooms
+    @favorite_observer.subscribing_rooms
     def favourite_observer_subscribing_rooms(observer: SignalObserver, scope: Scope):
-        yield f"favourite__{scope.user.pk}"
+        yield f"favorite__{scope.user.pk}"
 
     @action(methods=["POST"])
     async def subscribe(self):
-        self.favourite_observer.subscribe(self.scope)
+        self.favorite_observer.subscribe(self.scope)
 
         await self.emit()
 
     @action(methods=["DELETE"])
     async def unsubscribe(self):
-        self.favourite_observer.unsubscribe(self.scope)
+        self.favorite_observer.unsubscribe(self.scope)
 
         await self.emit()

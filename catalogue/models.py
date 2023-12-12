@@ -2,6 +2,7 @@ from pathlib import Path
 from uuid import uuid4
 
 from django.db import models
+from django.db.models.manager import BaseManager
 from django.core.exceptions import ValidationError
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
@@ -18,6 +19,8 @@ class Course(TimestampMixin, get_revision_mixin("course_creator", "course_editor
     """
     Collection of modules
     """
+
+    modules: BaseManager["Module"]
 
     COURSE_IMAGE_PATH = Path("assets/courses")
 
@@ -50,7 +53,10 @@ class Course(TimestampMixin, get_revision_mixin("course_creator", "course_editor
         related_name="course_complete_users",
     )  # users that have complete this course
 
-    tags = models.ManyToManyField(Tag)
+    tags = models.ManyToManyField(
+        Tag,
+        blank=True,
+    )
 
     def __str__(self):
         return self.name

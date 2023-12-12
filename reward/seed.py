@@ -1,9 +1,11 @@
+from datetime import datetime, timedelta
+
 from beelearn.utils import file_to_image_field
 
-from .models import Price, Reward
+from .models import Price, Reward, Streak
 
 
-def run():
+def seed_reward():
     Price.objects.get_or_create(
         xp=6,
         bits=16,
@@ -132,4 +134,37 @@ def run():
         unique_fields=["type"],
     )
 
-    return rewards
+
+def seed_streaks():
+    today = datetime.today()
+    end = datetime(
+        today.year + 2,
+        1,
+        1,
+    ).date()
+
+    start = datetime(today.year, today.month, 1).date()
+
+    streaks = []
+
+    while start < end:
+        streaks.append(Streak(date=start))
+        start += timedelta(days=1)
+
+    Streak.objects.bulk_create(
+        streaks,
+        update_conflicts=True,
+        update_fields=["date"],
+        unique_fields=["date"],
+    )
+
+
+def up():
+    seed_streaks()
+    seed_reward()
+
+
+def down():
+    Price.objects.all().delete()
+    Reward.objects.all().delete()
+    Streak.objects.all().delete()

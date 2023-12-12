@@ -1,9 +1,11 @@
 from beelearn.utils import file_to_image_field
+
 from reward.models import Price
-from .models import League
+
+from .models import League, UserLeague
 
 
-def run():
+def seed_leagues():
     leagues = []
 
     default_price, _ = Price.objects.get_or_create(
@@ -71,7 +73,7 @@ def run():
                 f"leaderboard/static/leagues/{league.type.lower()}.webp"
             )
 
-    return League.objects.bulk_create(
+    League.objects.bulk_create(
         leagues,
         update_conflicts=True,
         unique_fields=["type"],
@@ -80,3 +82,12 @@ def run():
             "color",
         ],
     )
+
+
+def up():
+    seed_leagues()
+
+
+def down():
+    League.objects.all().delete()
+    UserLeague.objects.all().delete()

@@ -1,4 +1,5 @@
 from logging import getLogger
+from typing import Any
 from django.http import HttpRequest
 
 logger = getLogger(__name__)
@@ -31,3 +32,11 @@ class LoggerMiddleware:
         #     )
 
         return response
+
+
+class OverrideRequestDataMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request: HttpRequest) -> Any:
+        pass 

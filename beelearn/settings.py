@@ -212,6 +212,12 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 REST_FRAMEWORK = {
+    "DEFAULT_PARSER_CLASSES": [
+        "beelearn.parsers.JSONMultipartParser",
+        "rest_framework.parsers.JSONParser",
+        "rest_framework.parsers.FormParser",
+        "rest_framework.parsers.FileUploadParser",
+    ],
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.BasicAuthentication",
         "rest_framework.authentication.SessionAuthentication",
@@ -239,6 +245,7 @@ if DEBUG:
     CORS_ALLOWED_ORIGINS += [
         "http://localhost:3000",
         "http://localhost:5000",
+        "http://localhost:7000",
         "http://192.168.43.14:3000",
         "http://192.168.42.183:3000",
         "http://bee-learn.web.app",

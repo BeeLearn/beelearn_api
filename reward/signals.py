@@ -136,10 +136,10 @@ def award_reward_price_to_user(instance: Reward, pk_set: Set[int], **kwargs):
     for user in users:
         user.profile.xp += instance.price.xp
         user.profile.bits += instance.price.bits
-        user.userleague.xp += instance.price.xp
+        # user.userleague.xp += instance.price.xp
 
         profiles.append(user.profile)
-        userleagues.append(user.userleague)
+        # userleagues.append(user.userleague)
 
         notifications.append(
             Notification(
@@ -183,10 +183,10 @@ def award_streak_price_to_user(pk_set: Set[int], action: str, **kwargs):
         for user in users:
             user.profile.xp += price.xp
             user.profile.bits += price.bits
-            user.userleague.xp += price.xp
+            # user.userleague.xp += price.xp
 
             profiles.append(user.profile)
-            userleagues.append(user.userleague)
+            # userleagues.append(user.userleague)
             notifications.append(
                 Notification(
                     user=user,

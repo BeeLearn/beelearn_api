@@ -39,7 +39,7 @@ consumer.register("streaks", StreakAPIHook)
 consumer.register("replies", ReplyAPIHook)
 consumer.register("threads", ThreadAPIHook)
 consumer.register("purchases", PurchaseAPIHook)
-consumer.register("favourites", FavoriteAPIHook)
+consumer.register("favorites", FavoriteAPIHook)
 consumer.register("notifications", NotificationAPIHook)
 
 consumer.start()

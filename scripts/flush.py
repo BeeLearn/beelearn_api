@@ -7,7 +7,7 @@ def run():
         python -m flush;
         python manage.py makemigrations;
         python manage.py migrate;
+        python manage.py runscript seed;
         python manage.py createsuperuser;
-        python manage.py runscript create_rewards
         """
     )

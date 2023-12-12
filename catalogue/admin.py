@@ -24,7 +24,7 @@ class ModuleInline(NestedStackedInline):
 
 @admin.register(Course)
 class CourseAdmin(NestedModelAdmin):
-    inlines = (ModuleInline,)
+    # inlines = (ModuleInline,)
     extra = 1
 
     list_display = (
@@ -55,7 +55,7 @@ class CourseAdmin(NestedModelAdmin):
 
 @admin.register(Module)
 class ModuleAdmin(NestedModelAdmin):
-    inlines = (LessonInline,)
+    # inlines = (LessonInline,)
 
     list_display = (
         "id",
@@ -75,7 +75,7 @@ class ModuleAdmin(NestedModelAdmin):
 
 @admin.register(Lesson)
 class LessonAdmin(NestedModelAdmin):
-    inlines = (TopicInline,)
+    # inlines = (TopicInline,)
 
     list_display = (
         "id",

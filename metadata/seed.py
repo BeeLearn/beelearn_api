@@ -2,7 +2,7 @@ from beelearn.utils import file_to_image_field
 from .models import Tag, Category
 
 
-def run():
+def seed_categories():
     categories = []
 
     categories.append(
@@ -69,7 +69,6 @@ def run():
     for category in categories:
         category: Category = category
         if not Category.objects.filter(name=category.name).exists():
-            print(category.icon)
             category.icon = file_to_image_field(
                 f"metadata/static/icons/{category.icon}.svg"
             )
@@ -79,19 +78,8 @@ def run():
         ignore_conflicts=True,
     )
 
-    #     Reward.objects.bulk_create(
-    #     rewards,
-    #     update_conflicts=True,
-    #     update_fields=[
-    #         "title",
-    #         "description",
-    #         "color",
-    #         "dark_color",
-    #         "price",
-    #     ],
-    #     unique_fields=["type"],
-    # )
 
+def seed_tags():
     tags = [
         "CSS",
         "JavaScript",
@@ -185,6 +173,11 @@ def run():
     )
 
 
-def drop():
+def up():
+    seed_categories()
+    seed_tags()
+
+
+def down():
     Tag.objects.all().delete()
     Category.objects.all().delete()

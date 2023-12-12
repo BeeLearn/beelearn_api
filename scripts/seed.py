@@ -1,15 +1,15 @@
 from multiprocessing import Process
 
-from leaderboard.seeds import run as run_leaderboard_seed
-from reward.seeds import run as run_reward_seed
-from metadata.seeds import run as run_metadata_seed
+import reward.seed as reward
+import metadata.seed as metadata
+import leaderboard.seed as leaderboard
 
 
 def run():
     processes = [
-        Process(target=run_reward_seed),
-        Process(target=run_leaderboard_seed),
-        Process(target=run_metadata_seed),
+        Process(target=reward.up),
+        Process(target=metadata.up),
+        Process(target=leaderboard.up),
     ]
 
     for process in processes:

@@ -1,12 +1,10 @@
 from django.utils import timezone
-from django.contrib.contenttypes.models import ContentType
 
 from rest_framework import serializers
 
 from django_restql.fields import NestedField
 from django_restql.serializers import NestedModelSerializer
 
-from generic_relations.relations import GenericRelatedField
 
 from assessment.models import (
     DragDropQuestion,
@@ -52,8 +50,13 @@ class CourseSerializer(
     is_liked = serializers.SerializerMethodField()
     is_enrolled = serializers.SerializerMethodField()
     is_completed = serializers.SerializerMethodField()
+    liked_topic_count = serializers.SerializerMethodField()
 
-    tags = NestedField(TagSerializer)
+    tags = NestedField(
+        TagSerializer,
+        many=True,
+        required=False,
+    )
 
     course_enrolled_users = NestedField(
         UserSerializer,
@@ -68,6 +71,21 @@ class CourseSerializer(
         required=False,
         write_only=True,
     )
+
+    def get_liked_topic_count(self, course: Course):
+        modules = course.modules.only("pk").values_list("pk")
+        lessons = (
+            Lesson.objects.filter(
+                module__in=modules,
+            )
+            .only("pk")
+            .values_list("pk")
+        )
+
+        return Topic.objects.filter(
+            likes=self.request.user,
+            lesson__in=lessons,
+        ).count()
 
     def get_is_new(self, course: Course):
         return course.created_at > (timezone.now() - timezone.timedelta(7))
@@ -90,7 +108,7 @@ class CourseSerializer(
 
     class Meta:
         model = Course
-        exclude = "editors",
+        exclude = ("editors",)
         read_only_fields = (
             "created_at",
             "updated_at",
@@ -121,7 +139,7 @@ class ModuleSerializer(NestedModelSerializer, ContextMixin):
             many=True,
             context=self.context,
         ).data
-    
+
     class Meta:
         model = Module
         exclude = (
@@ -181,6 +199,7 @@ class TopicQuestionSerializer(
     """
     TopicQuestion model serializer
     """
+
     question = GenericForeignKeyField(
         {
             DragDropQuestion: DragDropQuestionSerializer,
@@ -234,7 +253,6 @@ class TopicSerializer(
     is_completed = serializers.SerializerMethodField()
     is_unlocked = serializers.SerializerMethodField()
     thread_count = serializers.SerializerMethodField()
-    topic_questions = serializers.SerializerMethodField()
 
     likes = NestedField(
         UserSerializer,
@@ -268,7 +286,7 @@ class TopicSerializer(
 
     def get_is_unlocked(self, topic: Topic):
         return topic.entitled_users.contains(self.request.user)
-    
+
     def get_thread_count(self, topic: Topic):
         return Thread.objects.filter(reference=topic.thread_reference).count()
 

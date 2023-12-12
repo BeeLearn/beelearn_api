@@ -19,5 +19,5 @@ def user_post_save(instance: User, **kwargs):
     try:
         if not instance.userleague:
             create()
-    except User.DoesNotExist:
+    except UserLeague.DoesNotExist:
         create()
