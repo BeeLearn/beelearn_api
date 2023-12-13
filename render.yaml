@@ -15,7 +15,5 @@ services:
       - key: WEB_CONCURRENCY
         value: 4
       - key: PYTHON_VERSION
-        value: 3.12
-      - key: RENDER_EXTERNAL_HOSTNAME
-        value: v1.api.usebeelearn.com,beelearn.onrender.com
+        value: 3.11.4
       - fromGroup: BeeLearn
