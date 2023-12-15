@@ -83,6 +83,7 @@ def just_getting_started(instance: Lesson, pk_set: Set[int], **kwargs):
     """
     Triggered when a user completes the first lesson in a course.
     """
+    
     first_lesson = Lesson.objects.first()  # lessons are order by created_at by default
 
     if first_lesson == instance:
@@ -171,12 +172,12 @@ def award_streak_price_to_user(pk_set: Set[int], action: str, **kwargs):
         users = User.objects.filter(pk__in=pk_set)
         prices = Price.objects.filter(type=Price.PriceType.STREAK_COMPLETE)
 
-        if len(prices) == 0:
+        if prices.count() == 0:
             return
 
         profiles = []
-        notifications = []
         userleagues = []
+        notifications = []
 
         price = random.choice(prices)
 

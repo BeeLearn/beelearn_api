@@ -234,15 +234,13 @@ REST_FRAMEWORK = {
     ],
 }
 
-CORS_ALLOWED_ORIGINS = [
-    "http://usebeelearn.com",
-    "http://academy.usebeelearn.com",
-    "https://academy.usebeelearn.com",
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r"^https://\w+\.usebeelearn\.com$",
 ]
 
 # only allow localhost and firebase default url in DEBUG mode
 if DEBUG:
-    CORS_ALLOWED_ORIGINS += [
+    CORS_ALLOWED_ORIGINS = [
         "http://localhost:3000",
         "http://localhost:5000",
         "http://localhost:7000",
@@ -250,6 +248,9 @@ if DEBUG:
         "http://192.168.42.183:3000",
         "http://bee-learn.web.app",
         "https://bee-learn.web.app",
+        "https://beelearn.web.app",
+        "https://beelearn-auth.web.app",
+        "https://beelearn-cms.web.app",
     ]
 
 

@@ -30,7 +30,7 @@ django-nested-admin = "*"
 rest-framework-generic-relations = "*"
 django-debug-toolbar = "*"
 daphne = "*"
-djira = {git = "git+https://github.com/oasisMystre/djira", ref="0d14ede0c8f82dbf75764e5bc566891278ad9355"}
+djira = {git = "git+https://github.com/oasisMystre/djira", ref="97eb5b37aae7cfee2808f9e9b8ded063e7b7c1ab"}
 numpy = "*"
 dj-database-url = "*"
 psycopg = "*"
