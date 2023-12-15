@@ -14,4 +14,4 @@ if [ -n "$RENDER" ]; then
 fi
 
 
-# python manage.py runscript seed
+python manage.py runscript seed

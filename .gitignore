@@ -286,3 +286,8 @@ data
 serviceAccountKey.json 
 googleplayServiceAccountKey.json
 badges.json 
+
+.config 
+nginx
+docker-compose.yaml
+dockerfile
