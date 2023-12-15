@@ -143,7 +143,7 @@ if DEBUG:
 else:
     DATABASES = {
         "default": dj_database_url.parse(
-            "postgres://hue:j4yvHUgnDcWDYrmghbGOEYv1JhGD35Gw@dpg-cltsj98l5elc7386djo0-a/beelearn",
+            os.environ.get("DATABASE_URL"),
             conn_max_age=600,
             ssl_require=True,
         ),
