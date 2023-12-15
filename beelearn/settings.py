@@ -41,7 +41,7 @@ sentry_sdk.init(
 SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don"t run with debug turned on in production!
-DEBUG = False and "RENDER" not in os.environ
+DEBUG = "RENDER" not in os.environ
 
 ALLOWED_HOSTS = []
 
@@ -236,6 +236,7 @@ REST_FRAMEWORK = {
 
 CORS_ALLOWED_ORIGIN_REGEXES = [
     r"^https://\w+\.usebeelearn\.com$",
+    r"^https://beelearn.*--pr.*\.web\.app",
 ]
 
 # only allow localhost and firebase default url in DEBUG mode
