@@ -41,7 +41,7 @@ sentry_sdk.init(
 SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don"t run with debug turned on in production!
-DEBUG = "RENDER" not in os.environ
+DEBUG = False and "RENDER" not in os.environ
 
 ALLOWED_HOSTS = []
 
@@ -142,9 +142,10 @@ if DEBUG:
     }
 else:
     DATABASES = {
-        "default": dj_database_url.config(
-            # conn_max_age=600,
-            # ssl_require=True,
+        "default": dj_database_url.parse(
+            "postgres://hue:j4yvHUgnDcWDYrmghbGOEYv1JhGD35Gw@dpg-cltsj98l5elc7386djo0-a/beelearn",
+            conn_max_age=600,
+            ssl_require=True,
         ),
     }
 
