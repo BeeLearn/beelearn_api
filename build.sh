@@ -14,5 +14,4 @@ if [ -n "$RENDER" ]; then
 fi
 
 
-python manage.py runscript create_rewards
-python manage.py runscript create_streaks
+python manage.py runscript seed
