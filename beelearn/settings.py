@@ -27,6 +27,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 load_dotenv()
 
+print(os.environ)
+
 sentry_sdk.init(
     dsn=os.environ.get("SENTRY_DNS"),
     integrations=[DjangoIntegration()],
