@@ -2,10 +2,9 @@ import json
 import os
 
 from typing import Callable, TypeVar
-from typing_extensions import deprecated
 
 from django.core.files import File
-from django.db.models import ImageField, QuerySet, Model
+from django.db.models import ImageField, Model
 from django.utils.timezone import now, timedelta
 
 from .settings import BASE_DIR
@@ -32,7 +31,6 @@ def file_to_image_field(path: str):
     return File(open(path, "rb"), name=os.path.basename(path))
 
 
-@deprecated
 def save_file_to_image_field(
     path: str,
     model_instance: TModel,
