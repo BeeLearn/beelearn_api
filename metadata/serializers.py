@@ -10,6 +10,9 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class TagSerializer(serializers.ModelSerializer):
+    category = CategorySerializer()
+
     class Meta:
         model = Tag
         exclude = ()
+        

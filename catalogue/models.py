@@ -243,18 +243,15 @@ class TopicQuestion(models.Model):
         return self.topic.title
 
 
-def allow_visible_course_only_validator(instance: Course):
-    if not instance.is_visible:
-        raise ValidationError("Only visible course can be added to categories")
-
-
-class Category(
-    TimestampMixin, get_revision_mixin("category_creator", "category_editors")
-):
+class Category(TimestampMixin):
     """
-    Collections of courses that are related
+    user course recommendation collection
     """
 
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+    )
     courses = models.ManyToManyField(
         Course,
         blank=True,
@@ -269,12 +266,6 @@ class Category(
         max_length=128,
         help_text="Category description (Optional)",
     )
-
-    tags = None  # category tags
-
-    # def clean(self):
-    #     for course in self.courses:
-    #         allow_visible_course_only_validator(course)
 
     def __str__(self):
         return self.name

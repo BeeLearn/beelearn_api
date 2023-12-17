@@ -65,6 +65,12 @@ def seed_categories():
             icon="cloud_ops",
         ),
     )
+    categories.append(
+        Category(
+            name="Blockchain",
+            icon="blockchain",
+        ),
+    )
 
     for category in categories:
         category: Category = category
@@ -162,6 +168,30 @@ def seed_tags():
     ]
 
     category = Category.objects.get(name="Data Science")
+    Tag.objects.bulk_create(
+        list(
+            map(
+                lambda name: Tag(name=name, category=category),
+                tags,
+            ),
+        ),
+        ignore_conflicts=True,
+    )
+
+    tags = [
+        "web3",
+        "solidity",
+        "hardhat",
+        "mining",
+        "trading",
+        "finance",
+        "smart contract",
+        "altcoin",
+        "bitcoin",
+        "dapp",
+    ]
+
+    category = Category.objects.get(name="Blockchain")
     Tag.objects.bulk_create(
         list(
             map(

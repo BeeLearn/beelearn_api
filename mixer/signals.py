@@ -1,0 +1,16 @@
+from django.dispatch import receiver
+from django.db.models.signals import post_save
+
+from account.models import User
+
+from .legacy_models import generate_user_category_feed
+
+
+@receiver(post_save, sender=User)
+def generate_user_category_feed_on_user_created(
+    instance: User,
+    created: bool,
+    **kwargs,
+):
+    print("Fucked async functiom")
+    generate_user_category_feed(instance)

@@ -86,6 +86,7 @@ INSTALLED_APPS = [
     "payment.apps.PaymentConfig",
     "messaging.apps.MessagingConfig",
     "leaderboard.apps.LeaderboardConfig",
+    "mixer.apps.MixerConfig",
 ]
 
 MIDDLEWARE = [
