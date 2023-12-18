@@ -313,7 +313,4 @@ class CategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Category
-        exclude = (
-            "creator",
-            "editors",
-        )
+        exclude = ("user",)

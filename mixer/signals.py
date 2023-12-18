@@ -12,5 +12,4 @@ def generate_user_category_feed_on_user_created(
     created: bool,
     **kwargs,
 ):
-    print("Fucked async functiom")
     generate_user_category_feed(instance)

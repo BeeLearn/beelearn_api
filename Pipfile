@@ -6,7 +6,7 @@ name = "pypi"
 [packages]
 django = "*"
 djangorestframework = "*"
-pillow = "10.0.1"
+pillow = "*"
 dj-url-filter = "*"
 six = "*"
 django-cors-headers = "*"

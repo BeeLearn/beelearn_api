@@ -207,5 +207,10 @@ class TopicQuestionViewSet(
 
 
 class CategoryViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
-    queryset = Category.objects.prefetch_related("courses")
+    queryset = Category.objects.prefetch_related("courses").exclude(
+        courses__isnull=True,
+    )
     serializer_class = CategorySerializer
+
+    def get_queryset(self):
+        return self.queryset.filter(user=self.request.user)

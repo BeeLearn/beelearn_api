@@ -121,46 +121,47 @@ def grant_course_master_hat_trick_and_course_ninja_reward(pk_set: Set[int], **kw
 
 
 @receiver(signals.m2m_changed, sender=Reward.reward_unlocked_users.through)
-def award_reward_price_to_user(instance: Reward, pk_set: Set[int], **kwargs):
+def award_reward_price_to_user(instance: Reward, pk_set: Set[int], action: str, **kwargs):
     """
     Award achievement price to user
     """
-    profiles = []
-    notifications = []
-    userleagues = []
+    if action == "post_added":
+        profiles = []
+        notifications = []
+        userleagues = []
 
-    users = User.objects.select_related(
-        "profile",
-        "settings",
-    ).filter(pk__in=pk_set)
+        users = User.objects.select_related(
+            "profile",
+            "settings",
+        ).filter(pk__in=pk_set)
 
-    for user in users:
-        user.profile.xp += instance.price.xp
-        user.profile.bits += instance.price.bits
-        # user.userleague.xp += instance.price.xp
+        for user in users:
+            user.profile.xp += instance.price.xp
+            user.profile.bits += instance.price.bits
+            # user.userleague.xp += instance.price.xp
 
-        profiles.append(user.profile)
-        # userleagues.append(user.userleague)
+            profiles.append(user.profile)
+            # userleagues.append(user.userleague)
 
-        notifications.append(
-            Notification(
-                user=user,
-                body=instance.description,
-                image=instance.icon.url,
-                topic=Notification.Topic.REWARD,
-                title="%s has been unlocked" % instance.title,
-            ),
+            notifications.append(
+                Notification(
+                    user=user,
+                    body=instance.description,
+                    image=instance.icon.url,
+                    topic=Notification.Topic.REWARD,
+                    title="%s has been unlocked" % instance.title,
+                ),
+            )
+
+        Profile.objects.bulk_update(
+            profiles,
+            fields=["xp", "bits"],
         )
-
-    Profile.objects.bulk_update(
-        profiles,
-        fields=["xp", "bits"],
-    )
-    UserLeague.objects.bulk_update(
-        userleagues,
-        fields=["xp"],
-    )
-    Notification.objects.bulk_create(notifications)
+        UserLeague.objects.bulk_update(
+            userleagues,
+            fields=["xp"],
+        )
+        Notification.objects.bulk_create(notifications)
 
 
 @receiver(signals.m2m_changed, sender=Streak.streak_complete_users.through)
@@ -204,7 +205,7 @@ def award_streak_price_to_user(pk_set: Set[int], action: str, **kwargs):
                     title="Daily Streak Reward Unlocked!",
                     body="You've reached your daily goal and unlocked a streak reward!",
                     image=REWARD_XP_LEVEL_2_IMAGE,
-                    topic=Notification.Topic.REWARD,
+                    topic=Notification.Topic.STREAK,
                 )
             )
 
