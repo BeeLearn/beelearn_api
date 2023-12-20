@@ -12,5 +12,4 @@ def generate_user_category_feed_on_user_created(
     created: bool,
     **kwargs,
 ):
-    if created:
-        generate_user_category_feed(instance)
+    generate_user_category_feed(instance)

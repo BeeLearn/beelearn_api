@@ -1,3 +1,4 @@
+from django.utils import timezone
 from django.contrib.auth.models import AbstractUser
 
 from rest_framework.authentication import TokenAuthentication
@@ -52,6 +53,10 @@ def authenticate_credentials(key: str):
             },
             "profile/no-found",
         )
+    user.last_login = timezone.now()
+
+    if created:
+        user.date_joined = timezone.now()
 
     user.save(
         update_fields=[
@@ -59,6 +64,8 @@ def authenticate_credentials(key: str):
             "first_name",
             "last_name",
             "username",
+            "last_login",
+            "date_joined",
         ],
     )
 
