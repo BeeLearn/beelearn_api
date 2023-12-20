@@ -27,3 +27,6 @@ class Tag(TimestampMixin):
         blank=True,
         on_delete=models.SET_NULL,
     )
+
+    def __str__(self):
+        return self.name
