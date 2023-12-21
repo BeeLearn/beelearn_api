@@ -56,6 +56,7 @@ class Course(TimestampMixin, get_revision_mixin("course_creator", "course_editor
     tags = models.ManyToManyField(
         Tag,
         blank=True,
+        related_name="courses",
     )
 
     def __str__(self):

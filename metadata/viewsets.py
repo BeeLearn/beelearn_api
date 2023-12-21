@@ -8,10 +8,9 @@ from .serializers import TagSerializer, CategorySerializer
 
 class CategoryViewSet(GenericViewSet, ListModelMixin):
     serializer_class = CategorySerializer
-    queryset = Category.objects.all()
+    queryset = Category.objects.filter(tags__courses__isnull=False)
 
     search_fields = ("name",)
-
 
 class TagViewSet(GenericViewSet, ListModelMixin):
     serializer_class = TagSerializer

@@ -25,6 +25,7 @@ class Tag(TimestampMixin):
         Category,
         null=True,
         blank=True,
+        related_name="tags",
         on_delete=models.SET_NULL,
     )
 
