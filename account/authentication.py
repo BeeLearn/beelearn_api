@@ -19,7 +19,7 @@ def get_first_and_last_name(full_name: str):
         names = full_name.strip().split(" ")
         first_name = names[0]
 
-        if len(names) > 0:
+        if len(names) > 1:
             last_name = names[1]
 
     return first_name, last_name
